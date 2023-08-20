@@ -1,0 +1,311 @@
+<!--This page is only accessible for logged in users to view their account-->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Theta Tau | Tau Delta Chapter - Miami University</title>
+    <meta property="og:site_name" content="Theta Tau | Miami University" />
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-firestore.js"></script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+        // import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyCuS3TWRtitOxxjJ3gyb-lxH2kmu2N0Ij8",
+          authDomain: "thetataumiamiuniversity.firebaseapp.com",
+          projectId: "thetataumiamiuniversity",
+          storageBucket: "thetataumiamiuniversity.appspot.com",
+          messagingSenderId: "752928414181",
+          appId: "1:752928414181:web:d70dbd3f4ed11077e7b70c",
+          measurementId: "G-BTNR03FCB4"
+        };
+      
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        // This can be uncommented and implemented later if analytics are needed, proper Firebase (Google) SDK integration is needed however
+        // const analytics = getAnalytics(app);
+    </script>
+
+    <!--References the app.js file, uses defer to make sure it loads after the body elements have loaded-->
+    <script type="module" src="account.js" defer></script>
+
+    <link href="./favicon.ico" rel="shortcut icon" type="image/x-icon">
+    <!--<link href="/favicon.ico" rel="icon" type="image/x-icon">-->
+    <link href="https://fonts.googleapis.com/css?family=Lato:100" 
+          rel="stylesheet" type="text/css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
+          rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/home.css" rel="stylesheet">
+    <link href="assets/css/jquery-ui.min.css" rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Chrome, Firefox OS, Opera and Vivaldi -->
+    <meta name="theme-color" content="#5B0000">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#5B0000">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="#5B0000">
+
+</head>
+
+
+
+<body>
+
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button class="navbar-toggle" data-target="#myNavbar"
+                    data-toggle="collapse" type="button">
+                <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+            </button> <a class="navbar-brand" href="/"><span id="nav">THETA TAU | <span class="hidden-xs hidden-sm">MIAMI UNIVERSITY</span><span class="hidden-md hidden-lg hidden-xl">ΤΔ</span></span></a>
+            <span class="hidden-xs hidden-sm"><a href="/"><img src="assets/img/login-logo.png" class="navbar-brand"></a></span>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="index.html">HOME</a>
+                </li>
+                <li>
+                    <a href="gallery.html">GALLERY</a>
+                </li>
+                <li>
+                    <a href="events.html">EVENTS</a>
+                </li>
+                <li>
+                    <a href="leadership.html">LEADERSHIP</a>
+                </li>
+                <li>
+                    <a href="recruitment.html">RECRUITMENT</a>
+                </li>
+                <!--
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">MEMBERS
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/members">ACTIVES</a></li>
+                        <li><a href="/alumni">ALUMNI</a></li>
+                        <li><a href="/resumes">MEMBER RESUMES</a></li>
+                    </ul>
+                </li>
+                -->
+                <li>
+                    <a href="contact.html">CONTACT</a>
+                </li>
+              <!--This section only appears to change the name of the LOGIN tab for the users signed in to view their accounts-->
+              <li id="whenSignedInNav">
+                  <a href="login.html">ACCOUNT</a>
+              </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- This is displayed only when the user is logged in ---------------------------------->
+<div id="headerAccount" class="jumbotron" style="background-image:url('assets/img/banner.png'); background-position: center;">
+  <h1>Account</h1>
+</div>
+
+
+<div class="container" id="borderBar">
+
+<br/>
+<br/>
+
+<!-- Added upper ---------------------------------->
+
+<div class="container">
+
+  <!--These sections are only shown to logged in users on their first time logging in to setup account information-->
+  <div class="row" id="firstLoginPrompt">
+    <div class="col-md-12 text-center">
+      <h3>Looks like this is your first time logging in, please enter your information below:</h3>
+      <h4>(*NOTE: These choices can be changed later in your account settings)</h4>
+    </div>
+  </div>
+  <div class="row" id="firstLoginForm" hidden>
+    <!--This div section will only be displayed if it is the user's first time logging in
+    so they can setup their account information, visibility is handled by: account.js-->
+    <form class="form-horizontal" action="">
+        <fieldset>
+          <legend>Account Setup</legend>
+          <!-- Firstname input-->
+          <div class="form-group">
+            <label class="col-md-3 control-label" for="firstname">First Name</label>
+            <div class="col-md-9">
+              <input id="txtFirstname" name="firstname" type="text" placeholder="Enter your first name" class="form-control" value="" style="width:95%; margin: auto;" required>
+            </div>
+          </div>
+
+          <!-- Lastname input-->
+          <div class="form-group">
+            <label class="col-md-3 control-label" for="lastname">Last Name</label>
+            <div class="col-md-9">
+              <input id="txtLastname" name="lastname" type="text" placeholder="Enter your last name" class="form-control" value="" style="width:95%; margin: auto;" required>
+            </div>
+          </div>
+
+          <!-- College Major input-->
+          <div class="form-group">
+            <label class="col-md-3 control-label" for="major">Current Major</label>
+            <div class="col-md-9">
+              <input id="txtMajor" name="major" type="text" placeholder="Enter your current college major (Separate by commas if multiple)" class="form-control" value="" style="width:95%; margin: auto;" required>
+            </div>
+          </div>
+
+          <!-- College Minor input-->
+          <div class="form-group">
+            <label class="col-md-3 control-label" for="minor">Current Minor (Optional)</label>
+            <div class="col-md-9">
+              <input id="txtMinor" name="minor" type="text" placeholder="Enter your current college minor (Separate by commas if multiple)" class="form-control" value="" style="width:95%; margin: auto;">
+            </div>
+          </div>
+
+          <!-- Expected Grad Year input-->
+          <div class="form-group">
+            <label class="col-md-3 control-label" for="gradYear">Graduation Year</label>
+            <div class="col-md-9">
+              <input id="txtGradYear" name="gradYear" type="number" placeholder="Enter your expected graduation year" class="form-control" value="" style="width:95%; margin: auto;" min="1980" max="2050" required>
+            </div>
+          </div>
+
+          <!-- Fraternity Class input-->
+          <div class="form-group">
+            <label class="col-md-3 control-label" for="fratClass">Fraternity Class</label>
+            <div class="col-md-9">
+              <input id="txtFratClass" name="fratClass" type="text" placeholder="Enter your fraternity class (Ex: Mu)" class="form-control" value="" style="width:95%; margin: auto;" required>
+            </div>
+          </div>
+
+          <!-- LinkedIn Input-->
+          <div class="form-group">
+            <label class="col-md-3 control-label" for="linkedinURL">LinkedIn (Optional)</label>
+            <div class="col-md-9">
+              <input id="txtLinkedin" name="linkedinURL" type="url" placeholder="Enter your full LinkedIn URL" class="form-control" value="" style="width:95%; margin: auto;">
+            </div>
+          </div>
+          
+          <!-- Personal Website Input-->
+          <div class="form-group">
+            <label class="col-md-3 control-label" for="personalWebURL">Personal Website (Optional)</label>
+            <div class="col-md-9">
+              <input id="txtPersonalWeb" name="personalWebURL" type="url" placeholder="Enter your full personal website URL" class="form-control" value="" style="width:95%; margin: auto;">
+            </div>
+          </div>
+
+          <!-- GitHub Input-->
+          <div class="form-group">
+            <label class="col-md-3 control-label" for="personalGitHubURL">Personal GitHub (Optional)</label>
+            <div class="col-md-9">
+              <input id="txtGithub" name="personalGitHubURL" type="url" placeholder="Enter your full personal GitHub URL" class="form-control" value="" style="width:95%; margin: auto;">
+            </div>
+          </div>
+
+          <!-- Submission Button -->
+          <div class="form-group">
+            <div class="col-md-12 text-right">
+              <button id="btnMakeAccountDetails" type="button" class="btn btn-warning btn-lg">Submit</button>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+  </div>
+
+  <div class="row" id="fullUser" hidden>
+    <!--This section is shown to users that have logged in before and have successfully entered their information.-->
+    <!--This section should be always shown for authenticated and setup users to access and see their current points and account.-->
+    <div class="col-md-4" id="photoArea">
+      <img src="https://drive.google.com/uc?export=view&id=1AwJ9tWv0SagtDnE8U1NejxV2rpwOE8mD" alt="Theta Tau Brother Headshot" width="331" height="496">
+    </div>
+    <div class="col-md-2" id="brotherhoodPointsContainer">
+      <h2>Brotherhood Points:</h2>
+      <h4 id="bhoodPoints">0</h4>
+    </div>
+    <div class="col-md-2" id="servicePointsContainer">
+      <h2>Service Points:</h2>
+      <h4 id="servicePoints">0</h4>
+    </div>
+    <div class="col-md-2" id="bpdPointsContainer">
+      <h2>Professional Development Points:</h2>
+      <h4 id="pdPoints">0</h4>
+    </div>
+    <div class="col-md-2" id="generalPointsContainer">
+      <h2>General Points:</h2>
+      <h4 id="generalPoints">0</h4>
+    </div>
+  </div>
+
+  <div class="row" id="signedOutUser" hidden>
+    <!--This section is shown to users that are not logged in, and need to return to the Login page.-->
+    <br>
+    <div class="col-md-12 text-center">
+      <h3>You are not currently signed in, click below to return to the login page:</h3>
+    </div>
+    <br>
+    <div class="col-md-12 text-center">
+      <button id="btnLoginReturn" type="button" class="btn btn-warning btn-lg">Return to Login</button>
+    </div>
+  </div>
+
+</div>
+
+<!-- Added footer ------------------------------------------>
+<br/>
+<hr>
+<br/>
+
+</div>
+
+<nav class="navbar" class="footer">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h1 class="social-h1">
+                <!-- Removed facebook and Twitter as they are no longer used for now -->
+                <a href="https://www.instagram.com/thetatau_miamiu" target="_blank"><i class="fa fa-instagram"></i></a> 
+                <!--<a href="https://www.facebook.com/ThetaTauMU/?fref=ts" target="_blank"><i class="fa fa-facebook"></i></a>--> 
+                <!--<a href="https://twitter.com/thetataumu" target= "_blank"><i class="fa fa-twitter"></i></a>-->
+                <a href="https://www.linkedin.com/groups/8471878/" target="_blank"><i class="fa fa-linkedin"></i></a> 
+                <a href="https://github.com/ThetaTauMiami/" target="_blank"><i class="fa fa-github"></i></a>
+            </h1>
+        </div>
+        <div class="col-lg-12 text-center">
+            <p class="footer-links">
+              <a href="/">Home</a> · 
+              <a href="gallery.html">Gallery</a> · 
+              <a href="events.html">Events</a> · 
+              <a href="leadership.html">Leadership</a> · 
+              <a href="recruitment.html">Recruitment</a> · 
+              <!--<a href="members">Members</a> · 
+              <a href="alumni">Alumni</a> · -->
+              <a href="contact.html">Contact Us</a>  · 
+              <a href="account.html" id="footerAccount">Account</a>
+            </p>
+            <p class="footer-links">Theta Tau | Tau Delta Chapter of Miami University | 2023</p>
+        </div>
+    </div>
+</nav>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<!-- Bootbox dependencies -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
+
+<script src="assets/js/jquery-ui.min.js"></script>
+
+
+<!-- This script always goes last, contains custom scripts -->
+<script src="assets/js/site.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Theta Tau | Tau Delta Chapter - Miami University</title>
+    <meta property="og:site_name" content="Theta Tau | Miami University" />
+
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-firestore.js"></script>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
+        // import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyCuS3TWRtitOxxjJ3gyb-lxH2kmu2N0Ij8",
+          authDomain: "thetataumiamiuniversity.firebaseapp.com",
+          projectId: "thetataumiamiuniversity",
+          storageBucket: "thetataumiamiuniversity.appspot.com",
+          messagingSenderId: "752928414181",
+          appId: "1:752928414181:web:d70dbd3f4ed11077e7b70c",
+          measurementId: "G-BTNR03FCB4"
+        };
+      
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        // This can be uncommented and implemented later if analytics are needed, proper Firebase (Google) SDK integration is needed however
+        // const analytics = getAnalytics(app);
+    </script>
+
+    <!--References the authChange.js file to change link displays based on auth state, uses defer to make sure it loads after the body elements have loaded-->
+    <script type="module" src="authChange.js" defer></script>
+
+    <link href="./favicon.ico" rel="shortcut icon" type="image/x-icon">
+    <!--<link href="/favicon.ico" rel="icon" type="image/x-icon">-->
+    <link href="https://fonts.googleapis.com/css?family=Lato:100" 
+          rel="stylesheet" type="text/css">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+          rel="stylesheet">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
+          rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/home.css" rel="stylesheet">
+    <link href="assets/css/jquery-ui.min.css" rel="stylesheet">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Chrome, Firefox OS, Opera and Vivaldi -->
+    <meta name="theme-color" content="#5B0000">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#5B0000">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="#5B0000">
+
+</head>
+
+
+
+<body>
+
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button class="navbar-toggle" data-target="#myNavbar"
+                    data-toggle="collapse" type="button">
+                <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+            </button> <a class="navbar-brand" href="/"><span id="nav">THETA TAU | <span class="hidden-xs hidden-sm">MIAMI UNIVERSITY</span><span class="hidden-md hidden-lg hidden-xl">ΤΔ</span></span></a>
+            <span class="hidden-xs hidden-sm"><a href="/"><img src="assets/img/login-logo.png" class="navbar-brand"></a></span>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="index.html">HOME</a>
+                </li>
+                <li>
+                    <a href="gallery.html">GALLERY</a>
+                </li>
+                <li>
+                    <a href="events.html">EVENTS</a>
+                </li>
+                <li>
+                    <a href="leadership.html">LEADERSHIP</a>
+                </li>
+                <li>
+                    <a href="recruitment.html">RECRUITMENT</a>
+                </li>
+                <!--
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">MEMBERS
+                        <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/members">ACTIVES</a></li>
+                        <li><a href="/alumni">ALUMNI</a></li>
+                        <li><a href="/resumes">MEMBER RESUMES</a></li>
+                    </ul>
+                </li>
+                -->
+                <li>
+                    <a href="contact.html">CONTACT</a>
+                </li>
+                <!-- The login tab, which connects to Firebase to become the User Account page. *** ONLY appears when the user is not logged in -->
+                <li id="whenSignedOutNav">
+                    <a href="login.html" >LOGIN</a>
+                </li>
+                <!--This section only appears to change the name of the LOGIN tab for the users signed in to view their accounts-->
+                <li id="whenSignedInNav" style="display:none;">
+                    <a href="login.html">ACCOUNT</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+  
+<div class="jumbotron" style="background-image:url('assets/img/banner.png'); background-position: center;">
+    <h1>Gallery</h1>
+</div>
+
+<div class="container" id="borderBar">
+
+<br/>
+<br/>
+
+<!-- Added upper ---------------------------------->
+
+<div class="container">
+    <div clas="row">
+        <div class="col-xs-12">
+            <!-- Update album code from any google photos album here (set "Carousel only"): 
+                 https://www.publicalbum.org/blog/embedding-google-photos-albums
+            -->
+
+            <script src="https://cdn.jsdelivr.net/npm/publicalbum@latest/embed-ui.min.js" async></script>
+            <div class="pa-carousel-widget" style="width:100%; height:480px; display:none;"
+            data-link="https://photos.app.goo.gl/Wk1SCUoMeHwCWvRy6"
+            data-title="Theta Tau | Tau Delta | Public Photo Album"
+            data-description="8 new items added to shared album"
+            data-background-color="#5b0000">
+            <object data="https://lh3.googleusercontent.com/NZQz0Db3Gy60iSex8x-z98-79wppVPAzX7hrWADDqyRs5iKJPESK0pP0otiSlweN3pXT9Jy6PxLGBJMmUIoLX7aaR5oet_epo0EPjSKt9WIj7TvebNaJZzwtXo8W4cOuveqwm8MyCA=w1920-h1080"></object>
+            <object data="https://lh3.googleusercontent.com/Sp0CNY_7xeMHPJmKiv6R69ibwGe5eBnQwq3Se-msRYU0vwoLdCGRpS84qxqSmxIjNeIUIh8gFoXkDeNasIhDFEkHr-S9xuZ7_VELdAZe2fooIMya2VKT8Jg_VI11tA9eKO9v0Py-1g=w1920-h1080"></object>
+            <object data="https://lh3.googleusercontent.com/HNuB4zO7kpEjxFoLw11KCMas6729tiSQnVM_faYat0PhnkK07YLIU5wNu2m3p0uAhSBGSVDvhRB53toqadHWj8TZJ0YS_uLqHYD4ZbSKTgofwc7C6nf44uAfs2ffPwYjQ0eAaUMa8Q=w1920-h1080"></object>
+            <object data="https://lh3.googleusercontent.com/oCrvngey4sYHFaKmNVeHsg7dKyUp9Qi7Cjf_NWyPOoKasMPnSTrVLvcOzxMOOTWXEt5hyWP5qfK6aHfmetxUKV5TTKzoItXx7duykShXSzZM0xzaVIeaHoYu844Sitqe-dLlZBRofw=w1920-h1080"></object>
+            <object data="https://lh3.googleusercontent.com/n4Jr01E7jZhQLec-pCC-78qCItLtQxNs5WGht1gtU7l7WysJBiiwbNRKw4EKnBi8AotCj-4MqOggc2qB5aKPhCW8CWNjxBGY9DS_WRVYDcn11-mNhsG1RATVpUsXsQnQWxTB7siZew=w1920-h1080"></object>
+            <object data="https://lh3.googleusercontent.com/lwy8IvgzVwdMasQzu6E1zC7BmpeiMFDidmeTJVnLb8VkiG5R4NYNpTcqt5nUPOTzI465mRypGDN5fof9mRnygggTjBMIFA43e8u1VTB6Nmpj3YLpDsxDfucUOTEjaL6YZqNUCVnhLQ=w1920-h1080"></object>
+            <object data="https://lh3.googleusercontent.com/ZZ3PGiNMDGCw-j-wOvosPd8c97kRUNTfTSgsZWwyvy8x-76HpFRgJ71IEV616i7Cl949WkFNfxGAeJBy6BBsNpvyTray8CbindIgVzz9mKm5M0i4l8CvTBY5s9rw4iGJRueoVi6e7w=w1920-h1080"></object>
+            <object data="https://lh3.googleusercontent.com/sX1rpS3OdpYeHoIbmc0P4K00nWiPWGKn4-F3y2FCC8YjieCniIiZ764E2vWpJULWvmIaPo7mHF2v0jQc593DgvMsAItgs-qb7xhDYCHiQZ6QchoDV6TcURKKJ7B9fgirEPf03wAXfQ=w1920-h1080"></object>
+            <object data="https://lh3.googleusercontent.com/awqOlvrWZsmNwK2drZcGussuHrsSBJGqTGHmRriT7pbNc2xFgjXZnvc4LOjwt7oVeKGG8XVOsxLxBCvImixIsFnmxd28_VFPnbZ2WASmBjfky9PhTHjtjKWeXRBeL51M4t3pmawFVg=w1920-h1080"></object>
+            <object data="https://lh3.googleusercontent.com/YzEoK_NbKJ9qyh8jWWRMA_ydGzixhUL8ycPuWJ9TgQ4tc4-81UL_cTJ4941TZFSkl2Gf1nHFjo7AzZyP5JsOQK5pkT3zHs4KQB_bjYrVr3l9LTdQ8AMuCVS7eF_PVYsGuZ8SopJMYg=w1920-h1080"></object>
+            </div>
+
+<!-- Placeholder:
+<script src="https://cdn.jsdelivr.net/npm/publicalbum@latest/embed-ui.min.js" async></script>
+<div class="pa-carousel-widget" style="width:100%; height:480px; display:none;"
+  data-link="https://photos.app.goo.gl/3q5jwGxdwRxRUb6K7"
+  data-title="Theta Tau | Miami University | Public Photo Album"
+  data-description="2 new items added to shared album">
+  <object data="https://lh3.googleusercontent.com/ncOehZhfIiTM8G-D1EyQBk2vqlAmhMUKnbS1pYqvNwLUhMqsUXygVTs1cL3a3Ojdu34h6oG9UfnqyAv5rkzsgmZnBvb3k_v0kTSWB2hLEjvZ6FgmkKEaKZQjHh-kQDJmrqO8G29wZw=w1920-h1080"></object>
+  <object data="https://lh3.googleusercontent.com/Nn6FIYQf6TAxqgEBwtMwjmVMcobkzQPvzwqB_geI6bESWImEQRosrWA04xKyOucjvp_ohtIMpWlZmrwyp4M2JeDMpVmIrf1ss1kBLu4sK5AzjaBZOGl_JUf_fK6eHeMjijlB-SSLsg=w1920-h1080"></object>
+</div>-->
+
+
+
+        </div>
+    </div>
+</div>
+
+<!-- Added footer ------------------------------------------>
+<br/>
+<hr>
+<br/>
+
+</div>
+
+<nav class="navbar" class="footer">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h1 class="social-h1">
+                <!-- Removed facebook and Twitter as they are no longer used for now -->
+                <a href="https://www.instagram.com/thetatau_miamiu" target="_blank"><i class="fa fa-instagram"></i></a> 
+                <!--<a href="https://www.facebook.com/ThetaTauMU/?fref=ts" target="_blank"><i class="fa fa-facebook"></i></a>--> 
+                <!--<a href="https://twitter.com/thetataumu" target= "_blank"><i class="fa fa-twitter"></i></a>-->
+                <a href="https://www.linkedin.com/groups/8471878/" target="_blank"><i class="fa fa-linkedin"></i></a> 
+                <a href="https://github.com/ThetaTauMiami/" target="_blank"><i class="fa fa-github"></i></a>
+            </h1>
+        </div>
+        <div class="col-lg-12 text-center">
+            <p class="footer-links">
+                <a href="/">Home</a> · 
+                <a href="gallery.html">Gallery</a> · 
+                <a href="events.html">Events</a> · 
+                <a href="leadership.html">Leadership</a> · 
+                <a href="recruitment.html">Recruitment</a> · 
+                <!--<a href="members">Members</a> · 
+                <a href="alumni">Alumni</a> · -->
+                <a href="contact.html">Contact Us</a>  · 
+                <a href="login.html" id="footerLogin">Login</a>
+                <a href="login.html" id="footerAccount" hidden="true">Account</a>
+            </p>
+            <p class="footer-links">Theta Tau | Tau Delta Chapter of Miami University | 2023</p>
+        </div>
+    </div>
+</nav>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<!-- Bootbox dependencies -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
+
+<script src="assets/js/jquery-ui.min.js"></script>
+
+
+<!-- This script always goes last, contains custom scripts -->
+<script src="assets/js/site.js"></script>
+
+</body>
+
+</html>
