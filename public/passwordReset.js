@@ -16,6 +16,7 @@ const footerAccount = document.querySelector('#footerAccount')
 // Email Input
 const txtEmail = document.querySelector('#txtEmail')
 const successMessage = document.querySelector('#successMessage')
+const failureMessage = document.querySelector('#failureMessage')
 const resetPassword = document.querySelector('#resetPassword')
 
 const firebaseApp = initializeApp({
@@ -32,6 +33,14 @@ const firebaseApp = initializeApp({
 const auth = firebase.auth();
 const authentication = getAuth(firebaseApp);
 
+ // Log out function
+ const logout = async () => {
+  await signOut(auth);
+}
+
+// Make sure the user is logged out anytime they access the password reset page
+logout();
+
 ///// Password Management /////
 //// Reset Password ////
 
@@ -42,26 +51,14 @@ const resetPasswordFunction = () => {
   auth.sendPasswordResetEmail(email)
   .then(() => {
     console.log("Password Reset Email Sent Successfully!");
+    successMessage.hidden = false;
+    failureMessage.hidden = true;
   })
   .catch(error => {
     console.error(error);
+    failureMessage.hidden = false;
+    successMessage.hidden = true;
   })
-}
-
-// Handle display errors when logging in
-const hideLoginError = () => {
-    divLoginError.style.display = 'none'
-    lblLoginErrorMessage.innerHTML = ''
-}
-
-const showLoginError = (error) => {
-    divLoginError.style.display = 'block'    
-    if (error.code == AuthErrorCodes.INVALID_PASSWORD) {
-        lblLoginErrorMessage.innerHTML = `Wrong password. Try again.`
-    }
-    else {
-        lblLoginErrorMessage.innerHTML = `Invalid email`      
-    }
 }
 
 // Button Click Event Listeners (Reset Password)

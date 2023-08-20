@@ -83,7 +83,7 @@ const monitorAuthState = async () => {
 
 // Button Click Event Listeners (Email Login, Logout)
 btnLogin.addEventListener("click", loginEmailPassword) 
-btnLogout.addEventListener("click", logout)
+// btnLogout.addEventListener("click", logout)
 
 // Core constant variable used to regulate a user's authenticated 'state'
 const auth = firebase.auth();

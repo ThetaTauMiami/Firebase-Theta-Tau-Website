@@ -101,9 +101,9 @@
                 <li>
                     <a href="contact.html">CONTACT</a>
                 </li>
-              <!--This section only appears to change the name of the LOGIN tab for the users signed in to view their accounts-->
+              <!--This section only appears for the users signed in to view their accounts-->
               <li id="whenSignedInNav">
-                  <a href="login.html">ACCOUNT</a>
+                  <a href="account.html">ACCOUNT</a>
               </li>
             </ul>
         </div>
@@ -126,7 +126,7 @@
 <div class="container">
 
   <!--These sections are only shown to logged in users on their first time logging in to setup account information-->
-  <div class="row" id="firstLoginPrompt">
+  <div class="row" id="firstLoginPrompt" hidden>
     <div class="col-md-12 text-center">
       <h3>Looks like this is your first time logging in, please enter your information below:</h3>
       <h4>(*NOTE: These choices can be changed later in your account settings)</h4>
@@ -220,28 +220,31 @@
       </form>
   </div>
 
-  <div class="row" id="fullUser" hidden>
-    <!--This section is shown to users that have logged in before and have successfully entered their information.-->
-    <!--This section should be always shown for authenticated and setup users to access and see their current points and account.-->
-    <div class="col-md-4" id="photoArea">
-      <img src="https://drive.google.com/uc?export=view&id=1AwJ9tWv0SagtDnE8U1NejxV2rpwOE8mD" alt="Theta Tau Brother Headshot" width="331" height="496">
+  <div id="fullUser" hidden>
+    <div class="row">
+      <!--This section is shown to users that have logged in before and have successfully entered their information.-->
+      <!--This section should be always shown for authenticated and setup users to access and see their current points and account.-->
+      <div class="col-md-4" id="photoArea">
+        <img src="https://drive.google.com/uc?export=view&id=1AwJ9tWv0SagtDnE8U1NejxV2rpwOE8mD" alt="Theta Tau Brother Headshot" width="331" height="496">
+      </div>
+      <div class="col-md-2" id="brotherhoodPointsContainer">
+        <h2>Brotherhood Points:</h2>
+        <h4 id="bhoodPoints">0</h4>
+      </div>
+      <div class="col-md-2" id="servicePointsContainer">
+        <h2>Service Points:</h2>
+        <h4 id="servicePoints">0</h4>
+      </div>
+      <div class="col-md-2" id="bpdPointsContainer">
+        <h2>Professional Development Points:</h2>
+        <h4 id="pdPoints">0</h4>
+      </div>
+      <div class="col-md-2" id="generalPointsContainer">
+        <h2>General Points:</h2>
+        <h4 id="generalPoints">0</h4>
+      </div>
     </div>
-    <div class="col-md-2" id="brotherhoodPointsContainer">
-      <h2>Brotherhood Points:</h2>
-      <h4 id="bhoodPoints">0</h4>
-    </div>
-    <div class="col-md-2" id="servicePointsContainer">
-      <h2>Service Points:</h2>
-      <h4 id="servicePoints">0</h4>
-    </div>
-    <div class="col-md-2" id="bpdPointsContainer">
-      <h2>Professional Development Points:</h2>
-      <h4 id="pdPoints">0</h4>
-    </div>
-    <div class="col-md-2" id="generalPointsContainer">
-      <h2>General Points:</h2>
-      <h4 id="generalPoints">0</h4>
-    </div>
+    <button id="btnLogout" type="button" class="btn btn-warning btn-lg">Logout</button>
   </div>
 
   <div class="row" id="signedOutUser" hidden>

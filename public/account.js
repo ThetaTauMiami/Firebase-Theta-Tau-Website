@@ -95,7 +95,9 @@ function userOwnsSomething(userId) {
 }
 
 // This button will return a user back to the "Login" page and ensure that they are logged out as well
-btnLoginReturn.addEventListener("click", logoutExit) 
+btnLoginReturn.addEventListener("click", logoutExit)
+// Normal Logout Button
+btnLogout.addEventListener("click", logoutExit)
 
 // This authentication listener regulates what the user sees
 // on the page depending on the authentication state.
