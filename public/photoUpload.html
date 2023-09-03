@@ -32,7 +32,7 @@
     </script>
 
     <!--References the app.js file, uses defer to make sure it loads after the body elements have loaded-->
-    <script type="module" src="passwordReset.js" defer></script>
+    <script type="module" src="photoUpload.js" defer></script>
 
     <link href="./favicon.ico" rel="shortcut icon" type="image/x-icon">
     <!--<link href="/favicon.ico" rel="icon" type="image/x-icon">-->
@@ -100,9 +100,9 @@
                 <li>
                     <a href="contact.html">CONTACT</a>
                 </li>
-                <!-- The login tab, which connects to Firebase to become the User Account page. -->
+                <!-- The account tab, which shows the user their profile. -->
                 <li>
-                  <a href="login.html" >LOGIN</a>
+                  <a href="account.html" >ACCOUNT</a>
               </li>
             </ul>
         </div>
@@ -110,8 +110,8 @@
 </nav>
 
 <!-- Header "Reset Password" ---------------------------------->
-<div id="headerLogin" class="jumbotron" style="background-image:url('assets/img/banner.png'); background-position: center;">
-    <h1>Reset Password</h1>
+<div id="headerPhotoUpload" class="jumbotron" style="background-image:url('assets/img/banner.png'); background-position: center;">
+    <h1>Photo Upload</h1>
 </div>
 
 <div class="container" id="borderBar">
@@ -128,34 +128,53 @@
     <!--<a href="https://twitter.com/thetataumu?lang=en" target="_blank"><i id="social" class="fa fa-twitter fa-5x" aria-hidden="true">&nbsp;&nbsp;</i></a>-->
     <!-- <a href="https://www.instagram.com/thetatau_miamiu/?hl=en" target="_blank"><i id="social" class="fa fa-instagram fa-5x" aria-hidden="true">&nbsp;&nbsp;</i></a>
     <a href="http://www.linkedin.com/groups/8471878" target="_blank"><i id="social" class="fa fa-linkedin fa-5x" aria-hidden="true"></i></a> -->
-    <img id="profile-img" class="profile-img-card center-block img-responsive" src="assets/img/login-logo.png" style="height: 214px; width: 125px;" />
+    <!-- <img id="profile-img" class="profile-img-card center-block img-responsive" src="assets/img/login-logo.png" style="height: 214px; width: 125px;" /> -->
+    <h3><u>Upload Instructions</u></h3>
+    <p>(<b>*NOTE:</b> All images uploaded are displayed with dimensions of 331x496 pixels, or a multiple of this.)</p>
+    <div style="text-align: left; margin-left: 25%; margin-right: 25%;">
+      <ol type="1" style="font-size: 16px;">
+        <li>Navigate to the Theta Tau Miami shared Google Drive</li>
+        <li>Follow the folder path of <b>Pictures</b> > <b>Website</b> > <b>Headshots</b></li>
+        <li>Upload your professional headshot to the Google Drive folder, preferrably cropped to dimensions of 331x496 pixels</li>
+        <li>Double-click on your uploaded photo, click on the three dots in the top-right corner, and select <b>"Share"</b></li>
+        <li>Look at the bottom of the Share menu and change the <b>General Access</b> section to <b>"Anyone with the link"</b> with <b>"Viewer"</b> privilages</li>
+        <li>After selecting the correct options, copy the link and paste it into the submission box down below</li>
+      </ol>
+      <!-- <p>Step 1: Navigate to the Theta Tau Miami shared Google Drive</p>
+      <p>Step 2: Follow the folder path of <b>Pictures</b> > <b>Website</b> > <b>Headshots</b></p>
+      <p>Step 3: Upload your professional headshot to the Google Drive folder, preferrably cropped to dimensions of 331x496 pixels</p>
+      <p>Step 4: Double-click on your uploaded photo, click on the three dots in the top-right corner, and select <b>"Share"</b></p>
+      <p>Step 5: Look at the bottom of the Share menu and change the <b>General Access</b> section to <b>"Anyone with the link"</b> with <b>"Viewer"</b> privilages</p>
+      <p>Step 6: After selecting the correct options, copy the link and paste it into the submission box down below</p> -->
+    </div>
   </div>
 </div>
 
 <div class="container">
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
+
       <div class="well well-sm" style="margin-top: 30px">
 
         <form class="form-horizontal" action="">
           <fieldset>
 
-            <legend>Reset Your Password</legend>
+            <legend>Upload Your Photo</legend>
 
-            <!-- Email input-->
+            <!-- Photo URL input-->
             <div class="form-group">
-              <label class="col-md-3 control-label" for="email">Email: </label>
+              <label class="col-md-3 control-label" for="profilePhoto">Photo URL:</label>
               <div class="col-md-9">
-                <input id="txtEmail" name="email" type="email" placeholder="Enter account email here" class="form-control" value="">
+                <input id="txtPhotoURL" name="profilePhoto" type="url" placeholder="Enter your full shared photo URL" class="form-control" value="" style="width:95%; margin: auto;">
               </div>
             </div>
 
             <!-- Submit Button -->
             <div class="form-group">
               <div class="col-md-12 text-right">
-                <button id="resetPassword" type="button" class="btn btn-warning btn-lg">Submit</button>
+                <button id="btnSubmitPhoto" type="button" class="btn btn-warning btn-lg">Submit Photo</button>
               </div>
-              <div class="col-md-12 text-left" id="divLoginError">
+              <div class="col-md-12 text-left" id="divPhotoSubmitError">
                 <div id="lblLoginErrorMessage"></div>
               </div>
             </div>
@@ -163,8 +182,11 @@
         </form>
       </div>
       <div class="col-md-12 text-center">
-        <p id="successMessage" style="color:#005b14; font-size: 18px;  text-align: center;" hidden><b>Email successfully sent! Check your inbox for instructions.</b></p>
-        <p id="failureMessage" style="color:#5B0000; font-size: 18px;  text-align: center;" hidden><b>Invalid email has been entered, try again.</b></p>
+        <p id="successMessage" style="color:#005b14; font-size: 18px;  text-align: center;" hidden><b>Your photo was successfully submitted!</b></p>
+        <p id="failureMessage" style="color:#5B0000; font-size: 18px;  text-align: center;" hidden><b>Invalid URL has been entered, try again.</b></p>
+      </div>
+      <div class="col-md-12 text-left">
+        <a href="account.html" style="color:#5B0000; font-size: 18px;  text-align: left;">← Back to your account</a>
       </div>
     </div>
   </div>
@@ -199,8 +221,8 @@
               <!--<a href="members">Members</a> · 
               <a href="alumni">Alumni</a> · -->
               <a href="contact.html">Contact Us</a>  · 
-              <a href="login.html" id="footerLogin">Login</a>
-              <a href="account.html" id="footerAccount" hidden="true">Account</a>
+              <a href="login.html" id="footerLogin"hidden>Login</a>
+              <a href="account.html" id="footerAccount">Account</a>
             </p>
             <p class="footer-links">Theta Tau | Tau Delta Chapter of Miami University | 2023</p>
         </div>

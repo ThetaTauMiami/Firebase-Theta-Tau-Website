@@ -34,6 +34,8 @@ const divSignedOutUser = document.querySelector('#signedOutUser')
 // Return to Login Button
 const btnLoginReturn = document.querySelector('#btnLoginReturn')
 
+// Upload Photo Button
+const btnUploadPhoto = document.querySelector('#btnUploadPhoto')
 
 ///////////////// Firebase Initialization ////////////////
 const firebaseApp = initializeApp({
@@ -49,6 +51,7 @@ const firebaseApp = initializeApp({
 //////// Firestore Variables (Database) //////////
 const db = firebase.firestore();
 let usersRef; // Reference to the document or collection we want to access
+let unsubscribe;
 
 // Core constant variables used to regulate a user's authenticated 'state'
 const auth = firebase.auth();
@@ -94,10 +97,18 @@ function userOwnsSomething(userId) {
     });
 }
 
+// Function to redirect the user to the photo upload page from anywhere
+function goToPhotoUpload() {
+  window.location.replace("photoUpload.html");
+}
+
 // This button will return a user back to the "Login" page and ensure that they are logged out as well
-btnLoginReturn.addEventListener("click", logoutExit)
+btnLoginReturn.addEventListener("click", logoutExit);
 // Normal Logout Button
-btnLogout.addEventListener("click", logoutExit)
+btnLogout.addEventListener("click", logoutExit);
+
+// This button will take the user to the photo upload page
+btnUploadPhoto.addEventListener("click", goToPhotoUpload);
 
 // This authentication listener regulates what the user sees
 // on the page depending on the authentication state.
@@ -117,6 +128,57 @@ auth.onAuthStateChanged(user => {
               divFirstLoginForm.hidden = false;
               divFullUser.hidden = true;
             } else {
+
+              // Query the user's information
+              unsubscribe = usersRef
+              .where('uid', '==', user.uid) // Order by 'searchName' field
+              .onSnapshot(querySnapshot => {
+
+                  const photoArea = document.getElementById('photoArea');
+                  const bhpointsNum = document.getElementById('bhoodPoints');
+                  const servicepointsNum = document.getElementById('servicePoints');
+                  const pdpointsNum = document.getElementById('pdPoints');
+                  const generalpointsNum = document.getElementById('generalPoints');
+
+
+                  // Clear previous content for photo and points
+                  photoArea.innerHTML = '';
+                  bhpointsNum.innerHTML = '';
+                  servicepointsNum.innerHTML = '';
+                  pdpointsNum.innerHTML = '';
+                  generalpointsNum.innerHTML = '';
+
+                  // Loop through query results and extract profile variable values
+                  querySnapshot.docs.forEach(doc => {
+                      const profile = doc.data();
+                      const firstN = profile.firstname;
+                      const lastN = profile.lastname;
+                      const gradYear = profile.gradYear;
+                      const fratClass = profile.fratclass;
+                      const bhoodPoints = profile.brotherhoodPoints;
+                      const pdPoints = profile.pdPoints;
+                      const servicePoints = profile.servicePoints;
+                      const generalPoints = profile.generalPoints;
+                      const deiFulfilled = profile.deiFulfilled;
+                      const major = profile.major;
+                      const minor = profile.minor;
+                      const linkedinLink = profile.linkedinLink;
+                      const personalLink = profile.personalLink;
+                      const githubLink = profile.githubLink;
+                      const pictureLink = profile.pictureLink;
+                      // const amount = profile.amount;
+                      // const col = document.createElement('td');
+                      // col.textContent = `${name}: ${amount}`;
+                      // row.appendChild(col);
+                      // colCount++;
+                      // If there are 5 columns in this row, append it to the table body and start a new row
+                      photoArea.innerHTML = "<img src='" + pictureLink + "' alt='Theta Tau Brother Headshot' width='331' height='496'>";
+                      bhpointsNum.innerHTML = '' + bhoodPoints;
+                      servicepointsNum.innerHTML = '' + servicePoints;
+                      pdpointsNum.innerHTML = '' + pdPoints;
+                      generalpointsNum.innerHTML = '' + generalPoints;
+                  });
+              });
               // Hide first login display
               divFirstLoginPrompt.hidden = true;
               divFirstLoginForm.hidden = true;
@@ -137,6 +199,7 @@ auth.onAuthStateChanged(user => {
           txtFirstnameEntry.placeholder = "You must input a valid first name!";
           txtFirstnameEntry.classList.add('placeholderInvalid');
           txtFirstnameEntry.classList.add('placeholderInvalid::placeholder');
+          txtFirstnameEntry.value = "";
         }
 
         // Get User's Lastname
@@ -149,6 +212,7 @@ auth.onAuthStateChanged(user => {
           txtLastnameEntry.placeholder = "You must input a valid last name!";
           txtLastnameEntry.classList.add('placeholderInvalid');
           txtLastnameEntry.classList.add('placeholderInvalid::placeholder');
+          txtLastnameEntry.value = "";
         }
 
         // Get User's Major
@@ -161,6 +225,7 @@ auth.onAuthStateChanged(user => {
           txtMajorEntry.placeholder = "You must input a valid major!";
           txtMajorEntry.classList.add('placeholderInvalid');
           txtMajorEntry.classList.add('placeholderInvalid::placeholder');
+          txtMajorEntry.value = "";
         }
 
         // Get User's Minor (Optional)
@@ -178,6 +243,7 @@ auth.onAuthStateChanged(user => {
           txtGradYearEntry.placeholder = "You must input a valid graduation year! (1980-2050)";
           txtGradYearEntry.classList.add('placeholderInvalid');
           txtGradYearEntry.classList.add('placeholderInvalid::placeholder');
+          txtGradYearEntry.value = "";
         }
 
         // Get User's Grad Year
@@ -254,6 +320,10 @@ auth.onAuthStateChanged(user => {
               personalLink: personalWebVal,
               githubLink: githubVal
             })
+            // Change what the user sees
+            divFirstLoginPrompt.hidden = true;
+            divFirstLoginForm.hidden = true;
+            divFullUser.hidden = false;
         }
       }
 
@@ -265,6 +335,8 @@ auth.onAuthStateChanged(user => {
       divFullUser.hidden = true;
       // Show Logged-Out Section
       divSignedOutUser.hidden = false;
+      // Unsubscribe listening streams for no memory leak when user signs out
+      unsubscribe && unsubscribe();
   }
 });
 

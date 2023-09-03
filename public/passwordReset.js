@@ -47,7 +47,7 @@ logout();
 // User enters their email to recieve password reset email
 const resetPasswordFunction = () => {
   const email = txtEmail.value;
-  console.log(email);
+  //console.log(email);
   auth.sendPasswordResetEmail(email)
   .then(() => {
     console.log("Password Reset Email Sent Successfully!");
