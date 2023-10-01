@@ -37,6 +37,9 @@ const btnLoginReturn = document.querySelector('#btnLoginReturn')
 // Upload Photo Button
 const btnUploadPhoto = document.querySelector('#btnUploadPhoto')
 
+// Update Profile Button
+const btnUpdateProfile = document.querySelector('#btnUpdateProfile')
+
 ///////////////// Firebase Initialization ////////////////
 const firebaseApp = initializeApp({
     apiKey: "AIzaSyCuS3TWRtitOxxjJ3gyb-lxH2kmu2N0Ij8",
@@ -102,6 +105,11 @@ function goToPhotoUpload() {
   window.location.replace("photoUpload.html");
 }
 
+// Function to redirect the user to the profile update page from anywhere
+function goToProfileUpdate() {
+  window.location.replace("profileUpdate.html");
+}
+
 // This button will return a user back to the "Login" page and ensure that they are logged out as well
 btnLoginReturn.addEventListener("click", logoutExit);
 // Normal Logout Button
@@ -109,6 +117,9 @@ btnLogout.addEventListener("click", logoutExit);
 
 // This button will take the user to the photo upload page
 btnUploadPhoto.addEventListener("click", goToPhotoUpload);
+
+// This button will take the user to the profile update page
+btnUpdateProfile.addEventListener("click", goToProfileUpdate);
 
 // This authentication listener regulates what the user sees
 // on the page depending on the authentication state.

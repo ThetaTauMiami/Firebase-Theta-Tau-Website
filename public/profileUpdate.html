@@ -1,4 +1,3 @@
-<!--This page is only accessible for logged in users to view their account-->
 <!DOCTYPE html>
 <html>
 
@@ -33,7 +32,7 @@
     </script>
 
     <!--References the app.js file, uses defer to make sure it loads after the body elements have loaded-->
-    <script type="module" src="account.js" defer></script>
+    <script type="module" src="profileUpdate.js" defer></script>
 
     <link href="./favicon.ico" rel="shortcut icon" type="image/x-icon">
     <!--<link href="/favicon.ico" rel="icon" type="image/x-icon">-->
@@ -101,20 +100,19 @@
                 <li>
                     <a href="contact.html">CONTACT</a>
                 </li>
-              <!--This section only appears for the users signed in to view their accounts-->
-              <li id="whenSignedInNav">
-                  <a href="account.html">ACCOUNT</a>
+                <!-- The account tab, which shows the user their profile. -->
+                <li>
+                  <a href="account.html" >ACCOUNT</a>
               </li>
             </ul>
         </div>
     </div>
 </nav>
 
-<!-- This is displayed only when the user is logged in ---------------------------------->
-<div id="headerAccount" class="jumbotron" style="background-image:url('assets/img/banner.png'); background-position: center;">
-  <h1>Account</h1>
+<!-- Header "Profile Update" ---------------------------------->
+<div id="headerProfileUpdate" class="jumbotron" style="background-image:url('assets/img/banner.png'); background-position: center;">
+    <h1>Profile Update</h1>
 </div>
-
 
 <div class="container" id="borderBar">
 
@@ -124,143 +122,103 @@
 <!-- Added upper ---------------------------------->
 
 <div class="container">
-
-  <!--These sections are only shown to logged in users on their first time logging in to setup account information-->
-  <div class="row" id="firstLoginPrompt" hidden>
+  <div class="row" style="text-align: center">
+    <div class="row" id="profileUpdateForm">
+      <!--This div section will contain the intial login form to allow users to
+        make changes to their profile settings, account updates are handled by: profileUpdate.js-->
+      <form class="form-horizontal" action="">
+          <fieldset>
+            <legend>Enter Information to Update Your Account</legend>
+            <!-- Firstname input-->
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="firstname">First Name</label>
+              <div class="col-md-9">
+                <input id="txtFirstname" name="firstname" type="text" placeholder="Enter your first name" class="form-control" value="" style="width:95%; margin: auto;" required>
+              </div>
+            </div>
+  
+            <!-- Lastname input-->
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="lastname">Last Name</label>
+              <div class="col-md-9">
+                <input id="txtLastname" name="lastname" type="text" placeholder="Enter your last name" class="form-control" value="" style="width:95%; margin: auto;" required>
+              </div>
+            </div>
+  
+            <!-- College Major input-->
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="major">Current Major</label>
+              <div class="col-md-9">
+                <input id="txtMajor" name="major" type="text" placeholder="Enter your current college major (Separate by commas if multiple)" class="form-control" value="" style="width:95%; margin: auto;" required>
+              </div>
+            </div>
+  
+            <!-- College Minor input-->
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="minor">Current Minor (Optional)</label>
+              <div class="col-md-9">
+                <input id="txtMinor" name="minor" type="text" placeholder="Enter your current college minor (Separate by commas if multiple)" class="form-control" value="" style="width:95%; margin: auto;">
+              </div>
+            </div>
+  
+            <!-- Expected Grad Year input-->
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="gradYear">Graduation Year</label>
+              <div class="col-md-9">
+                <input id="txtGradYear" name="gradYear" type="number" placeholder="Enter your expected graduation year" class="form-control" value="" style="width:95%; margin: auto;" min="1980" max="2050" required>
+              </div>
+            </div>
+  
+            <!-- Fraternity Class input-->
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="fratClass">Fraternity Class</label>
+              <div class="col-md-9">
+                <input id="txtFratClass" name="fratClass" type="text" placeholder="Enter your fraternity class (Ex: Mu)" class="form-control" value="" style="width:95%; margin: auto;" required>
+              </div>
+            </div>
+  
+            <!-- LinkedIn Input-->
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="linkedinURL">LinkedIn (Optional)</label>
+              <div class="col-md-9">
+                <input id="txtLinkedin" name="linkedinURL" type="url" placeholder="Enter your full LinkedIn URL" class="form-control" value="" style="width:95%; margin: auto;">
+              </div>
+            </div>
+            
+            <!-- Personal Website Input-->
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="personalWebURL">Personal Website (Optional)</label>
+              <div class="col-md-9">
+                <input id="txtPersonalWeb" name="personalWebURL" type="url" placeholder="Enter your full personal website URL" class="form-control" value="" style="width:95%; margin: auto;">
+              </div>
+            </div>
+  
+            <!-- GitHub Input-->
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="personalGitHubURL">Personal GitHub (Optional)</label>
+              <div class="col-md-9">
+                <input id="txtGithub" name="personalGitHubURL" type="url" placeholder="Enter your full personal GitHub URL" class="form-control" value="" style="width:95%; margin: auto;">
+              </div>
+            </div>
+  
+            <!-- Submission Button -->
+            <div class="form-group">
+              <div class="col-md-12 text-right">
+                <button id="btnUpdateAccountDetails" type="button" class="btn btn-warning btn-lg">Update</button>
+              </div>
+            </div>
+          </fieldset>
+        </form>
+    </div>
     <div class="col-md-12 text-center">
-      <h3>Looks like this is your first time logging in, please enter your information below:</h3>
-      <h4>(*NOTE: These choices can be changed later in your account settings)</h4>
+      <p id="successMessage" style="color:#005b14; font-size: 18px;  text-align: center;" hidden><b>Your profile was successfully updated!</b></p>
+      <p id="failureMessage" style="color:#5B0000; font-size: 18px;  text-align: center;" hidden><b>Invalid profile information, please try again.</b></p>
+      <p id="notInitMessage" style="color:#5B0000; font-size: 18px;  text-align: center;" hidden><b>You have not intialized your profile yet, return to your account page.</b></p>
     </div>
-  </div>
-  <div class="row" id="firstLoginForm" hidden>
-    <!--This div section will only be displayed if it is the user's first time logging in
-    so they can setup their account information, visibility is handled by: account.js-->
-    <form class="form-horizontal" action="">
-        <fieldset>
-          <legend>Account Setup</legend>
-          <!-- Firstname input-->
-          <div class="form-group">
-            <label class="col-md-3 control-label" for="firstname">First Name</label>
-            <div class="col-md-9">
-              <input id="txtFirstname" name="firstname" type="text" placeholder="Enter your first name" class="form-control" value="" style="width:95%; margin: auto;" required>
-            </div>
-          </div>
-
-          <!-- Lastname input-->
-          <div class="form-group">
-            <label class="col-md-3 control-label" for="lastname">Last Name</label>
-            <div class="col-md-9">
-              <input id="txtLastname" name="lastname" type="text" placeholder="Enter your last name" class="form-control" value="" style="width:95%; margin: auto;" required>
-            </div>
-          </div>
-
-          <!-- College Major input-->
-          <div class="form-group">
-            <label class="col-md-3 control-label" for="major">Current Major</label>
-            <div class="col-md-9">
-              <input id="txtMajor" name="major" type="text" placeholder="Enter your current college major (Separate by commas if multiple)" class="form-control" value="" style="width:95%; margin: auto;" required>
-            </div>
-          </div>
-
-          <!-- College Minor input-->
-          <div class="form-group">
-            <label class="col-md-3 control-label" for="minor">Current Minor (Optional)</label>
-            <div class="col-md-9">
-              <input id="txtMinor" name="minor" type="text" placeholder="Enter your current college minor (Separate by commas if multiple)" class="form-control" value="" style="width:95%; margin: auto;">
-            </div>
-          </div>
-
-          <!-- Expected Grad Year input-->
-          <div class="form-group">
-            <label class="col-md-3 control-label" for="gradYear">Graduation Year</label>
-            <div class="col-md-9">
-              <input id="txtGradYear" name="gradYear" type="number" placeholder="Enter your expected graduation year" class="form-control" value="" style="width:95%; margin: auto;" min="1980" max="2050" required>
-            </div>
-          </div>
-
-          <!-- Fraternity Class input-->
-          <div class="form-group">
-            <label class="col-md-3 control-label" for="fratClass">Fraternity Class</label>
-            <div class="col-md-9">
-              <input id="txtFratClass" name="fratClass" type="text" placeholder="Enter your fraternity class (Ex: Mu)" class="form-control" value="" style="width:95%; margin: auto;" required>
-            </div>
-          </div>
-
-          <!-- LinkedIn Input-->
-          <div class="form-group">
-            <label class="col-md-3 control-label" for="linkedinURL">LinkedIn (Optional)</label>
-            <div class="col-md-9">
-              <input id="txtLinkedin" name="linkedinURL" type="url" placeholder="Enter your full LinkedIn URL" class="form-control" value="" style="width:95%; margin: auto;">
-            </div>
-          </div>
-          
-          <!-- Personal Website Input-->
-          <div class="form-group">
-            <label class="col-md-3 control-label" for="personalWebURL">Personal Website (Optional)</label>
-            <div class="col-md-9">
-              <input id="txtPersonalWeb" name="personalWebURL" type="url" placeholder="Enter your full personal website URL" class="form-control" value="" style="width:95%; margin: auto;">
-            </div>
-          </div>
-
-          <!-- GitHub Input-->
-          <div class="form-group">
-            <label class="col-md-3 control-label" for="personalGitHubURL">Personal GitHub (Optional)</label>
-            <div class="col-md-9">
-              <input id="txtGithub" name="personalGitHubURL" type="url" placeholder="Enter your full personal GitHub URL" class="form-control" value="" style="width:95%; margin: auto;">
-            </div>
-          </div>
-
-          <!-- Submission Button -->
-          <div class="form-group">
-            <div class="col-md-12 text-right">
-              <button id="btnMakeAccountDetails" type="button" class="btn btn-warning btn-lg">Submit</button>
-            </div>
-          </div>
-        </fieldset>
-      </form>
-  </div>
-
-  <div id="fullUser" hidden>
-    <div class="row">
-      <!--This section is shown to users that have logged in before and have successfully entered their information.-->
-      <!--This section should be always shown for authenticated and setup users to access and see their current points and account.-->
-      <div class="col-md-4" id="photoArea">
-        <!--This area is rewritten by JavaScript to display the correct photo to users-->
-      </div>
-      <div class="col-md-2" id="brotherhoodPointsContainer">
-        <h2>Brotherhood Points:</h2>
-        <h4 id="bhoodPoints"></h4>
-      </div>
-      <div class="col-md-2" id="servicePointsContainer">
-        <h2>Service Points:</h2>
-        <h4 id="servicePoints"></h4>
-      </div>
-      <div class="col-md-2" id="pdPointsContainer">
-        <h2>Professional Development Points:</h2>
-        <h4 id="pdPoints"></h4>
-      </div>
-      <div class="col-md-2" id="generalPointsContainer">
-        <h2>General Points:</h2>
-        <h4 id="generalPoints"></h4>
-      </div>
-    </div>
-    <button id="btnLogout" type="button" class="btn btn-warning btn-lg">Logout</button>
-    <button id="btnUploadPhoto" type="button" class="btn btn-warning btn-lg">Upload Photo</button>
-    <button id="btnUpdateProfile" type="button" class="btn btn-warning btn-lg">Update Profile</button>
-  </div>
-
-  <div class="row" id="signedOutUser" hidden>
-    <!--This section is shown to users that are not logged in, and need to return to the Login page.-->
-    <br>
     <div class="col-md-12 text-center">
-      <h3>You are not currently signed in, click below to return to the login page:</h3>
-    </div>
-    <br>
-    <div class="col-md-12 text-center">
-      <button id="btnLoginReturn" type="button" class="btn btn-warning btn-lg">Return to Login</button>
+      <a href="account.html" style="color:#5B0000; font-size: 18px;  text-align: left;">← Back to your account</a>
     </div>
   </div>
-
 </div>
 
 <!-- Added footer ------------------------------------------>
@@ -292,6 +250,7 @@
               <!--<a href="members">Members</a> · 
               <a href="alumni">Alumni</a> · -->
               <a href="contact.html">Contact Us</a>  · 
+              <a href="login.html" id="footerLogin"hidden>Login</a>
               <a href="account.html" id="footerAccount">Account</a>
             </p>
             <p class="footer-links">Theta Tau | Tau Delta Chapter of Miami University | 2023</p>

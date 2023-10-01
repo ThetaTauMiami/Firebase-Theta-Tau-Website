@@ -50,6 +50,7 @@ auth.onAuthStateChanged(user => {
           txtPhotoURL.classList.add('placeholderInvalid::placeholder');
           txtPhotoURL.value = "";
           successMessage.hidden = true;
+          failureMessage.hidden = false;
         } else { // Valid input
             // Query the user's information
             const query = usersRef.where('uid', '==', user.uid);
@@ -64,11 +65,13 @@ auth.onAuthStateChanged(user => {
               });
             });
             successMessage.hidden = false;
+            failureMessage.hidden = true;
         }
       }
 
   } else { // User is not signed in
     // Return the user to the login screen
+    unsubscribe && unsubscribe(); // Stop listening for user input (no memory leaks)
     window.location.replace("login.html");
   }
 });
