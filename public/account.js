@@ -20,6 +20,11 @@ const txtFratClassEntry = document.querySelector('#txtFratClass')
 const txtLinkedinEntry = document.querySelector('#txtLinkedin')
 const txtPersonalWebEntry = document.querySelector('#txtPersonalWeb')
 const txtGitHubEntry = document.querySelector('#txtGithub')
+// Text Areas
+const txtNavbarName = document.querySelector('#userNameNavbar')
+
+// Get the canvas element
+var ctx = document.getElementById('pointsChart').getContext('2d');
 
 // Submission Button
 const btnMakeAccountDetails = document.querySelector('#btnMakeAccountDetails')
@@ -27,6 +32,8 @@ const btnMakeAccountDetails = document.querySelector('#btnMakeAccountDetails')
 
 //Logged-In User Sections
 const divFullUser = document.querySelector('#fullUser')
+const loggedInNavbar = document.querySelector('#loggedInNavbar')
+const logoutHeader = document.querySelector('#logoutHeader')
 
 //Logged-Out User Sections
 const divSignedOutUser = document.querySelector('#signedOutUser')
@@ -100,26 +107,44 @@ function userOwnsSomething(userId) {
     });
 }
 
-// Function to redirect the user to the photo upload page from anywhere
-function goToPhotoUpload() {
-  window.location.replace("photoUpload.html");
-}
+function updatePointsChart(bhoodP, serviceP, professionalDevelopmentP, generalP) {
+          let totalP = bhoodP + serviceP + professionalDevelopmentP + generalP;
+          const xValues = ["Brotherhood", "Service", "Professional Development", "General", "Total"];
+          const yValues = [bhoodP, serviceP, professionalDevelopmentP, generalP, totalP];
+          const barColors = ["red", "green","blue","orange","purple"];
 
-// Function to redirect the user to the profile update page from anywhere
-function goToProfileUpdate() {
-  window.location.replace("profileUpdate.html");
+          // Create the bar chart
+          var pointsChart = new Chart(ctx, {
+            type: "bar",
+            data: {
+              labels: xValues,
+              datasets: [{
+                backgroundColor: barColors,
+                data: yValues,
+                label: 'Semester Points'
+              }]
+            },
+            options: { 
+              legend: {
+                  display: false
+              }
+            }
+          });
 }
 
 // This button will return a user back to the "Login" page and ensure that they are logged out as well
 btnLoginReturn.addEventListener("click", logoutExit);
 // Normal Logout Button
-btnLogout.addEventListener("click", logoutExit);
+// btnLogout.addEventListener("click", logoutExit);
+
+// Logout header clicked
+logoutHeader.addEventListener("click", logoutExit);
 
 // This button will take the user to the photo upload page
-btnUploadPhoto.addEventListener("click", goToPhotoUpload);
+// btnUploadPhoto.addEventListener("click", goToPhotoUpload);
 
 // This button will take the user to the profile update page
-btnUpdateProfile.addEventListener("click", goToProfileUpdate);
+// btnUpdateProfile.addEventListener("click", goToProfileUpdate);
 
 // This authentication listener regulates what the user sees
 // on the page depending on the authentication state.
@@ -138,6 +163,7 @@ auth.onAuthStateChanged(user => {
               divFirstLoginPrompt.hidden = false;
               divFirstLoginForm.hidden = false;
               divFullUser.hidden = true;
+              loggedInNavbar.hidden = true;
             } else {
 
               // Query the user's information
@@ -188,6 +214,8 @@ auth.onAuthStateChanged(user => {
                       servicepointsNum.innerHTML = '' + servicePoints;
                       pdpointsNum.innerHTML = '' + pdPoints;
                       generalpointsNum.innerHTML = '' + generalPoints;
+                      txtNavbarName.innerHTML = 'Welcome, ' + firstN + ' ' + lastN + '!';
+                      updatePointsChart(bhoodPoints, servicePoints, pdPoints, generalPoints);
                   });
               });
               // Hide first login display
@@ -195,6 +223,7 @@ auth.onAuthStateChanged(user => {
               divFirstLoginForm.hidden = true;
               // Show normal login content (User has setup account)
               divFullUser.hidden = false;
+              loggedInNavbar.hidden = false;
             }
       });
     
@@ -335,6 +364,7 @@ auth.onAuthStateChanged(user => {
             divFirstLoginPrompt.hidden = true;
             divFirstLoginForm.hidden = true;
             divFullUser.hidden = false;
+            loggedInNavbar.hidden = false;
         }
       }
 
@@ -344,6 +374,7 @@ auth.onAuthStateChanged(user => {
       divFirstLoginPrompt.hidden = true;
       divFirstLoginForm.hidden = true;
       divFullUser.hidden = true;
+      loggedInNavbar.hidden = true;
       // Show Logged-Out Section
       divSignedOutUser.hidden = false;
       // Unsubscribe listening streams for no memory leak when user signs out

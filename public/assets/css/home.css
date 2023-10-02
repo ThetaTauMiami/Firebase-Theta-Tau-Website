@@ -306,3 +306,8 @@ body {
 .hide {
   display:none;
 }
+
+.center {
+  margin: auto;
+  width: 80%;
+}

@@ -54,7 +54,7 @@ const hideLoginError = () => {
 const showLoginError = (error) => {
     divLoginError.style.display = 'block'    
     if (error.code == AuthErrorCodes.INVALID_PASSWORD) {
-        lblLoginErrorMessage.innerHTML = `Wrong password. Try again.`
+        lblLoginErrorMessage.innerHTML = `Invalid email or password, try again.`
     }
     else {
         lblLoginErrorMessage.innerHTML = `Invalid email or password, try again.`      

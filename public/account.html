@@ -10,6 +10,7 @@
     <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-firestore.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
@@ -46,6 +47,8 @@
     <link href="assets/css/style.css" rel="stylesheet">
     <link href="assets/css/home.css" rel="stylesheet">
     <link href="assets/css/jquery-ui.min.css" rel="stylesheet">
+    <!-- <link href="assets/css/dotsMenu.css" rel="stylesheet"> -->
+    
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Chrome, Firefox OS, Opera and Vivaldi -->
@@ -118,10 +121,36 @@
 
 <div class="container" id="borderBar">
 
-<br/>
-<br/>
 
 <!-- Added upper ---------------------------------->
+
+<!--Logged-in navbar-->
+<div id="loggedInNavbar" hidden>
+  <nav style="border-radius: 0px;" class="navbar navbar-default">
+    <div class="container-fluid text-center">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <!-- Centered and white text for the h3 tag -->
+            <h3 id="userNameNavbar" class="mx-auto" style="color: white; width: 100%;"></h3>
+        </div>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="photoUpload.html">Photo Upload</a></li>
+                <li><a href="profileUpdate.html">Profile Update</a></li>
+                <li id="whenSignedInNav"><a id="logoutHeader" href="#">Logout</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+  </nav>
+  <br/>
+</div>
 
 <div class="container">
 
@@ -227,26 +256,30 @@
       <div class="col-md-4" id="photoArea">
         <!--This area is rewritten by JavaScript to display the correct photo to users-->
       </div>
-      <div class="col-md-2" id="brotherhoodPointsContainer">
-        <h2>Brotherhood Points:</h2>
-        <h4 id="bhoodPoints"></h4>
-      </div>
-      <div class="col-md-2" id="servicePointsContainer">
-        <h2>Service Points:</h2>
-        <h4 id="servicePoints"></h4>
-      </div>
-      <div class="col-md-2" id="pdPointsContainer">
-        <h2>Professional Development Points:</h2>
-        <h4 id="pdPoints"></h4>
-      </div>
-      <div class="col-md-2" id="generalPointsContainer">
-        <h2>General Points:</h2>
-        <h4 id="generalPoints"></h4>
+      <div class="col-md-8">
+        <div class="row">
+          <div class="col-md-3" id="brotherhoodPointsContainer">
+            <h2>Brotherhood Points:</h2>
+            <h4 id="bhoodPoints"></h4>
+          </div>
+          <div class="col-md-3" id="servicePointsContainer">
+            <h2>Service Points:</h2>
+            <h4 id="servicePoints"></h4>
+          </div>
+          <div class="col-md-3" id="pdPointsContainer">
+            <h2>Professional Development Points:</h2>
+            <h4 id="pdPoints"></h4>
+          </div>
+          <div class="col-md-3" id="generalPointsContainer">
+            <h2>General Points:</h2>
+            <h4 id="generalPoints"></h4>
+          </div>
+        </div>
+        <div class="row center" >
+          <canvas id="pointsChart" style="width:100%;max-width:600px"></canvas>
+        </div>
       </div>
     </div>
-    <button id="btnLogout" type="button" class="btn btn-warning btn-lg">Logout</button>
-    <button id="btnUploadPhoto" type="button" class="btn btn-warning btn-lg">Upload Photo</button>
-    <button id="btnUpdateProfile" type="button" class="btn btn-warning btn-lg">Update Profile</button>
   </div>
 
   <div class="row" id="signedOutUser" hidden>
