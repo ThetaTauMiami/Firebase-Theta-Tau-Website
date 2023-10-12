@@ -91,6 +91,3 @@ function transformGoogleDriveURL(originalURL) {
     return originalURL;
   }
 }
-
-
-

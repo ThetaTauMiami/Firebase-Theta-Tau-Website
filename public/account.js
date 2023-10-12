@@ -218,7 +218,7 @@ auth.onAuthStateChanged(user => {
                       // row.appendChild(col);
                       // colCount++;
                       // If there are 5 columns in this row, append it to the table body and start a new row
-                      photoArea.innerHTML = "<img src='https://drive.google.com/uc?export=view&id=1F26Y5GnD9GFQH_Z8-9hKc_Ll1nFGrNll' alt='Theta Tau Brother Headshot' width='331' height='496'>";
+                      photoArea.innerHTML = "<img src='" + pictureLink + "' alt='Theta Tau Brother Headshot' width='331' height='496'>";
                       bhpointsNum.innerHTML = '' + bhoodPoints;
                       servicepointsNum.innerHTML = '' + servicePoints;
                       pdpointsNum.innerHTML = '' + pdPoints;
