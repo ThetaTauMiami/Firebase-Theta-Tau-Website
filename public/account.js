@@ -47,6 +47,9 @@ const btnUploadPhoto = document.querySelector('#btnUploadPhoto')
 // Update Profile Button
 const btnUpdateProfile = document.querySelector('#btnUpdateProfile')
 
+// Points Update Button (ADMINS ONLY)
+const updatePointsSection = document.querySelector('#updatePointsSection')
+
 ///////////////// Firebase Initialization ////////////////
 const firebaseApp = initializeApp({
     apiKey: "AIzaSyCuS3TWRtitOxxjJ3gyb-lxH2kmu2N0Ij8",
@@ -60,12 +63,17 @@ const firebaseApp = initializeApp({
 
 //////// Firestore Variables (Database) //////////
 const db = firebase.firestore();
+const configRef = db.collection('config').doc('roles');
 let usersRef; // Reference to the document or collection we want to access
-let unsubscribe;
+let unsubscribe; // Query handler for user information check
+let adminCheck; // Query handler for admin uid check
 
 // Core constant variables used to regulate a user's authenticated 'state'
 const auth = firebase.auth();
 const authentication = getAuth(firebaseApp);
+
+// Track user's state of loaded ownership
+var ownershipLoaded = false;
 
 ///////////////////// User Authentication ////////////////////////
 // Monitor user Authentication state, this will change website contents using javascript functions
@@ -164,6 +172,7 @@ auth.onAuthStateChanged(user => {
               divFirstLoginForm.hidden = false;
               divFullUser.hidden = true;
               loggedInNavbar.hidden = true;
+              updatePointsSection.style.display = 'none';
             } else {
 
               // Query the user's information
@@ -209,7 +218,7 @@ auth.onAuthStateChanged(user => {
                       // row.appendChild(col);
                       // colCount++;
                       // If there are 5 columns in this row, append it to the table body and start a new row
-                      photoArea.innerHTML = "<img src='" + pictureLink + "' alt='Theta Tau Brother Headshot' width='331' height='496'>";
+                      photoArea.innerHTML = "<img src='https://drive.google.com/uc?export=view&id=1F26Y5GnD9GFQH_Z8-9hKc_Ll1nFGrNll' alt='Theta Tau Brother Headshot' width='331' height='496'>";
                       bhpointsNum.innerHTML = '' + bhoodPoints;
                       servicepointsNum.innerHTML = '' + servicePoints;
                       pdpointsNum.innerHTML = '' + pdPoints;
@@ -218,11 +227,29 @@ auth.onAuthStateChanged(user => {
                       updatePointsChart(bhoodPoints, servicePoints, pdPoints, generalPoints);
                   });
               });
+
+              // Query the admin information
+              adminCheck = configRef
+                .get()
+                .then(doc => {
+                  if (doc.exists) {
+                    const admins = doc.data().admins;
+                    if (admins && admins.includes(user.uid)) {
+                      // User is an admin, do something
+                      updatePointsSection.style.display = 'list-item';
+                    }
+                  }
+                })
+                .catch(error => {
+                  console.error('Error getting document:', error);
+                });
+
               // Hide first login display
               divFirstLoginPrompt.hidden = true;
               divFirstLoginForm.hidden = true;
               // Show normal login content (User has setup account)
               divFullUser.hidden = false;
+              // Show the 
               loggedInNavbar.hidden = false;
             }
       });
@@ -365,6 +392,11 @@ auth.onAuthStateChanged(user => {
             divFirstLoginForm.hidden = true;
             divFullUser.hidden = false;
             loggedInNavbar.hidden = false;
+            setTimeout(function() {
+              // Reload the page to properly display account page
+              // on initial load-in (wait 0.5 seconds)
+              location.reload(true);
+            }, 500);
         }
       }
 

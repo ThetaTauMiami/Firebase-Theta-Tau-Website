@@ -311,3 +311,9 @@ body {
   margin: auto;
   width: 80%;
 }
+
+.center-div-photo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
