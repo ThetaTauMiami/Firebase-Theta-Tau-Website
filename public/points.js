@@ -124,7 +124,9 @@ auth.onAuthStateChanged(user => {
                             querySnapshot.forEach(doc => {
                                 const userData = doc.data();
                                 const userRow = takesUserCreatesHTML(userData);
+                                const brElem = document.createElement("br");
                                 document.getElementById('memberList').appendChild(userRow);
+                                document.getElementById('memberList').appendChild(brElem);
                             });
                         }).catch(error => {
                             console.error('Error getting users:', error);
@@ -161,6 +163,18 @@ auth.onAuthStateChanged(user => {
 
 function takesUserCreatesHTML(userDocument) {
   let element = document.createElement("div")
+  let noSelectString, yesSelectString;
+  let totalPoints = userDocument.brotherhoodPoints 
+    + userDocument.servicePoints
+    + userDocument.pdPoints
+    + userDocument.generalPoints;
+  if (userDocument.deiFulfilled == "true") {
+    yesSelectString = "selected";
+    noSelectString = "";
+  } else if (userDocument.deiFulfilled == "false") {
+    yesSelectString = "";
+    noSelectString = "selected";
+  }
   element.setAttribute("class", "row")
   element.setAttribute("style", "padding:10px")
   element.innerHTML =
@@ -170,20 +184,64 @@ function takesUserCreatesHTML(userDocument) {
       <div class="col-lg-2">
         <h5>${userDocument.firstname} ${userDocument.lastname}</h5>
       </div>
-      <div class="col-lg-1">
-          <input type="number" id="brotherhoodPoints-${userDocument.uid}" name="brotherhoodPoints" step="1" min="0" value="${userDocument.brotherhoodPoints}">
-      </div>
-      <div class="col-lg-1">
-          <input type="number" id="servicePoints-${userDocument.uid}" name="servicePoints" step="1" min="0" value="${userDocument.servicePoints}">
-      </div>
-      <div class="col-lg-1">
-        <input type="number" id="pdPoints-${userDocument.uid}" name="pdPoints" step="1" min="0" value="${userDocument.pdPoints}">
-      </div>
-      <div class="col-lg-1">
-        <input type="number" id="generalPoints-${userDocument.uid}" name="generalPoints" step="1" min="0" value="${userDocument.generalPoints}">
-      </div>
-      <div class="col-lg-2">
-        <input type="checkbox" id="deiPoint-${userDocument.uid}" name="deiPoint" checked="${userDocument.deiFulfilled}" value="true">
+      <div class="col-lg-6">
+        <div class="row points-padding">
+          <div class="col-md-6">
+            <label for="brotherhoodPoints-${userDocument.uid}">Brotherhood Points: </label>
+          </div>
+          <div class="col-md-6">
+            <input type="number" id="brotherhoodPoints-${userDocument.uid}" name="brotherhoodPoints" step="1" min="0" value="${userDocument.brotherhoodPoints}">
+          </div>
+        </div>
+        
+        <div class="row points-padding">
+          <div class="col-md-6">
+            <label for="servicePoints-${userDocument.uid}">Service Points: </label>
+          </div>
+          <div class="col-md-6">
+            <input type="number" id="servicePoints-${userDocument.uid}" name="servicePoints" step="1" min="0" value="${userDocument.servicePoints}">
+          </div>
+        </div>
+
+        <div class="row points-padding">
+          <div class="col-md-6">
+            <label for="pdPoints-${userDocument.uid}">Professional Development Points: </label>
+          </div>
+          <div class="col-md-6">
+            <input type="number" id="pdPoints-${userDocument.uid}" name="pdPoints" step="1" min="0" value="${userDocument.pdPoints}">
+          </div>
+        </div>
+
+        <div class="row points-padding">
+          <div class="col-md-6">
+            <label for="generalPoints-${userDocument.uid}">General Points: </label>
+          </div>
+          <div class="col-md-6">
+            <input type="number" id="generalPoints-${userDocument.uid}" name="generalPoints" step="1" min="0" value="${userDocument.generalPoints}">
+          </div>
+        </div>
+
+        <div class="row points-padding">
+          <div class="col-md-6">
+            <label for="totalPoints-${userDocument.uid}">Total Points: </label>
+          </div>
+          <div class="col-md-6">
+            <label id="totalPoints-${userDocument.uid}" name="totalPoints">${totalPoints}</label>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <label for="deiPoint-${userDocument.uid}">DEI Fulfillment: </label>
+          </div>
+          <div class="col-md-6">
+            <select name="deiPoint" id="deiPoint-${userDocument.uid}">
+              <option value="true" ${yesSelectString}>Yes</option>
+              <option value="false" ${noSelectString}>No</option>
+            </select>
+          </div>
+        </div>
+
       </div>
       <div class="col-2">
         <button class="btn btn-warning updatePoints-btn">Update</button> 
@@ -206,6 +264,8 @@ function updateUserPoints(userDocument) {
   const user_pdPoints = document.querySelector(`#pdPoints-${userDocument.uid}`).value;
   const user_generalPoints = document.querySelector(`#generalPoints-${userDocument.uid}`).value;
   const user_deiPoint = document.querySelector(`#deiPoint-${userDocument.uid}`).value;
+  var totalPoints = parseInt(user_brotherhoodPoints) + parseInt(user_servicePoints) + parseInt(user_pdPoints) + parseInt(user_generalPoints);
+  document.querySelector(`#totalPoints-${userDocument.uid}`).innerHTML = totalPoints;
 
   const query = usersRef.where('uid', '==', userDocument.uid);
       query.get()

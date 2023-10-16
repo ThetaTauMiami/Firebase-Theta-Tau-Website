@@ -375,7 +375,7 @@ auth.onAuthStateChanged(user => {
               pdPoints: 0,
               servicePoints: 0,
               generalPoints: 0,
-              deiFulfilled: false,
+              deiFulfilled: "false",
               firstname: firstnameVal,
               lastname: lastnameVal,
               major: majorVal,

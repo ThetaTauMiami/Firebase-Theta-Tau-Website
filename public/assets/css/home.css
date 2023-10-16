@@ -317,3 +317,7 @@ body {
   justify-content: center;
   align-items: center;
 }
+
+.points-padding {
+  padding-bottom: 10px;
+}
