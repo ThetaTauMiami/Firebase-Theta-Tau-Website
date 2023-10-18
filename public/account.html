@@ -136,8 +136,8 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <!-- Centered and white text for the h3 tag -->
-            <h3 id="userNameNavbar" class="mx-auto" style="color: white; width: 100%;"></h3>
+            <!-- Centered and white text for the h5 tag -->
+            <h5 id="userNameNavbar" class="mx-auto" style="color: white; width: 100%; font-size: 28px"></h5>
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="navbar-collapse">
@@ -158,7 +158,7 @@
   <!--These sections are only shown to logged in users on their first time logging in to setup account information-->
   <div class="row" id="firstLoginPrompt" hidden>
     <div class="col-md-12 text-center">
-      <h3>Looks like this is your first time logging in, please enter your information below:</h3>
+      <h5>Looks like this is your first time logging in, please enter your information below:</h5>
       <h4>(*NOTE: These choices can be changed later in your account settings)</h4>
     </div>
   </div>
@@ -259,25 +259,58 @@
       </div>
       <div class="col-md-8">
         <div class="row">
-          <div class="col-md-3" id="brotherhoodPointsContainer">
-            <h2>Brotherhood Points:</h2>
-            <h4 id="bhoodPoints"></h4>
-          </div>
-          <div class="col-md-3" id="servicePointsContainer">
-            <h2>Service Points:</h2>
-            <h4 id="servicePoints"></h4>
-          </div>
-          <div class="col-md-3" id="pdPointsContainer">
-            <h2>Professional Development Points:</h2>
-            <h4 id="pdPoints"></h4>
-          </div>
-          <div class="col-md-3" id="generalPointsContainer">
-            <h2>General Points:</h2>
-            <h4 id="generalPoints"></h4>
+          <div class="row center" >
+            <canvas id="pointsChart" style="width:100%;max-width:600px; padding-left:20px;"></canvas>
           </div>
         </div>
-        <div class="row center" >
-          <canvas id="pointsChart" style="width:100%;max-width:600px"></canvas>
+        <hr/>
+        <div class="row" style="padding-left:20px;">
+          <div class="col-md-6" id="brotherhoodPointsContainer">
+            <h5 class="points-display">Brotherhood Points:</h5>
+          </div>
+          <div class="col-md-6" id="brotherhoodPointsContainer2">
+            <h5 id="bhoodPoints" class="points-display"></h5>
+          </div>
+        </div>
+        <div class="row" style="padding-left:20px;">
+          <div class="col-md-6" id="servicePointsContainer">
+            <h5 class="points-display">Service Points:</h5>
+          </div>
+          <div class="col-md-6" id="servicePointsContaine2">
+            <h5 id="servicePoints" class="points-display"></h5>
+          </div>
+        </div>
+        <div class="row" style="padding-left:20px;">
+          <div class="col-md-6" id="pdPointsContainer">
+            <h5 class="points-display">Professional Development Points:</h5>
+          </div>
+          <div class="col-md-6" id="pdPointsContainer2">
+            <h5 id="pdPoints" class="points-display"></h5>
+          </div>
+        </div>
+        <div class="row" style="padding-left:20px;">
+          <div class="col-md-6" id="generalPointsContainer">
+            <h5 class="points-display">General Points:</h5>
+          </div>
+          <div class="col-md-6" id="generalPointsContainer2">
+            <h5 id="generalPoints" class="points-display"></h5>
+          </div>
+        </div>
+        <div class="row" style="padding-left:20px;">
+          <div class="col-md-6" id="totalPointsContainer">
+            <h5 class="points-display">Total Points:</h5>
+          </div>
+          <div class="col-md-6" id="totalPointsContainer2">
+            <h5 id="totalPoints" class="points-display"></h5>
+          </div>
+        </div>
+        <div class="row" style="padding-left:20px;">
+          <div class="col-md-6" id="deiPointContainer">
+            <h5 class="points-display">DEI Fulfilled:</h5>
+          </div>
+          <div class="col-md-6" id="deiPointContainer2">
+            <h5 id="deiPoint" class="points-display"></h5>
+          </div>
         </div>
       </div>
     </div>
@@ -287,7 +320,7 @@
     <!--This section is shown to users that are not logged in, and need to return to the Login page.-->
     <br>
     <div class="col-md-12 text-center">
-      <h3>You are not currently signed in, click below to return to the login page:</h3>
+      <h5>You are not currently signed in, click below to return to the login page:</h5>
     </div>
     <br>
     <div class="col-md-12 text-center">

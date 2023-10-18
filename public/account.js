@@ -115,6 +115,61 @@ function userOwnsSomething(userId) {
     });
 }
 
+function pointsColorDeterminer(numPoints) {
+  if (numPoints <= 0) {
+      return "color: #8a0108";
+  } else if (numPoints === 1) {
+    return "color: #e80602";
+  } else if (numPoints === 2) {
+      return "color: #f56302";
+  } else if (numPoints === 3) {
+      return "color: #F8B324";
+  } else if (numPoints === 4) {
+      return "color: #67d962";
+  } else {
+      // Assuming 5 or more
+      return "color: #08a300";
+  }
+}
+
+function totalPointsColorDeterminer(numPoints) {
+  if (numPoints <= 4) {
+      return "color: #8a0108";
+  } else if (numPoints <= 8) {
+    return "color: #e80602";
+  } else if (numPoints <= 12) {
+      return "color: #f56302";
+  } else if (numPoints <= 16) {
+      return "color: #F8B324";
+  } else if (numPoints < 20) {
+      return "color: #67d962";
+  } else {
+      // Assuming 20 or more
+      return "color: #08a300";
+  }
+}
+
+function deiFormatter(deiFulfillment) {
+  if (deiFulfillment == 'true') {
+    return "Yes";
+  } else if (deiFulfillment == 'false') {
+    return "No";
+  } else {
+    return "Invalid DEI point format";
+  }
+}
+
+function deiPointColor(deiFulfillment) {
+  if (deiFulfillment == 'true') {
+    return "color: #08a300";
+  } else if (deiFulfillment == 'false') {
+    return "color: #e80602";
+  } else {
+    return "Black";
+  }
+}
+
+
 function updatePointsChart(bhoodP, serviceP, professionalDevelopmentP, generalP) {
           let totalP = bhoodP + serviceP + professionalDevelopmentP + generalP;
           const xValues = ["Brotherhood", "Service", "Professional Development", "General", "Total"];
@@ -185,6 +240,8 @@ auth.onAuthStateChanged(user => {
                   const servicepointsNum = document.getElementById('servicePoints');
                   const pdpointsNum = document.getElementById('pdPoints');
                   const generalpointsNum = document.getElementById('generalPoints');
+                  const totalPointsNum = document.getElementById('totalPoints');
+                  const deiPointDiv = document.getElementById('deiPoint');
 
 
                   // Clear previous content for photo and points
@@ -212,17 +269,29 @@ auth.onAuthStateChanged(user => {
                       const personalLink = profile.personalLink;
                       const githubLink = profile.githubLink;
                       const pictureLink = profile.pictureLink;
-                      // const amount = profile.amount;
-                      // const col = document.createElement('td');
-                      // col.textContent = `${name}: ${amount}`;
-                      // row.appendChild(col);
-                      // colCount++;
-                      // If there are 5 columns in this row, append it to the table body and start a new row
+
+                      // Calculate total points
+                      var totalPoints = bhoodPoints + servicePoints + pdPoints + generalPoints;
+
                       photoArea.innerHTML = "<img src='" + pictureLink + "' alt='Theta Tau Brother Headshot' width='331' height='496'>";
                       bhpointsNum.innerHTML = '' + bhoodPoints;
+                      bhpointsNum.style = pointsColorDeterminer(bhoodPoints);
+
                       servicepointsNum.innerHTML = '' + servicePoints;
+                      servicepointsNum.style = pointsColorDeterminer(servicePoints);
+
                       pdpointsNum.innerHTML = '' + pdPoints;
+                      pdpointsNum.style = pointsColorDeterminer(pdPoints);
+
                       generalpointsNum.innerHTML = '' + generalPoints;
+                      generalpointsNum.style = pointsColorDeterminer(generalPoints);
+
+                      totalPointsNum.innerHTML = '' + totalPoints;
+                      totalPointsNum.style = totalPointsColorDeterminer(totalPoints);
+
+                      deiPointDiv.innerHTML = '' + deiFormatter(deiFulfilled);
+                      deiPointDiv.style = deiPointColor(deiFulfilled);
+
                       txtNavbarName.innerHTML = 'Welcome, ' + firstN + ' ' + lastN + '!';
                       updatePointsChart(bhoodPoints, servicePoints, pdPoints, generalPoints);
                   });
