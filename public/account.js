@@ -318,7 +318,7 @@ auth.onAuthStateChanged(user => {
               divFirstLoginForm.hidden = true;
               // Show normal login content (User has setup account)
               divFullUser.hidden = false;
-              // Show the 
+              // Show the logged in navbar
               loggedInNavbar.hidden = false;
             }
       });
