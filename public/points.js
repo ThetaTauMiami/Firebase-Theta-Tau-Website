@@ -1,7 +1,4 @@
-// This JavaScript document is for the account page only, as other JavaScript files will be used for login.html and the static pages
-// This JavaScript file handles logged in users, admin users, and provides a way for logged out users to exit the page
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
-import { AuthErrorCodes } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
 import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword, connectAuthEmulator } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
 
 // Initalize constants that the JS will use to interact with HTML elements based on user authentication state
