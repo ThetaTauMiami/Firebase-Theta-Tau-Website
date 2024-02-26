@@ -254,6 +254,93 @@ function takesUserCreatesHTML(userDocument) {
       return element;
 }
 
+// Function to export points to CSV
+function exportPoints() {
+
+   // Example CSV data format:
+   let csvContent = "data:text/csv;charset=utf-8,";
+   csvContent += "Name,Brotherhood Points,Service Points,Professional Development Points,General Points,DEI Fulfilled\n";
+ 
+   const usersRef = db.collection('userData');
+   usersRef.get().then(querySnapshot => {
+     querySnapshot.forEach(doc => {
+       const userData = doc.data();
+       const row = `${userData.firstname} ${userData.lastname},${userData.brotherhoodPoints},${userData.servicePoints},${userData.pdPoints},${userData.generalPoints},${userData.deiFulfilled}\n`;
+       csvContent += row;
+     });
+ 
+     // Create a Blob containing the CSV data
+     const encodedUri = encodeURI(csvContent);
+     const link = document.createElement("a");
+     link.setAttribute("href", encodedUri);
+     link.setAttribute("download", "user_points.csv");
+     document.body.appendChild(link);
+ 
+     // Trigger the download
+     link.click();
+   }).catch(error => {
+     console.error('Error getting users:', error);
+   });
+}
+
+// Attach exportPoints function to the global window object
+window.exportPoints = exportPoints;
+
+function clearPoints() {
+  // Ask for confirmation
+  const confirmed = window.confirm("Are you sure you want to clear all points?");
+
+  if (!confirmed) {
+    return; // If user cancels, do nothing
+  }
+
+  const usersRef = db.collection('userData');
+  usersRef.get().then(querySnapshot => {
+    querySnapshot.forEach(doc => {
+      const docID = doc.id;
+      const userData = doc.data(); // Fetch document data
+      const curUID = userData.uid; // Access uid field from document data
+      
+      // Update the user document to reset points to zero and DEI Fulfillment to "false"
+      usersRef.doc(docID).update({
+        brotherhoodPoints: 0,
+        servicePoints: 0,
+        pdPoints: 0,
+        generalPoints: 0,
+        deiFulfilled: "false"
+      }).then(() => {
+        //console.log("Points cleared successfully for user:", userData.firstname, " ", userData.lastname);
+        // Update HTML to reflect changes
+        updateHTMLAfterClear(userData);
+      }).catch(error => {
+        //console.error("Error clearing points for user:", userData.firstname, " ", userData.lastname, "-->", error);
+      });
+    });
+  }).catch(error => {
+    console.error('Error getting users:', error);
+  });
+}
+
+// Function to update HTML after points are cleared
+function updateHTMLAfterClear(docID) {
+  // Update total points display to show 0
+  document.querySelector(`#totalPoints-${docID.uid}`).innerHTML = 0;
+
+  // Update each input field value to 0
+  document.querySelector(`#brotherhoodPoints-${docID.uid}`).value = 0;
+  document.querySelector(`#servicePoints-${docID.uid}`).value = 0;
+  document.querySelector(`#pdPoints-${docID.uid}`).value = 0;
+  document.querySelector(`#generalPoints-${docID.uid}`).value = 0;
+
+  // Update DEI Fulfillment select field to "No"
+  document.querySelector(`#deiPoint-${docID.uid}`).value = "false";
+}
+
+
+
+// Attach clearPoints function to the global window object
+window.clearPoints = clearPoints;
+
 function updateUserPoints(userDocument) {
   const usersRef = db.collection("userData");
   const user_brotherhoodPoints = document.querySelector(`#brotherhoodPoints-${userDocument.uid}`).value;
