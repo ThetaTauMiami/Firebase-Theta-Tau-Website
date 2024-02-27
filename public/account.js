@@ -6,8 +6,6 @@ import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword, conne
 
 // Initalize constants that the JS will use to interact with HTML elements based on user authentication state
 
-// Is Keigen the goat?????
-
 //First Login Sections
 const divFirstLoginPrompt = document.querySelector('#firstLoginPrompt')
 const divFirstLoginForm = document.querySelector('#firstLoginForm')
