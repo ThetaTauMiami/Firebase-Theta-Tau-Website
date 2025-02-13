@@ -6,6 +6,11 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read  # Allows reading repo contents
+      checks: write   # ✅ Allows Firebase to create check runs
+      pull-requests: write  # ✅ Allows Firebase to comment on PRs (optional)
+
     steps:
       - uses: actions/checkout@v3
 
