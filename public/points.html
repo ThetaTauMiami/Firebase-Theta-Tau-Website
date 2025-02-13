@@ -33,7 +33,7 @@
     </script>
 
     <!--References the app.js file, uses defer to make sure it loads after the body elements have loaded-->
-    <script type="module" src="points.js" defer></script>
+    <script type="module" src="assets/js/points.js" defer></script>
 
     <link href="./favicon.ico" rel="shortcut icon" type="image/x-icon">
     <!--<link href="/favicon.ico" rel="icon" type="image/x-icon">-->
@@ -63,55 +63,7 @@
 
 <body>
 
-  <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button class="navbar-toggle" data-target="#myNavbar"
-                    data-toggle="collapse" type="button">
-                <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
-            </button> <a class="navbar-brand" href="/"><span id="nav">THETA TAU | <span class="hidden-xs hidden-sm">MIAMI UNIVERSITY</span><span class="hidden-md hidden-lg hidden-xl">ΤΔ</span></span></a>
-            <span class="hidden-xs hidden-sm"><a href="/"><img src="assets/img/login-logo.png" class="navbar-brand"></a></span>
-        </div>
-        <div class="collapse navbar-collapse" id="myNavbar">
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="index.html">HOME</a>
-                </li>
-                <li>
-                    <a href="gallery.html">GALLERY</a>
-                </li>
-                <li>
-                    <a href="events.html">EVENTS</a>
-                </li>
-                <li>
-                    <a href="leadership.html">LEADERSHIP</a>
-                </li>
-                <li>
-                    <a href="recruitment.html">RECRUITMENT</a>
-                </li>
-                <!--
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">MEMBERS
-                        <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/members">ACTIVES</a></li>
-                        <li><a href="/alumni">ALUMNI</a></li>
-                        <li><a href="/resumes">MEMBER RESUMES</a></li>
-                    </ul>
-                </li>
-                -->
-                <li>
-                    <a href="contact.html">CONTACT</a>
-                </li>
-              <!--This section only appears for the users signed in to view their accounts-->
-              <li id="whenSignedInNav">
-                  <a href="account.html">ACCOUNT</a>
-              </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
+<div id="nav-placeholder"></div>
 <!-- This is displayed only when the user is logged in ---------------------------------->
 <div id="headerAccount" class="jumbotron" style="background-image:url('assets/img/banner.png'); background-position: center;">
   <h1>Points Update</h1>
@@ -194,35 +146,7 @@
 <br/>
 </div>
 
-<nav class="navbar" class="footer">
-    <div class="row">
-        <div class="col-lg-12 text-center">
-            <h1 class="social-h1">
-                <!-- Removed facebook and Twitter as they are no longer used for now -->
-                <a href="https://www.instagram.com/thetatau_miamiu" target="_blank"><i class="fa fa-instagram"></i></a> 
-                <!--<a href="https://www.facebook.com/ThetaTauMU/?fref=ts" target="_blank"><i class="fa fa-facebook"></i></a>--> 
-                <!--<a href="https://twitter.com/thetataumu" target= "_blank"><i class="fa fa-twitter"></i></a>-->
-                <a href="https://www.linkedin.com/groups/8471878/" target="_blank"><i class="fa fa-linkedin"></i></a> 
-                <a href="https://github.com/ThetaTauMiami/" target="_blank"><i class="fa fa-github"></i></a>
-            </h1>
-        </div>
-        <div class="col-lg-12 text-center">
-            <p class="footer-links">
-              <a href="/">Home</a> · 
-              <a href="gallery.html">Gallery</a> · 
-              <a href="events.html">Events</a> · 
-              <a href="leadership.html">Leadership</a> · 
-              <a href="recruitment.html">Recruitment</a> · 
-              <!--<a href="members">Members</a> · 
-              <a href="alumni">Alumni</a> · -->
-              <a href="contact.html">Contact Us</a>  · 
-              <a href="account.html" id="footerAccount">Account</a>
-            </p>
-            <p class="footer-links">Theta Tau | Tau Delta Chapter of Miami University | 2023</p>
-        </div>
-    </div>
-</nav>
-
+<div id="footer-placeholder"></div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
 <!-- Bootbox dependencies -->
@@ -234,7 +158,7 @@
 
 <!-- This script always goes last, contains custom scripts -->
 <script src="assets/js/site.js"></script>
-
+<script src="assets/js/loadComponents.js"></script>
 </body>
 
 </html>

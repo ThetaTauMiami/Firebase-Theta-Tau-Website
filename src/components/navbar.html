@@ -4,23 +4,25 @@
             <button class="navbar-toggle" data-target="#myNavbar"
                     data-toggle="collapse" type="button">
                 <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
-            </button> <a class="navbar-brand" href="/"><span id="nav">THETA TAU | <span class="hidden-xs">MIAMI UNIVERSITY</span><span class="hidden-sm hidden-md hidden-lg hidden-xl">ΤΔ</span></span></a>
-            <span class="hidden-xs"><a href="/"><img src=
-                             "{{asset('/img/navbar-logo.png')}}" class="navbar-brand"></a></span>
+            </button> <a class="navbar-brand" href="/"><span id="nav">THETA TAU | <span class="hidden-xs hidden-sm">MIAMI UNIVERSITY</span><span class="hidden-md hidden-lg hidden-xl">ΤΔ</span></span></a>
+            <span class="hidden-xs hidden-sm"><a href="/"><img src="assets/img/login-logo.png" class="navbar-brand"></a></span>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <a href="/">HOME</a>
+                    <a href="index.html">HOME</a>
                 </li>
                 <li>
-                    <a href="/gallery">GALLERY</a>
+                    <a href="gallery.html">GALLERY</a>
                 </li>
                 <li>
-                    <a href="/events">EVENTS</a>
+                    <a href="events.html">EVENTS</a>
                 </li>
                 <li>
-                    <a href="/recruitment">RECRUITMENT</a>
+                    <a href="leadership.html">LEADERSHIP</a>
+                </li>
+                <li>
+                    <a href="recruitment.html">RECRUITMENT</a>
                 </li>
                 <!--
                 <li class="dropdown">
@@ -34,7 +36,15 @@
                 </li>
                 -->
                 <li>
-                    <a href="/contact">CONTACT</a>
+                    <a href="contact.html">CONTACT</a>
+                </li>
+                <!-- The login tab, which connects to Firebase to become the User Account page. *** ONLY appears when the user is not logged in -->
+                <li id="whenSignedOutNav">
+                    <a href="login.html" >LOGIN</a>
+                </li>
+                <!--This section only appears to change the name of the LOGIN tab for the users signed in to view their accounts-->
+                <li id="whenSignedInNav" style="display:none;">
+                    <a href="account.html">ACCOUNT</a>
                 </li>
             </ul>
         </div>
