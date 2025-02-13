@@ -14,4 +14,6 @@ function loadComponent(id, file) {
 document.addEventListener("DOMContentLoaded", () => {
     loadComponent("nav-placeholder", "/src/components/navbar.html");
     loadComponent("footer-placeholder", "/src/components/footer.html");
+    loadComponent("styles-placeholder", "/src/components/styles.html");
+    loadComponent("scripts-placeholder", "/src/components/scripts.html");
 });
