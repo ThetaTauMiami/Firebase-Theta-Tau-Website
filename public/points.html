@@ -1,164 +1,104 @@
-<!--This page is only accessible for logged in users to view their account-->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Theta Tau | Tau Delta Chapter - Miami University</title>
+    <meta charset="UTF-8">
+    <title>Theta Tau | Points Update</title>
     <meta property="og:site_name" content="Theta Tau | Miami University" />
 
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-firestore.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-        // import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-        const firebaseConfig = {
-          apiKey: "AIzaSyCuS3TWRtitOxxjJ3gyb-lxH2kmu2N0Ij8",
-          authDomain: "thetataumiamiuniversity.firebaseapp.com",
-          projectId: "thetataumiamiuniversity",
-          storageBucket: "thetataumiamiuniversity.appspot.com",
-          messagingSenderId: "752928414181",
-          appId: "1:752928414181:web:d70dbd3f4ed11077e7b70c",
-          measurementId: "G-BTNR03FCB4"
-        };
-      
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        // This can be uncommented and implemented later if analytics are needed, proper Firebase (Google) SDK integration is needed however
-    </script>
-
-    <!--References the app.js file, uses defer to make sure it loads after the body elements have loaded-->
-    <script type="module" src="assets/js/points.js" defer></script>
-
-    <link href="./favicon.ico" rel="shortcut icon" type="image/x-icon">
-    <!--<link href="/favicon.ico" rel="icon" type="image/x-icon">-->
-    <link href="https://fonts.googleapis.com/css?family=Lato:100" 
-          rel="stylesheet" type="text/css">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-          rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
-          rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
-    <link href="assets/css/home.css" rel="stylesheet">
-    <link href="assets/css/jquery-ui.min.css" rel="stylesheet">
-    <!-- <link href="assets/css/dotsMenu.css" rel="stylesheet"> -->
-    
+    <!-- Load external styles dynamically -->
+    <div id="styles-placeholder"></div>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Chrome, Firefox OS, Opera and Vivaldi -->
     <meta name="theme-color" content="#5B0000">
-    <!-- Windows Phone -->
     <meta name="msapplication-navbutton-color" content="#5B0000">
-    <!-- iOS Safari -->
     <meta name="apple-mobile-web-app-status-bar-style" content="#5B0000">
-
 </head>
-
-
 
 <body>
 
+<!-- Navbar (Loaded Dynamically) -->
 <div id="nav-placeholder"></div>
-<!-- This is displayed only when the user is logged in ---------------------------------->
+
+<!-- Header -->
 <div id="headerAccount" class="jumbotron" style="background-image:url('assets/img/banner.png'); background-position: center;">
-  <h1>Points Update</h1>
+    <h1>Points Update</h1>
 </div>
 
 <div class="container" id="borderBar">
 
-<!-- Added upper ---------------------------------->
+    <!-- Logged-in Navbar -->
+    <div id="loggedInNavbar" hidden>
+        <nav style="border-radius: 0px;" class="navbar navbar-default">
+            <div class="container-fluid text-center">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <h3 id="userNameNavbar" class="mx-auto" style="color: white; width: 100%;"></h3>
+                </div>
+                <div class="collapse navbar-collapse" id="navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li id="updatePointsSection" style="display: none;"><a href="points.html">Points Update</a></li>
+                        <li><a href="photoUpload.html">Photo Upload</a></li>
+                        <li><a href="profileUpdate.html">Profile Update</a></li>
+                        <li id="whenSignedInNav"><a id="logoutHeader" href="#">Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <br/>
+    </div>
 
-<!--Logged-in navbar-->
-<div id="loggedInNavbar" hidden>
-  <nav style="border-radius: 0px;" class="navbar navbar-default">
-    <div class="container-fluid text-center">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <!-- Centered and white text for the h3 tag -->
-            <h3 id="userNameNavbar" class="mx-auto" style="color: white; width: 100%;"></h3>
+    <!-- Admin-Only Points Management -->
+    <div class="container">
+        <div id="memberList">
+            <!-- JavaScript will dynamically populate this section with members -->
         </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="navbar-collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li id="updatePointsSection" style="display: none;"><a href="points.html">Points Update</a></li>
-                <li><a href="photoUpload.html">Photo Upload</a></li>
-                <li><a href="profileUpdate.html">Profile Update</a></li>
-                <li id="whenSignedInNav"><a id="logoutHeader" href="#">Logout</a></li>
-            </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-  </nav>
-  <br/>
-</div>
 
-<!--THIS AREA IS ONLY SHOWN TO ADMINS!!! REDIRECT TO ACCOUNT IF ELSE!-->
-<div class="container">
-  <!--This area will create rows with each member of the database, and admins can update their point count-->
-  <div id="memberList">
-    <!--Each row will have a member picture, PD points, Brotherhood points, Service points, General Points, a DEI point, Total Points, and an Update button (8 elements)-->
-  </div>
-
-  <div class="row" id="signedOutUser" hidden>
-    <!--This section is shown to users that are not logged in, and need to return to the Login page.-->
-    <br>
-    <div class="col-md-12 text-center">
-      <h3>You are not currently signed in, click below to return to the login page:</h3>
+        <!-- Redirect non-admins -->
+        <div class="row" id="signedOutUser" hidden>
+            <br>
+            <div class="col-md-12 text-center">
+                <h3>You are not currently signed in. Click below to return to the login page:</h3>
+            </div>
+            <br>
+            <div class="col-md-12 text-center">
+                <button id="btnLoginReturn" type="button" class="btn btn-warning btn-lg">Return to Login</button>
+            </div>
+        </div>
     </div>
-    <br>
-    <div class="col-md-12 text-center">
-      <button id="btnLoginReturn" type="button" class="btn btn-warning btn-lg">Return to Login</button>
+
+    <br/>
+    <div class="row text-center">
+        <div class="col-md-4">
+            <button class="btn btn-warning" onclick="exportPoints()">Export Points to CSV</button>
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-warning" onclick="clearPoints()">Clear All Current Points</button>
+        </div>
+        <div class="col-md-4">
+            <a href="account.html" class="btn btn-default">← Back to Account</a>
+        </div>
     </div>
-  </div>
+
+    <br/>
+    <hr>
+    <br/>
 </div>
 
-<br/>
-<div class="col-md-3 text-center"> 
-</div>
-<div class="col-md-3 text-center">
-    <button class="btn btn-warning" onclick="exportPoints()">Export Points to CSV</button>
-</div>
-<div class="col-md-3 text-center">
-    <button class="btn btn-warning" onclick="clearPoints()">Clear All Current Points</button>
-</div>
-<div class="col-md-3 text-center">
-</div>
-<br/>
-<br/>
-<hr>
-
-<!-- Added footer ------------------------------------------>
-<br/>
-<div class="col-md-12 text-center">
-    <a href="account.html" style="color:#5B0000; font-size: 18px;  text-align: left;">← Back to your account</a>
-</div>
-<hr>
-<br/>
-</div>
-
+<!-- Footer (Loaded Dynamically) -->
 <div id="footer-placeholder"></div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-<!-- Bootbox dependencies -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
+<!-- Scripts (Loaded Dynamically) -->
+<div id="scripts-placeholder"></div>
 
-<script src="assets/js/jquery-ui.min.js"></script>
-
-
-<!-- This script always goes last, contains custom scripts -->
-<script src="assets/js/site.js"></script>
+<!-- Load Components -->
 <script src="assets/js/loadComponents.js"></script>
+
 </body>
 
 </html>

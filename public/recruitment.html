@@ -1,193 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Theta Tau | Tau Delta Chapter - Miami University</title>
+    <meta charset="UTF-8">
+    <title>Theta Tau | Recruitment</title>
     <meta property="og:site_name" content="Theta Tau | Miami University" />
 
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-firestore.js"></script>
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-        // import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-        const firebaseConfig = {
-          apiKey: "AIzaSyCuS3TWRtitOxxjJ3gyb-lxH2kmu2N0Ij8",
-          authDomain: "thetataumiamiuniversity.firebaseapp.com",
-          projectId: "thetataumiamiuniversity",
-          storageBucket: "thetataumiamiuniversity.appspot.com",
-          messagingSenderId: "752928414181",
-          appId: "1:752928414181:web:d70dbd3f4ed11077e7b70c",
-          measurementId: "G-BTNR03FCB4"
-        };
-      
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        // This can be uncommented and implemented later if analytics are needed, proper Firebase (Google) SDK integration is needed however
-        // const analytics = getAnalytics(app);
-    </script>
-
-    <!--References the authChange.js file to change link displays based on auth state, uses defer to make sure it loads after the body elements have loaded-->
-    <script type="module" src="assets/js/authChange.js" defer></script>
-
-    <link href="./favicon.ico" rel="shortcut icon" type="image/x-icon">
-    <!--<link href="/favicon.ico" rel="icon" type="image/x-icon">-->
-    <link href="https://fonts.googleapis.com/css?family=Lato:100" 
-          rel="stylesheet" type="text/css">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-          rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
-          rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
-    <link href="assets/css/home.css" rel="stylesheet">
-    <link href="assets/css/jquery-ui.min.css" rel="stylesheet">
+    <!-- Load external styles dynamically -->
+    <div id="styles-placeholder"></div>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Chrome, Firefox OS, Opera and Vivaldi -->
     <meta name="theme-color" content="#5B0000">
-    <!-- Windows Phone -->
     <meta name="msapplication-navbutton-color" content="#5B0000">
-    <!-- iOS Safari -->
     <meta name="apple-mobile-web-app-status-bar-style" content="#5B0000">
-
 </head>
-
-
 
 <body>
 
+<!-- Navbar (Loaded Dynamically) -->
 <div id="nav-placeholder"></div>
 
-  
-<div class="jumbotron" style="background-image:url('assets/img/banner.png'); background-position: center;">
+<!-- Header -->
+<div class="jumbotron text-center" style="background-image:url('assets/img/banner.png'); background-position: center;">
     <h1>Recruitment</h1>
 </div>
 
-
 <div class="container" id="borderBar">
 
-<br/>
-<br/>
+    <!-- Recruitment Section -->
+    <div class="container">
+        <div class="row text-center">
+            <h1 style="color: #5B0000;">Ready to Join Our Brotherhood?</h1>
+            <hr>
+        </div>
 
-<!-- Added upper ---------------------------------->
-
-<!-- START RECRUITMENT SEASON SNIPPET
--->
-<div class="container">
-    <!-- Information Row -->
-    <div class="row">
-        <h1 style="color: #5B0000; text-align: center">Ready to Join Our Brotherhood?</h1>
-        <hr>
-        <div class="col-sm-offset-1 col-sm-5">
-            <div>
-                <img class="img-responsive center-block" src="assets/img/initiation.JPG">
+        <div class="row">
+            <div class="col-sm-offset-1 col-sm-5">
+                <img class="img-responsive center-block" src="assets/img/initiation.JPG" alt="Theta Tau Initiation">
+            </div>
+            <div class="col-sm-5">
+                <p>Theta Tau conducts recruitment at the beginning of each fall semester. Our recruitment process consists of events that allow our chapter to evaluate candidates on their values, credentials, and overall fit within our brotherhood. These events include:</p>
+                <ul>
+                    <li>🔹 Information Sessions</li>
+                    <li>🔹 Informal Nights</li>
+                    <li>🔹 Formal Interviews</li>
+                </ul>
+                <p>For more information, please read the flyers below!</p>
             </div>
         </div>
-        <div class="col-sm-5">
-            <p style="font-size: medium">Theta Tau conducts recruitment at the beginning of each fall semester. Our
-                recruitment process consists of
-                events that allow our chapter to evaluate candidates on their values, credentials, and overall fit
-                in our brotherhood. These events include Information Sessions, Informal Nights, and Formal
-                Interviews.</p>
-            <br>
-            <p style="font-size: medium">For more information, please read the flyers below!</p>
-        </div>
-    </div>
-    <!-- Flyers Row -->
-    <div class="row">
-        <h1 style="color: #5B0000; text-align: center">Fall Rush 2024 Flyers</h1>
-        <hr>
-        <div class="col-sm-6">
-            <div>
+
+        <!-- Flyers -->
+        <div class="row text-center">
+            <h1 style="color: #5B0000;">Fall Rush 2024 Flyers</h1>
+            <hr>
+            <div class="col-sm-6">
                 <img class="img-responsive" src="assets/img/recruitmentFlyer2024_1.png" alt="Recruitment Flyer 1">
             </div>
-        </div>
-        <div class="col-sm-6">
-            <div>
+            <div class="col-sm-6">
                 <img class="img-responsive" src="assets/img/recruitmentFlyer2024_2.png" alt="Recruitment Flyer 2">
             </div>
         </div>
     </div>
-    <!-- <div class="row" style="text-align: center;">
-        <br>
-        <br>
-        <p>Ryan Holthouse note for Nick and Liam: I still have all of the old event formats for the info sessions and rush events, they're just not attatched to this folder atm. Once recruitment has the official dates we'll pop em in here</p>
-    </div> -->
-</div>
 
+    <br><br>
 
-<!-- END RECRUITMENT SEASON SNIPPET
--->
-
-
-
-<!-- START OFF SEASON SNIPPET
--->
-<!--
-<div class="container">
-    <div class="row">
-        <div class="col-sm-offset-1 col-sm-5">
-            <div style = "margin-top: 50px;">
-                <img class="img-responsive center-block" src="/assets/img/fraternity-full.jpg">
-            </div>
-        </div>
-        <div class="col-sm-5">
-            <h2>Check Back Next Fall!</h2>
+    <!-- Contact Section -->
+    <div class="container">
+        <div class="row text-center">
+            <h1 style="color: #5B0000;">Contact Us</h1>
             <hr>
-            <p style="font-size: medium">We rush at the beginning of every fall semester. If you are interested in joining our brotherhood, please check back early next fall semester for more information. You are also welcome to reach out to our recruitment team using the email below if you would like more information or would like to ensure your name be included in our mailing list for next fall's rush.
-            </p>
-            <h4>Click the button below to sign up for our recruitment email list!</h4>
-            <hr>
-            <p style="font-size:10px;">Signing up for our email list will allow for you to receive updates regarding the most current
-                recruitment information. In addition, check back on this page in the future to see more
-                information once we make it available. </p>
-            
-            <p><strong>todo: google form link here</strong></p>
+            <p>If you have any questions, feel free to reach out to us at <a href="mailto:thetataurecruitmentmu@gmail.com">thetataurecruitmentmu@gmail.com</a></p>
         </div>
     </div>
-</div>
--->
-<!-- END OFF SEASON SNIPPET
--->
 
-<br><br>
-
-<div class="container">
-    <div class="row">
-        <div class="col-xs-12" class="text-center">
-            <h1 style="color: #5B0000; text-align: center">Contact Us</h1>
-            <hr>
-            <p style="font-size: medium; text-align: center">Feel free to reach out with any questions or concerns at <a href="mailto:thetataurecruitmentmu@gmail.com">thetataurecruitmentmu@gmail.com</a> </p>
-        </div>
-    </div>
-</div>
-
-
-
-<!-- Added footer ------------------------------------------>
-<br/>
-<hr>
-<br/>
+    <br><br>
 
 </div>
 
+<!-- Footer (Loaded Dynamically) -->
 <div id="footer-placeholder"></div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-<!-- Bootbox dependencies -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
+<!-- Scripts (Loaded Dynamically) -->
+<div id="scripts-placeholder"></div>
 
-<script src="assets/js/jquery-ui.min.js"></script>
-
-
-<!-- This script always goes last, contains custom scripts -->
-<script src="assets/js/site.js"></script>
+<!-- Load Components -->
 <script src="assets/js/loadComponents.js"></script>
+
 </body>
 
 </html>
