@@ -1,0 +1,26 @@
+name: Deploy to Firebase Hosting
+
+on:
+  pull_request:  # ✅ Deploys previews on PRs
+  push:
+    branches:
+      - main  # ✅ Deploys to live site when `main` branch is updated
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy to Firebase Hosting
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: thetataumiamiuniversity
+          channelId: ${{ github.ref == 'refs/heads/main' && 'live' || 'preview' }}
