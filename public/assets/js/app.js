@@ -17,8 +17,6 @@ const headerAccount = document.querySelector('#headerAccount')
 const footerLogin = document.querySelector('#footerLogin')
 const footerAccount = document.querySelector('#footerAccount')
 
-
-
 const firebaseApp = initializeApp({
     apiKey: "AIzaSyCuS3TWRtitOxxjJ3gyb-lxH2kmu2N0Ij8",
     authDomain: "thetataumiamiuniversity.firebaseapp.com",
@@ -36,6 +34,7 @@ const firebaseApp = initializeApp({
 const loginEmailPassword = async () => {
     const loginEmail = txtEmail.value
     const loginPassword = txtPassword.value
+    console.log(loginEmail, loginPassword)
     try {
       await signInWithEmailAndPassword(authentication, loginEmail, loginPassword)
     }
@@ -82,7 +81,9 @@ const monitorAuthState = async () => {
 }
 
 // Button Click Event Listeners (Email Login, Logout)
-btnLogin.addEventListener("click", loginEmailPassword) 
+
+btnLogin.addEventListener("click", loginEmailPassword)
+
 // btnLogout.addEventListener("click", logout)
 
 // Core constant variable used to regulate a user's authenticated 'state'
