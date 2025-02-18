@@ -5,10 +5,6 @@
     <title>Theta Tau | Tau Delta Chapter - Miami University</title>
     <meta property="og:site_name" content="Theta Tau | Miami University" />
 
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-firestore.js"></script>
     <script type="module">
         // Import the functions you need from the SDKs you need
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
@@ -31,22 +27,7 @@
         // const analytics = getAnalytics(app);
     </script>
 
-    <!--References the authChange.js file to change link displays based on auth state, uses defer to make sure it loads after the body elements have loaded-->
-    <script type="module" src="assets/js/authChange.js" defer></script>
-
-    <link href="./favicon.ico" rel="shortcut icon" type="image/x-icon">
-    <!--<link href="/favicon.ico" rel="icon" type="image/x-icon">-->
-    <link href="https://fonts.googleapis.com/css?family=Lato:100" 
-          rel="stylesheet" type="text/css">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-          rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
-          rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
-    <link href="assets/css/home.css" rel="stylesheet">
-    <link href="assets/css/jquery-ui.min.css" rel="stylesheet">
-
-
+    <!-- Imports styles from public/components/placeholder.html   -->
     <div id="styles-placeholder"></div>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -65,115 +46,107 @@
 
     <div id="nav-placeholder"></div>
   
-<div class="jumbotron" style="background-image:url('assets/img/banner.png'); background-position: center;">
-    <h1>Contact Us</h1>
-</div>
+    <div class="jumbotron" style="background-image:url('assets/img/banner.png'); background-position: center;">
+        <h1>Contact Us</h1>
+    </div>
 
 
-<div class="container" id="borderBar">
+    <div class="container" id="borderBar">
 
-<br/>
-<br/>
+    <br/>
+    <br/>
 
-<!-- Added upper ---------------------------------->
+    <!-- Added upper ---------------------------------->
 
-<div class="container">
-  <div class="row" style="text-align: center">
-    <!-- Removed facebook and Twitter as they are no longer used for now -->
-    <!--<a href="https://www.facebook.com/ThetaTauMU/" target="_blank"><i id="social" class="fa fa-facebook-official fa-5x" aria-hidden="true">&nbsp;&nbsp; </i></a>-->
-    <!--<a href="https://twitter.com/thetataumu?lang=en" target="_blank"><i id="social" class="fa fa-twitter fa-5x" aria-hidden="true">&nbsp;&nbsp;</i></a>-->
-    <a href="https://www.instagram.com/thetatau_miamiu/?hl=en" target="_blank"><i id="social" class="fa fa-instagram fa-5x" aria-hidden="true">&nbsp;&nbsp;</i></a>
-    <a href="http://www.linkedin.com/groups/8471878" target="_blank"><i id="social" class="fa fa-linkedin fa-5x" aria-hidden="true"></i></a>
-  </div>
-</div>
-
-<div class="container">
-  <div class="row">
-    <div class="col-md-6 col-md-offset-3">
-      <div class="well well-sm" style="margin-top: 30px">
-
-<!--
-              <h2>Thank You!</h2>
-              <p>Your message was sent successfully.</p>
--->
-
-        <form class="form-horizontal" action="https://formspree.io/f/mdobejag" method="post">
-          <fieldset>
-
-            <legend>Email Us</legend>
-            <!-- Name input-->
-            <img id="profile-img" class="profile-img-card center-block img-responsive" src="assets/img/login-logo.png" style="height: 214px; width: 125px;" />
-
-
-            <div class="form-group">
-              <label class="col-md-3 control-label" for="name">Name</label>
-              <div class="col-md-9">
-                <input id="name" name="name" type="text" placeholder="Your name" class="form-control" value="">
-              </div>
-            </div>
-
-            <!-- Email input-->
-            <div class="form-group">
-              <label class="col-md-3 control-label" for="email">Your E-mail</label>
-              <div class="col-md-9">
-                <input id="email" name="_replyto" type="email" placeholder="Your email" class="form-control" value="">
-              </div>
-            </div>
-
-            <!-- Subject input-->
-            <div class="form-group">
-              <label class="col-md-3 control-label" for="email">Message Subject</label>
-              <div class="col-md-9">
-                <input id="subject" name="subject" type="text" placeholder="Subject" class="form-control" value="">
-              </div>
-            </div>
-
-            <!-- Message body -->
-            <div class="form-group">
-              <label class="col-md-3 control-label" for="message_body">Your Message</label>
-              <div class="col-md-9">
-                <textarea class="form-control" id="message_body" name="message_body" placeholder="Please enter your message here..." rows="5"></textarea>
-              </div>
-            </div>
-
-            <!-- Form actions -->
-            <div class="form-group">
-              <div class="col-md-12 text-right">
-                <button type="submit" class="btn btn-warning btn-lg">Submit</button>
-              </div>
-            </div>
-          </fieldset>
-        </form>
-
+    <div class="container">
+      <div class="row" style="text-align: center">
+        <!-- Removed facebook and Twitter as they are no longer used for now -->
+        <!--<a href="https://www.facebook.com/ThetaTauMU/" target="_blank"><i id="social" class="fa fa-facebook-official fa-5x" aria-hidden="true">&nbsp;&nbsp; </i></a>-->
+        <!--<a href="https://twitter.com/thetataumu?lang=en" target="_blank"><i id="social" class="fa fa-twitter fa-5x" aria-hidden="true">&nbsp;&nbsp;</i></a>-->
+        <a href="https://www.instagram.com/thetatau_miamiu/?hl=en" target="_blank"><i id="social" class="fa fa-instagram fa-5x" aria-hidden="true">&nbsp;&nbsp;</i></a>
+        <a href="http://www.linkedin.com/groups/8471878" target="_blank"><i id="social" class="fa fa-linkedin fa-5x" aria-hidden="true"></i></a>
       </div>
+    </div>
 
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+          <div class="well well-sm" style="margin-top: 30px">
+
+    <!--
+                  <h2>Thank You!</h2>
+                  <p>Your message was sent successfully.</p>
+    -->
+
+            <form class="form-horizontal" action="https://formspree.io/f/mdobejag" method="post">
+              <fieldset>
+
+                <legend>Email Us</legend>
+                <!-- Name input-->
+                <img id="profile-img" class="profile-img-card center-block img-responsive" src="assets/img/login-logo.png" style="height: 214px; width: 125px;" />
+
+
+                <div class="form-group">
+                  <label class="col-md-3 control-label" for="name">Name</label>
+                  <div class="col-md-9">
+                    <input id="name" name="name" type="text" placeholder="Your name" class="form-control" value="">
+                  </div>
+                </div>
+
+                <!-- Email input-->
+                <div class="form-group">
+                  <label class="col-md-3 control-label" for="email">Your E-mail</label>
+                  <div class="col-md-9">
+                    <input id="email" name="_replyto" type="email" placeholder="Your email" class="form-control" value="">
+                  </div>
+                </div>
+
+                <!-- Subject input-->
+                <div class="form-group">
+                  <label class="col-md-3 control-label" for="email">Message Subject</label>
+                  <div class="col-md-9">
+                    <input id="subject" name="subject" type="text" placeholder="Subject" class="form-control" value="">
+                  </div>
+                </div>
+
+                <!-- Message body -->
+                <div class="form-group">
+                  <label class="col-md-3 control-label" for="message_body">Your Message</label>
+                  <div class="col-md-9">
+                    <textarea class="form-control" id="message_body" name="message_body" placeholder="Please enter your message here..." rows="5"></textarea>
+                  </div>
+                </div>
+
+                <!-- Form actions -->
+                <div class="form-group">
+                  <div class="col-md-12 text-right">
+                    <button type="submit" class="btn btn-warning btn-lg">Submit</button>
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Added footer ------------------------------------------>
+    <br/>
+    <hr>
+    <br/>
 
     </div>
-  </div>
-</div>
 
-<!-- Added footer ------------------------------------------>
-<br/>
-<hr>
-<br/>
-
-</div>
-
+    <!-- Imports footer from public/components/footer.html   -->
     <div id='footer-placeholder'></div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-
-<!-- Bootbox dependencies -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
-
-<script src="assets/js/jquery-ui.min.js"></script>
-
-
+    <!-- Imports scripts from public/components/scripts.html   -->
     <div id="scripts-placeholder"></div>
     <script src="assets/js/loadComponents.js"></script>
-<!-- This script always goes last, contains custom scripts -->
-<script src="assets/js/site.js"></script>
+
 
 </body>
 
