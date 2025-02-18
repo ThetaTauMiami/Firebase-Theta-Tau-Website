@@ -1,1 +1,1 @@
-Welcome to the 2023 Firebase Hosted Theta Tau Website
+Welcome to the 2025 Firebase Hosted Theta Tau Website
