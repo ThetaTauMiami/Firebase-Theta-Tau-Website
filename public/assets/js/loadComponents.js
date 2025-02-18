@@ -17,5 +17,4 @@ document.addEventListener("DOMContentLoaded", () => {
     loadComponent("styles-placeholder", "/public/components/styles.html");
     loadComponent("scripts-placeholder", "/public/components/scripts.html");
 
-    <div id='footer-placeholder'></div>
 });
