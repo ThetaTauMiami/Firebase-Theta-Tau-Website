@@ -1,7 +1,8 @@
 // firebase-config.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
 import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
-import { getFirestore, collection } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
+
 
 // Firebase Configuration (Replace with your actual Firebase credentials)
 const firebaseConfig = {
@@ -23,4 +24,5 @@ const db = getFirestore(firebaseApp);
 function giveFirestore() {
     return getFirestore(firebaseApp);
 }
-export { firebaseApp, auth, db, giveFirestore };
+
+export { firebaseConfig, firebaseApp, auth, db, giveFirestore };
