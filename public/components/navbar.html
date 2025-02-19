@@ -1,4 +1,36 @@
-<script type="module" src="assets/js/authChange.js" defer></script>
+<script type="module">
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
+    import { auth } from "/config/firebaseConfig.js";
+
+    console.log("Auth script loaded");
+
+    function applyAuthState() {
+        const whenSignedOutNav = document.getElementById("whenSignedOutNav");
+        const whenSignedInNav = document.getElementById("whenSignedInNav");
+
+        if (!whenSignedOutNav || !whenSignedInNav) {
+            console.error("Navbar elements not found!");
+            return;
+        }
+
+        console.log("Checking authentication state...");
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log("User is logged in:", user.uid);
+                whenSignedOutNav.style.display = "none";
+                whenSignedInNav.style.display = "block";
+            } else {
+                console.log("User is not logged in");
+                whenSignedOutNav.style.display = "block";
+                whenSignedInNav.style.display = "none";
+            }
+        });
+    }
+
+    // Wait for the DOM and all elements to be fully loaded
+    window.addEventListener("load", applyAuthState);
+</script>
 
 
 <nav class="navbar navbar-inverse navbar-fixed-top">

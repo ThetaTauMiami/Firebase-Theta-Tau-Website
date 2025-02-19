@@ -5,50 +5,16 @@
 <head>
     <title>Theta Tau | Tau Delta Chapter - Miami University</title>
     <meta property="og:site_name" content="Theta Tau | Miami University" />
+    <meta charset="utf-8">
 
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-firestore.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-        // import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-        const firebaseConfig = {
-          apiKey: "AIzaSyCuS3TWRtitOxxjJ3gyb-lxH2kmu2N0Ij8",
-          authDomain: "thetataumiamiuniversity.firebaseapp.com",
-          projectId: "thetataumiamiuniversity",
-          storageBucket: "thetataumiamiuniversity.appspot.com",
-          messagingSenderId: "752928414181",
-          appId: "1:752928414181:web:d70dbd3f4ed11077e7b70c",
-          measurementId: "G-BTNR03FCB4"
-        };
-      
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        // This can be uncommented and implemented later if analytics are needed, proper Firebase (Google) SDK integration is needed however
-        // const analytics = getAnalytics(app);
-    </script>
+
 
     <!--References the app.js file, uses defer to make sure it loads after the body elements have loaded-->
     <script type="module" src="assets/js/account.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <link href="./favicon.ico" rel="shortcut icon" type="image/x-icon">
-    <!--<link href="/favicon.ico" rel="icon" type="image/x-icon">-->
-    <link href="https://fonts.googleapis.com/css?family=Lato:100" 
-          rel="stylesheet" type="text/css">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-          rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
-          rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
-    <link href="assets/css/home.css" rel="stylesheet">
-    <link href="assets/css/jquery-ui.min.css" rel="stylesheet">
-    <!-- <link href="assets/css/dotsMenu.css" rel="stylesheet"> -->
-    
+    <!-- Imports styles from public/components/styles.html   -->
+    <div id="styles-placeholder"></div>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Chrome, Firefox OS, Opera and Vivaldi -->
@@ -63,6 +29,7 @@
 
 
 <body>
+    <!-- Imports navbar from public/components/navbarf.html   -->
     <div id="nav-placeholder"></div>
 
     <!-- This is displayed only when the user is logged in ---------------------------------->
@@ -74,241 +41,231 @@
     <div class="container" id="borderBar">
 
 
-<!-- Added upper ---------------------------------->
+    <!-- Added upper ---------------------------------->
 
-<!--Logged-in navbar-->
-<div id="loggedInNavbar" hidden>
-  <nav style="border-radius: 0px;" class="navbar navbar-default">
-    <div class="container-fluid text-center">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <!-- Centered and white text for the h5 tag -->
-            <h5 id="userNameNavbar" class="mx-auto" style="color: white; width: 100%; font-size: 28px"></h5>
-        </div>
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="navbar-collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li id="updatePointsSection" style="display: none;"><a href="points.html">Points Update</a></li>
-                <li><a href="photoUpload.html">Photo Upload</a></li>
-                <li><a href="profileUpdate.html">Profile Update</a></li>
-                <li id="whenSignedInNav"><a id="logoutHeader" href="#">Logout</a></li>
-            </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-  </nav>
-  <br/>
-</div>
-
-<div class="container">
-
-  <!--These sections are only shown to logged in users on their first time logging in to setup account information-->
-  <div class="row" id="firstLoginPrompt" hidden>
-    <div class="col-md-12 text-center">
-      <h5>Looks like this is your first time logging in, please enter your information below:</h5>
-      <h4>(*NOTE: These choices can be changed later in your account settings)</h4>
+    <!--Logged-in navbar-->
+    <div id="loggedInNavbar" hidden>
+      <nav style="border-radius: 0px;" class="navbar navbar-default">
+        <div class="container-fluid text-center">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <!-- Centered and white text for the h5 tag -->
+                <h5 id="userNameNavbar" class="mx-auto" style="color: white; width: 100%; font-size: 28px"></h5>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li id="updatePointsSection" style="display: none;"><a href="points.html">Points Update</a></li>
+                    <li><a href="photoUpload.html">Photo Upload</a></li>
+                    <li><a href="profileUpdate.html">Profile Update</a></li>
+                    <li id="whenSignedInNav"><a id="logoutHeader" href="#">Logout</a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+      </nav>
+      <br/>
     </div>
-  </div>
-  <div class="row" id="firstLoginForm" hidden>
-    <!--This div section will only be displayed if it is the user's first time logging in
-    so they can setup their account information, visibility is handled by: account.js-->
-    <form class="form-horizontal" action="">
-        <fieldset>
-          <legend>Account Setup</legend>
-          <!-- Firstname input-->
-          <div class="form-group">
-            <label class="col-md-3 control-label" for="firstname">First Name</label>
-            <div class="col-md-9">
-              <input id="txtFirstname" name="firstname" type="text" placeholder="Enter your first name" class="form-control" value="" style="width:95%; margin: auto;" required>
-            </div>
-          </div>
 
-          <!-- Lastname input-->
-          <div class="form-group">
-            <label class="col-md-3 control-label" for="lastname">Last Name</label>
-            <div class="col-md-9">
-              <input id="txtLastname" name="lastname" type="text" placeholder="Enter your last name" class="form-control" value="" style="width:95%; margin: auto;" required>
-            </div>
-          </div>
+    <div class="container">
 
-          <!-- College Major input-->
-          <div class="form-group">
-            <label class="col-md-3 control-label" for="major">Current Major</label>
-            <div class="col-md-9">
-              <input id="txtMajor" name="major" type="text" placeholder="Enter your current college major (Separate by commas if multiple)" class="form-control" value="" style="width:95%; margin: auto;" required>
-            </div>
-          </div>
-
-          <!-- College Minor input-->
-          <div class="form-group">
-            <label class="col-md-3 control-label" for="minor">Current Minor (Optional)</label>
-            <div class="col-md-9">
-              <input id="txtMinor" name="minor" type="text" placeholder="Enter your current college minor (Separate by commas if multiple)" class="form-control" value="" style="width:95%; margin: auto;">
-            </div>
-          </div>
-
-          <!-- Expected Grad Year input-->
-          <div class="form-group">
-            <label class="col-md-3 control-label" for="gradYear">Graduation Year</label>
-            <div class="col-md-9">
-              <input id="txtGradYear" name="gradYear" type="number" placeholder="Enter your expected graduation year" class="form-control" value="" style="width:95%; margin: auto;" min="1980" max="2050" required>
-            </div>
-          </div>
-
-          <!-- Fraternity Class input-->
-          <div class="form-group">
-            <label class="col-md-3 control-label" for="fratClass">Fraternity Class</label>
-            <div class="col-md-9">
-              <input id="txtFratClass" name="fratClass" type="text" placeholder="Enter your fraternity class (Ex: Mu)" class="form-control" value="" style="width:95%; margin: auto;" required>
-            </div>
-          </div>
-
-          <!-- LinkedIn Input-->
-          <div class="form-group">
-            <label class="col-md-3 control-label" for="linkedinURL">LinkedIn (Optional)</label>
-            <div class="col-md-9">
-              <input id="txtLinkedin" name="linkedinURL" type="url" placeholder="Enter your full LinkedIn URL" class="form-control" value="" style="width:95%; margin: auto;">
-            </div>
-          </div>
-          
-          <!-- Personal Website Input-->
-          <div class="form-group">
-            <label class="col-md-3 control-label" for="personalWebURL">Personal Website (Optional)</label>
-            <div class="col-md-9">
-              <input id="txtPersonalWeb" name="personalWebURL" type="url" placeholder="Enter your full personal website URL" class="form-control" value="" style="width:95%; margin: auto;">
-            </div>
-          </div>
-
-          <!-- GitHub Input-->
-          <div class="form-group">
-            <label class="col-md-3 control-label" for="personalGitHubURL">Personal GitHub (Optional)</label>
-            <div class="col-md-9">
-              <input id="txtGithub" name="personalGitHubURL" type="url" placeholder="Enter your full personal GitHub URL" class="form-control" value="" style="width:95%; margin: auto;">
-            </div>
-          </div>
-
-          <!-- Submission Button -->
-          <div class="form-group">
-            <div class="col-md-12 text-right">
-              <button id="btnMakeAccountDetails" type="button" class="btn btn-warning btn-lg">Submit</button>
-            </div>
-          </div>
-        </fieldset>
-      </form>
-  </div>
-
-  <div id="fullUser" hidden>
-    <div class="row">
-      <!--This section is shown to users that have logged in before and have successfully entered their information.-->
-      <!--This section should be always shown for authenticated and setup users to access and see their current points and account.-->
-      <div class="col-md-4 center-div-photo" id="photoArea" width="331" height="496">
-        <!--This area is rewritten by JavaScript to display the correct photo to users-->
+      <!--These sections are only shown to logged in users on their first time logging in to setup account information-->
+      <div class="row" id="firstLoginPrompt" hidden>
+        <div class="col-md-12 text-center">
+          <h5>Looks like this is your first time logging in, please enter your information below:</h5>
+          <h4>(*NOTE: These choices can be changed later in your account settings)</h4>
+        </div>
       </div>
-      <div class="col-md-8">
+      <div class="row" id="firstLoginForm" hidden>
+        <!--This div section will only be displayed if it is the user's first time logging in
+        so they can setup their account information, visibility is handled by: account.js-->
+        <form class="form-horizontal" action="">
+            <fieldset>
+              <legend>Account Setup</legend>
+              <!-- Firstname input-->
+              <div class="form-group">
+                <label class="col-md-3 control-label" for="firstname">First Name</label>
+                <div class="col-md-9">
+                  <input id="txtFirstname" name="firstname" type="text" placeholder="Enter your first name" class="form-control" value="" style="width:95%; margin: auto;" required>
+                </div>
+              </div>
+
+              <!-- Lastname input-->
+              <div class="form-group">
+                <label class="col-md-3 control-label" for="lastname">Last Name</label>
+                <div class="col-md-9">
+                  <input id="txtLastname" name="lastname" type="text" placeholder="Enter your last name" class="form-control" value="" style="width:95%; margin: auto;" required>
+                </div>
+              </div>
+
+              <!-- College Major input-->
+              <div class="form-group">
+                <label class="col-md-3 control-label" for="major">Current Major</label>
+                <div class="col-md-9">
+                  <input id="txtMajor" name="major" type="text" placeholder="Enter your current college major (Separate by commas if multiple)" class="form-control" value="" style="width:95%; margin: auto;" required>
+                </div>
+              </div>
+
+              <!-- College Minor input-->
+              <div class="form-group">
+                <label class="col-md-3 control-label" for="minor">Current Minor (Optional)</label>
+                <div class="col-md-9">
+                  <input id="txtMinor" name="minor" type="text" placeholder="Enter your current college minor (Separate by commas if multiple)" class="form-control" value="" style="width:95%; margin: auto;">
+                </div>
+              </div>
+
+              <!-- Expected Grad Year input-->
+              <div class="form-group">
+                <label class="col-md-3 control-label" for="gradYear">Graduation Year</label>
+                <div class="col-md-9">
+                  <input id="txtGradYear" name="gradYear" type="number" placeholder="Enter your expected graduation year" class="form-control" value="" style="width:95%; margin: auto;" min="1980" max="2050" required>
+                </div>
+              </div>
+
+              <!-- Fraternity Class input-->
+              <div class="form-group">
+                <label class="col-md-3 control-label" for="fratClass">Fraternity Class</label>
+                <div class="col-md-9">
+                  <input id="txtFratClass" name="fratClass" type="text" placeholder="Enter your fraternity class (Ex: Mu)" class="form-control" value="" style="width:95%; margin: auto;" required>
+                </div>
+              </div>
+
+              <!-- LinkedIn Input-->
+              <div class="form-group">
+                <label class="col-md-3 control-label" for="linkedinURL">LinkedIn (Optional)</label>
+                <div class="col-md-9">
+                  <input id="txtLinkedin" name="linkedinURL" type="url" placeholder="Enter your full LinkedIn URL" class="form-control" value="" style="width:95%; margin: auto;">
+                </div>
+              </div>
+
+              <!-- Personal Website Input-->
+              <div class="form-group">
+                <label class="col-md-3 control-label" for="personalWebURL">Personal Website (Optional)</label>
+                <div class="col-md-9">
+                  <input id="txtPersonalWeb" name="personalWebURL" type="url" placeholder="Enter your full personal website URL" class="form-control" value="" style="width:95%; margin: auto;">
+                </div>
+              </div>
+
+              <!-- GitHub Input-->
+              <div class="form-group">
+                <label class="col-md-3 control-label" for="personalGitHubURL">Personal GitHub (Optional)</label>
+                <div class="col-md-9">
+                  <input id="txtGithub" name="personalGitHubURL" type="url" placeholder="Enter your full personal GitHub URL" class="form-control" value="" style="width:95%; margin: auto;">
+                </div>
+              </div>
+
+              <!-- Submission Button -->
+              <div class="form-group">
+                <div class="col-md-12 text-right">
+                  <button id="btnMakeAccountDetails" type="button" class="btn btn-warning btn-lg">Submit</button>
+                </div>
+              </div>
+            </fieldset>
+          </form>
+      </div>
+
+      <div id="fullUser" hidden>
         <div class="row">
-          <div class="row center" >
-            <canvas id="pointsChart" style="width:100%;max-width:600px; padding-left:20px;"></canvas>
+          <!--This section is shown to users that have logged in before and have successfully entered their information.-->
+          <!--This section should be always shown for authenticated and setup users to access and see their current points and account.-->
+          <div class="col-md-4 center-div-photo" id="photoArea" width="331" height="496">
+            <!--This area is rewritten by JavaScript to display the correct photo to users-->
           </div>
-        </div>
-        <hr/>
-        <div class="row" style="padding-left:20px;">
-          <div class="col-md-6" id="brotherhoodPointsContainer">
-            <h5 class="points-display">Brotherhood Points:</h5>
-          </div>
-          <div class="col-md-6" id="brotherhoodPointsContainer2">
-            <h5 id="bhoodPoints" class="points-display"></h5>
-          </div>
-        </div>
-        <div class="row" style="padding-left:20px;">
-          <div class="col-md-6" id="servicePointsContainer">
-            <h5 class="points-display">Service Points:</h5>
-          </div>
-          <div class="col-md-6" id="servicePointsContaine2">
-            <h5 id="servicePoints" class="points-display"></h5>
-          </div>
-        </div>
-        <div class="row" style="padding-left:20px;">
-          <div class="col-md-6" id="pdPointsContainer">
-            <h5 class="points-display">Professional Development Points:</h5>
-          </div>
-          <div class="col-md-6" id="pdPointsContainer2">
-            <h5 id="pdPoints" class="points-display"></h5>
-          </div>
-        </div>
-        <div class="row" style="padding-left:20px;">
-          <div class="col-md-6" id="generalPointsContainer">
-            <h5 class="points-display">General Points:</h5>
-          </div>
-          <div class="col-md-6" id="generalPointsContainer2">
-            <h5 id="generalPoints" class="points-display"></h5>
-          </div>
-        </div>
-        <div class="row" style="padding-left:20px;">
-          <div class="col-md-6" id="totalPointsContainer">
-            <h5 class="points-display">Total Points:</h5>
-          </div>
-          <div class="col-md-6" id="totalPointsContainer2">
-            <h5 id="totalPoints" class="points-display"></h5>
-          </div>
-        </div>
-        <div class="row" style="padding-left:20px;">
-          <div class="col-md-6" id="deiPointContainer">
-            <h5 class="points-display">DEI Fulfilled:</h5>
-          </div>
-          <div class="col-md-6" id="deiPointContainer2">
-            <h5 id="deiPoint" class="points-display"></h5>
-          </div>
-          <!-- Google Calendar iFrame -->
-          <div style="padding-top:50px">
-            <iframe src="https://calendar.google.com/calendar/embed?src=thetatau%40miamioh.edu&ctz=America%2FNew_York" style="border:solid 2px #000000" max-width:"800" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+          <div class="col-md-8">
+            <div class="row">
+              <div class="row center" >
+                <canvas id="pointsChart" style="width:100%;max-width:600px; padding-left:20px;"></canvas>
+              </div>
+            </div>
+            <hr/>
+            <div class="row" style="padding-left:20px;">
+              <div class="col-md-6" id="brotherhoodPointsContainer">
+                <h5 class="points-display">Brotherhood Points:</h5>
+              </div>
+              <div class="col-md-6" id="brotherhoodPointsContainer2">
+                <h5 id="bhoodPoints" class="points-display"></h5>
+              </div>
+            </div>
+            <div class="row" style="padding-left:20px;">
+              <div class="col-md-6" id="servicePointsContainer">
+                <h5 class="points-display">Service Points:</h5>
+              </div>
+              <div class="col-md-6" id="servicePointsContaine2">
+                <h5 id="servicePoints" class="points-display"></h5>
+              </div>
+            </div>
+            <div class="row" style="padding-left:20px;">
+              <div class="col-md-6" id="pdPointsContainer">
+                <h5 class="points-display">Professional Development Points:</h5>
+              </div>
+              <div class="col-md-6" id="pdPointsContainer2">
+                <h5 id="pdPoints" class="points-display"></h5>
+              </div>
+            </div>
+            <div class="row" style="padding-left:20px;">
+              <div class="col-md-6" id="generalPointsContainer">
+                <h5 class="points-display">General Points:</h5>
+              </div>
+              <div class="col-md-6" id="generalPointsContainer2">
+                <h5 id="generalPoints" class="points-display"></h5>
+              </div>
+            </div>
+            <div class="row" style="padding-left:20px;">
+              <div class="col-md-6" id="totalPointsContainer">
+                <h5 class="points-display">Total Points:</h5>
+              </div>
+              <div class="col-md-6" id="totalPointsContainer2">
+                <h5 id="totalPoints" class="points-display"></h5>
+              </div>
+            </div>
+            <div class="row" style="padding-left:20px;">
+              <div class="col-md-6" id="deiPointContainer">
+                <h5 class="points-display">DEI Fulfilled:</h5>
+              </div>
+              <div class="col-md-6" id="deiPointContainer2">
+                <h5 id="deiPoint" class="points-display"></h5>
+              </div>
+              <!-- Google Calendar iFrame -->
+              <div style="padding-top:50px">
+                <iframe src="https://calendar.google.com/calendar/embed?src=thetatau%40miamioh.edu&ctz=America%2FNew_York" style="border:solid 2px #000000" max-width:"800" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+              </div>
+            </div>
           </div>
         </div>
       </div>
+
+      <div class="row" id="signedOutUser" hidden>
+        <!--This section is shown to users that are not logged in, and need to return to the Login page.-->
+        <br>
+        <div class="col-md-12 text-center">
+          <h5>You are not currently signed in, click below to return to the login page:</h5>
+        </div>
+        <br>
+        <div class="col-md-12 text-center">
+          <button id="btnLoginReturn" type="button" class="btn btn-warning btn-lg">Return to Login</button>
+        </div>
+      </div>
+
     </div>
-  </div>
 
-  <div class="row" id="signedOutUser" hidden>
-    <!--This section is shown to users that are not logged in, and need to return to the Login page.-->
-    <br>
-    <div class="col-md-12 text-center">
-      <h5>You are not currently signed in, click below to return to the login page:</h5>
+    <!-- Added footer ------------------------------------------>
+    <br/>
+    <hr>
+    <br/>
+
     </div>
-    <br>
-    <div class="col-md-12 text-center">
-      <button id="btnLoginReturn" type="button" class="btn btn-warning btn-lg">Return to Login</button>
-    </div>
-  </div>
 
-</div>
-
-<!-- Added footer ------------------------------------------>
-<br/>
-<hr>
-<br/>
-
-</div>
-
+    <!-- Imports footer from public/components/footer.html   -->
     <div id='footer-placeholder'></div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 
-<!-- Bootbox dependencies -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
-
-<script src="assets/js/jquery-ui.min.js"></script>
-
-
-<!-- This script always goes last, contains custom scripts -->
+    <!-- Imports styles from public/components/styles.html   -->
     <div id="scripts-placeholder"></div>
     <script src="assets/js/loadComponents.js"></script>
-    <script src="assets/js/site.js"></script>
-
-
 
 </body>
 
