@@ -10,6 +10,10 @@
     <script type="module" src="assets/js/app.js" defer></script>
 
 
+    <script type="module">
+        import { redirectIfAuthenticated } from "/auth.js";
+        redirectIfAuthenticated();
+    </script>
     <!-- Imports styles from public/components/styles.html   -->
     <div id="styles-placeholder"></div>
 

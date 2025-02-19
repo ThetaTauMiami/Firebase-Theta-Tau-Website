@@ -1,6 +1,6 @@
 // firebase-config.js
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
+import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
 
 
@@ -20,6 +20,14 @@ const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
 const db = getFirestore(firebaseApp);
 
+// Set authentication persistence to keep users logged in across page reloads
+setPersistence(auth, browserLocalPersistence)
+    .then(() => {
+        console.log("Persistence set to browserLocalPersistence");
+    })
+    .catch((error) => {
+        console.error("Error setting persistence:", error);
+    });
 
 function giveFirestore() {
     return getFirestore(firebaseApp);
