@@ -1,10 +1,20 @@
-// This JavaScript document is for the account page only, as other JavaScript files will be used for login.html and the static pages
-// This JavaScript file handles logged in users, admin users, and provides a way for logged out users to exit the page
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
-import { AuthErrorCodes } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
-import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword, connectAuthEmulator } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+import {
+    onAuthStateChanged,
+    signOut
+} from 'https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js';
+import {
+    collection,
+    doc,
+    query,
+    where,
+    getDocs,
+    getDoc
+} from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
+import {
+    auth,
+    db
+} from "/config/firebaseConfig.js";
 
-// Initalize constants that the JS will use to interact with HTML elements based on user authentication state
 
 //First Login Sections
 const divFirstLoginPrompt = document.querySelector('#firstLoginPrompt')
@@ -50,27 +60,12 @@ const btnUpdateProfile = document.querySelector('#btnUpdateProfile')
 // Points Update Button (ADMINS ONLY)
 const updatePointsSection = document.querySelector('#updatePointsSection')
 
-///////////////// Firebase Initialization ////////////////
-const firebaseApp = initializeApp({
-    apiKey: "AIzaSyCuS3TWRtitOxxjJ3gyb-lxH2kmu2N0Ij8",
-    authDomain: "thetataumiamiuniversity.firebaseapp.com",
-    projectId: "thetataumiamiuniversity",
-    storageBucket: "thetataumiamiuniversity.appspot.com",
-    messagingSenderId: "752928414181",
-    appId: "1:752928414181:web:d70dbd3f4ed11077e7b70c",
-    measurementId: "G-BTNR03FCB4"
-});
 
-//////// Firestore Variables (Database) //////////
-const db = firebase.firestore();
-const configRef = db.collection('config').doc('roles');
+
+const configRef = doc(collection(db, 'config'), 'roles');
 let usersRef; // Reference to the document or collection we want to access
 let unsubscribe; // Query handler for user information check
 let adminCheck; // Query handler for admin uid check
-
-// Core constant variables used to regulate a user's authenticated 'state'
-const auth = firebase.auth();
-const authentication = getAuth(firebaseApp);
 
 // Track user's state of loaded ownership
 var ownershipLoaded = false;
@@ -78,13 +73,13 @@ var ownershipLoaded = false;
 ///////////////////// User Authentication ////////////////////////
 // Monitor user Authentication state, this will change website contents using javascript functions
 const monitorAuthState = async () => {
-    onAuthStateChanged(authentication, user => {
-      if (user) {
-        console.log("Logged In")
-      }
-      else {
-        console.log("Not Logged In")
-      }
+    onAuthStateChanged(auth, user => {
+        if (user) {
+            console.log("Logged In")
+        } else {
+            console.log("Not Logged In")
+            window.redirect("/login")
+        }
     })
 }
 
@@ -92,107 +87,111 @@ monitorAuthState();
 
 // Log out
 const logout = async () => {
-  await signOut(auth);
+    await signOut(auth);
 }
 
 const logoutExit = () => {
-  logout(); // Ensure the user is signed out
-  window.location.replace('login.html'); // Send the user back to the Login page
+    signOut(auth).then(() => {
+        window.location.replace('login.html');
+    }).catch((err) => {
+        console.error(`Error Logging Out: ${err}`);
+    });
 }
 
 
 ////////////////////// FUNCTIONS ///////////////////////////////////
 // Function to check if a user owns any items in the Cloud Firestore database
-function userOwnsSomething(userId) {
-  return db.collection("userData")
-    .where("uid", "==", userId)
-    .get()
-    .then((querySnapshot) => {
-      return !querySnapshot.empty; // returns true if user owns things, false otherwise
-    })
-    .catch((error) => {
-      return false; // return false if there was an error [nothing owned]
-    });
-}
+const userOwnsSomething = async (userId) => {
+    try {
+        const userRef = collection(db, "userData");
+        const userQuery = query(userRef, where("uid", "==", userId));
+        const querySnapshot = await getDocs(userQuery);
+
+        return !querySnapshot.empty; // Returns true if the user owns data, false otherwise
+    } catch (error) {
+        console.error("Error checking user ownership:", error);
+        return false; // Return false if there's an error
+    }
+};
 
 function pointsColorDeterminer(numPoints) {
-  if (numPoints <= 0) {
-      return "color: #8a0108";
-  } else if (numPoints === 1) {
-    return "color: #e80602";
-  } else if (numPoints === 2) {
-      return "color: #f56302";
-  } else if (numPoints === 3) {
-      return "color: #F8B324";
-  } else if (numPoints === 4) {
-      return "color: #67d962";
-  } else {
-      // Assuming 5 or more
-      return "color: #08a300";
-  }
+    if (numPoints <= 0) {
+        return "color: #8a0108";
+    } else if (numPoints === 1) {
+        return "color: #e80602";
+    } else if (numPoints === 2) {
+        return "color: #f56302";
+    } else if (numPoints === 3) {
+        return "color: #F8B324";
+    } else if (numPoints === 4) {
+        return "color: #67d962";
+    } else {
+        // Assuming 5 or more
+        return "color: #08a300";
+    }
 }
 
 function totalPointsColorDeterminer(numPoints) {
-  if (numPoints <= 4) {
-      return "color: #8a0108";
-  } else if (numPoints <= 8) {
-    return "color: #e80602";
-  } else if (numPoints <= 12) {
-      return "color: #f56302";
-  } else if (numPoints <= 16) {
-      return "color: #F8B324";
-  } else if (numPoints < 20) {
-      return "color: #67d962";
-  } else {
-      // Assuming 20 or more
-      return "color: #08a300";
-  }
+    if (numPoints <= 4) {
+        return "color: #8a0108";
+    } else if (numPoints <= 8) {
+        return "color: #e80602";
+    } else if (numPoints <= 12) {
+        return "color: #f56302";
+    } else if (numPoints <= 16) {
+        return "color: #F8B324";
+    } else if (numPoints < 20) {
+        return "color: #67d962";
+    } else {
+        // Assuming 20 or more
+        return "color: #08a300";
+    }
 }
 
 function deiFormatter(deiFulfillment) {
-  if (deiFulfillment == 'true') {
-    return "Yes";
-  } else if (deiFulfillment == 'false') {
-    return "No";
-  } else {
-    return "Invalid DEI point format";
-  }
+    if (deiFulfillment == 'true') {
+        return "Yes";
+    } else if (deiFulfillment == 'false') {
+        return "No";
+    } else {
+        return "Invalid DEI point format";
+    }
 }
 
 function deiPointColor(deiFulfillment) {
-  if (deiFulfillment == 'true') {
-    return "color: #08a300";
-  } else if (deiFulfillment == 'false') {
-    return "color: #e80602";
-  } else {
-    return "Black";
-  }
+    if (deiFulfillment == 'true') {
+        return "color: #08a300";
+    } else if (deiFulfillment == 'false') {
+        return "color: #e80602";
+    } else {
+        return "Black";
+    }
 }
 
 
 function updatePointsChart(bhoodP, serviceP, professionalDevelopmentP, generalP) {
-          let totalP = bhoodP + serviceP + professionalDevelopmentP + generalP;
-          const xValues = ["Brotherhood", "Service", "Professional Development", "General", "Total"];
-          const yValues = [bhoodP, serviceP, professionalDevelopmentP, generalP, totalP];
-          const barColors = ["red", "green","blue","orange","purple"];
+    let totalP = bhoodP + serviceP + professionalDevelopmentP + generalP;
+    const xValues = ["Brotherhood", "Service", "Professional Development", "General", "Total"];
+    const yValues = [bhoodP, serviceP, professionalDevelopmentP, generalP, totalP];
+    const barColors = ["red", "green", "blue", "orange", "purple"];
 
-          // Create the bar chart
-          var pointsChart = new Chart(ctx, {
-            type: "bar",
-            data: {
-              labels: xValues,
-              datasets: [{
+    // Create the bar chart
+    var pointsChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: xValues,
+            datasets: [{
                 backgroundColor: barColors,
                 data: yValues,
                 label: 'Semester Points'
-              }]
-            },
-            options: { 
-              legend: {
-                  display: false
-              }
+            }]
+        },
+        options: {
+            legend: {
+                display: false
             }
-          });
+        }
+    });
 }
 
 // This button will return a user back to the "Login" page and ensure that they are logged out as well
@@ -209,277 +208,211 @@ logoutHeader.addEventListener("click", logoutExit);
 // This button will take the user to the profile update page
 // btnUpdateProfile.addEventListener("click", goToProfileUpdate);
 
-// This authentication listener regulates what the user sees
-// on the page depending on the authentication state.
 auth.onAuthStateChanged(user => {
-  if (user) {
-      // SIGNED IN
-      // Create a reference to the database user collection
-      usersRef = db.collection('userData');
-      // Hide Signed-Out Content
-      divSignedOutUser.hidden = true;
-      // Checks to see if the current user has setup their account (Not first sign-in)
-      userOwnsSomething(user.uid)
-          .then((userOwnsThings) => {
-            console.log("User owns things? ", userOwnsThings);
-            if (!userOwnsThings) { // If the user hasn't setup their account
-              divFirstLoginPrompt.hidden = false;
-              divFirstLoginForm.hidden = false;
-              divFullUser.hidden = true;
-              loggedInNavbar.hidden = true;
-              updatePointsSection.style.display = 'none';
-            } else {
-
-              // Query the user's information
-              unsubscribe = usersRef
-              .where('uid', '==', user.uid) // Order by 'searchName' field
-              .onSnapshot(querySnapshot => {
-
-                  const photoArea = document.getElementById('photoArea');
-                  const bhpointsNum = document.getElementById('bhoodPoints');
-                  const servicepointsNum = document.getElementById('servicePoints');
-                  const pdpointsNum = document.getElementById('pdPoints');
-                  const generalpointsNum = document.getElementById('generalPoints');
-                  const totalPointsNum = document.getElementById('totalPoints');
-                  const deiPointDiv = document.getElementById('deiPoint');
-
-
-                  // Clear previous content for photo and points
-                  photoArea.innerHTML = '';
-                  bhpointsNum.innerHTML = '';
-                  servicepointsNum.innerHTML = '';
-                  pdpointsNum.innerHTML = '';
-                  generalpointsNum.innerHTML = '';
-
-                  // Loop through query results and extract profile variable values
-                  querySnapshot.docs.forEach(doc => {
-                      const profile = doc.data();
-                      const firstN = profile.firstname;
-                      const lastN = profile.lastname;
-                      const gradYear = profile.gradYear;
-                      const fratClass = profile.fratclass;
-                      const bhoodPoints = profile.brotherhoodPoints;
-                      const pdPoints = profile.pdPoints;
-                      const servicePoints = profile.servicePoints;
-                      const generalPoints = profile.generalPoints;
-                      const deiFulfilled = profile.deiFulfilled;
-                      const major = profile.major;
-                      const minor = profile.minor;
-                      const linkedinLink = profile.linkedinLink;
-                      const personalLink = profile.personalLink;
-                      const githubLink = profile.githubLink;
-                      const pictureLink = profile.pictureLink;
-
-                      // Calculate total points
-                      var totalPoints = bhoodPoints + servicePoints + pdPoints + generalPoints;
-
-                      photoArea.innerHTML = "<img src='" + pictureLink + "' alt='Theta Tau Brother Headshot' width='331' height='496'>";
-                      bhpointsNum.innerHTML = '' + bhoodPoints;
-                      bhpointsNum.style = pointsColorDeterminer(bhoodPoints);
-
-                      servicepointsNum.innerHTML = '' + servicePoints;
-                      servicepointsNum.style = pointsColorDeterminer(servicePoints);
-
-                      pdpointsNum.innerHTML = '' + pdPoints;
-                      pdpointsNum.style = pointsColorDeterminer(pdPoints);
-
-                      generalpointsNum.innerHTML = '' + generalPoints;
-                      generalpointsNum.style = pointsColorDeterminer(generalPoints);
-
-                      totalPointsNum.innerHTML = '' + totalPoints;
-                      totalPointsNum.style = totalPointsColorDeterminer(totalPoints);
-
-                      deiPointDiv.innerHTML = '' + deiFormatter(deiFulfilled);
-                      deiPointDiv.style = deiPointColor(deiFulfilled);
-
-                      txtNavbarName.innerHTML = 'Welcome, ' + firstN + ' ' + lastN + '!';
-                      updatePointsChart(bhoodPoints, servicePoints, pdPoints, generalPoints);
-                  });
-              });
-
-              // Query the admin information
-              adminCheck = configRef
-                .get()
-                .then(doc => {
-                  if (doc.exists) {
-                    const admins = doc.data().admins;
-                    if (admins && admins.includes(user.uid)) {
-                      // User is an admin, do something
-                      updatePointsSection.style.display = 'list-item';
-                    }
-                  }
-                })
-                .catch(error => {
-                  console.error('Error getting document:', error);
-                });
-
-              // Hide first login display
-              divFirstLoginPrompt.hidden = true;
-              divFirstLoginForm.hidden = true;
-              // Show normal login content (User has setup account)
-              divFullUser.hidden = false;
-              // Show the logged in navbar
-              loggedInNavbar.hidden = false;
-            }
-      });
-    
-      // If the user is logged in and fills out the account details, handle the submission here
-      btnMakeAccountDetails.onclick = () => {
-        // Get User's Firstname
-        let firstnameVal = txtFirstnameEntry.value;
-        //console.log(firstnameVal);
-        //console.log(txtFirstnameEntry.checkValidity());
-        if (!txtFirstnameEntry.checkValidity()) { // If the user has an invalid Firstname input
-          // Display a red invalid input field for the user to fix
-          txtFirstnameEntry.style = "width:95%; margin: auto; background-color: #FFCCCB;";
-          txtFirstnameEntry.placeholder = "You must input a valid first name!";
-          txtFirstnameEntry.classList.add('placeholderInvalid');
-          txtFirstnameEntry.classList.add('placeholderInvalid::placeholder');
-          txtFirstnameEntry.value = "";
-        }
-
-        // Get User's Lastname
-        let lastnameVal = txtLastnameEntry.value;
-        //console.log(lastnameVal);
-        //console.log(txtLastnameEntry.checkValidity());
-        if (!txtLastnameEntry.checkValidity()) { // If the user has an invalid Lastname input
-          // Display a red invalid input field for the user to fix
-          txtLastnameEntry.style = "width:95%; margin: auto; background-color: #FFCCCB;";
-          txtLastnameEntry.placeholder = "You must input a valid last name!";
-          txtLastnameEntry.classList.add('placeholderInvalid');
-          txtLastnameEntry.classList.add('placeholderInvalid::placeholder');
-          txtLastnameEntry.value = "";
-        }
-
-        // Get User's Major
-        let majorVal = txtMajorEntry.value;
-        //console.log(majorVal);
-        //console.log(txtMajorEntry.checkValidity());
-        if (!txtMajorEntry.checkValidity()) { // If the user has an invalid major input
-          // Display a red invalid input field for the user to fix
-          txtMajorEntry.style = "width:95%; margin: auto; background-color: #FFCCCB;";
-          txtMajorEntry.placeholder = "You must input a valid major!";
-          txtMajorEntry.classList.add('placeholderInvalid');
-          txtMajorEntry.classList.add('placeholderInvalid::placeholder');
-          txtMajorEntry.value = "";
-        }
-
-        // Get User's Minor (Optional)
-        let minorVal = txtMinorEntry.value;
-        //console.log(minorVal);
-        //console.log(txtMinorEntry.checkValidity());
-
-        // Get User's Grad Year
-        let gradYearVal = txtGradYearEntry.value;
-        //console.log(gradYearVal);
-        //console.log(txtGradYearEntry.checkValidity());
-        if (!txtGradYearEntry.checkValidity()) { // If the user has an invalid graduation year input
-          // Display a red invalid input field for the user to fix
-          txtGradYearEntry.style = "width:95%; margin: auto; background-color: #FFCCCB;";
-          txtGradYearEntry.placeholder = "You must input a valid graduation year! (1980-2050)";
-          txtGradYearEntry.classList.add('placeholderInvalid');
-          txtGradYearEntry.classList.add('placeholderInvalid::placeholder');
-          txtGradYearEntry.value = "";
-        }
-
-        // Get User's Grad Year
-        let fratClassVal = txtFratClassEntry.value;
-        //console.log(fratClassVal);
-        //console.log(txtFratClassEntry.checkValidity());
-        if (!txtFratClassEntry.checkValidity()) { // If the user has an invalid fraternity class input
-          // Display a red invalid input field for the user to fix
-          txtFratClassEntry.style = "width:95%; margin: auto; background-color: #FFCCCB;";
-          txtFratClassEntry.placeholder = "You must input a valid fraternity class! (Ex: Kappa)";
-          txtFratClassEntry.classList.add('placeholderInvalid');
-          txtFratClassEntry.classList.add('placeholderInvalid::placeholder');
-        }
-
-        // Get User's LinkedIn URL (Optional)
-        let linkedinVal = txtLinkedinEntry.value;
-        //console.log(linkedinVal);
-        //console.log(txtLinkedinEntry.checkValidity());
-        if (!txtLinkedinEntry.checkValidity()) { // If the user has an invalid LinkedIn URL input
-          // Display a red invalid input field for the user to fix
-          txtLinkedinEntry.style = "width:95%; margin: auto; background-color: #FFCCCB;";
-          txtLinkedinEntry.placeholder = "You must input a valid LinkedIn URL!";
-          txtLinkedinEntry.classList.add('placeholderInvalid');
-          txtLinkedinEntry.classList.add('placeholderInvalid::placeholder');
-          txtLinkedinEntry.value = "";
-        }
-
-        // Get User's Personal Website URL (Optional)
-        let personalWebVal = txtPersonalWebEntry.value;
-        //console.log(personalWebVal);
-        //console.log(txtPersonalWebEntry.checkValidity());
-        if (!txtPersonalWebEntry.checkValidity()) { // If the user has an invalid Personal Web URL input
-          // Display a red invalid input field for the user to fix
-          txtPersonalWebEntry.style = "width:95%; margin: auto; background-color: #FFCCCB;";
-          txtPersonalWebEntry.placeholder = "You must input a valid personal website URL!";
-          txtPersonalWebEntry.classList.add('placeholderInvalid');
-          txtPersonalWebEntry.classList.add('placeholderInvalid::placeholder');
-          txtPersonalWebEntry.value = "";
-        }
-
-        // Get User's GitHub URL (Optional)
-        let githubVal = txtGitHubEntry.value;
-        //console.log(githubVal);
-        //console.log(txtGitHubEntry.checkValidity());
-        if (!txtGitHubEntry.checkValidity()) { // If the user has an invalid GitHub URL input
-          // Display a red invalid input field for the user to fix
-          txtGitHubEntry.style = "width:95%; margin: auto; background-color: #FFCCCB;";
-          txtGitHubEntry.placeholder = "You must input a valid GitHub URL!";
-          txtGitHubEntry.classList.add('placeholderInvalid');
-          txtGitHubEntry.classList.add('placeholderInvalid::placeholder');
-          txtGitHubEntry.value = "";
-        }
-
-        if (txtFirstnameEntry.checkValidity() && txtLastnameEntry.checkValidity()
-          && txtMajorEntry.checkValidity() && txtGradYearEntry.checkValidity()
-          && txtLinkedinEntry.checkValidity() && txtPersonalWebEntry.checkValidity()
-          && txtFratClassEntry.checkValidity() && txtGitHubEntry.checkValidity()) { // If every field has a valid input, accept the form
-            usersRef.add({
-              uid: user.uid,
-              fratclass: fratClassVal,
-              brotherhoodPoints: 0,
-              pdPoints: 0,
-              servicePoints: 0,
-              generalPoints: 0,
-              deiFulfilled: "false",
-              firstname: firstnameVal,
-              lastname: lastnameVal,
-              major: majorVal,
-              minor: minorVal,
-              gradYear: gradYearVal,
-              // The picture link is a placeholder photo for everyone before they upload their own professional headshot
-              pictureLink: 'https://drive.google.com/uc?export=view&id=1AwJ9tWv0SagtDnE8U1NejxV2rpwOE8mD',
-              linkedinLink: linkedinVal,
-              personalLink: personalWebVal,
-              githubLink: githubVal
-            })
-            // Change what the user sees
-            divFirstLoginPrompt.hidden = true;
-            divFirstLoginForm.hidden = true;
-            divFullUser.hidden = false;
-            loggedInNavbar.hidden = false;
-            setTimeout(function() {
-              // Reload the page to properly display account page
-              // on initial load-in (wait 0.5 seconds)
-              location.reload(true);
-            }, 500);
-        }
-      }
-
-  } else {
-      // NOT SIGNED IN
-      //Hide Signed-In Sections
-      divFirstLoginPrompt.hidden = true;
-      divFirstLoginForm.hidden = true;
-      divFullUser.hidden = true;
-      loggedInNavbar.hidden = true;
-      // Show Logged-Out Section
-      divSignedOutUser.hidden = false;
-      // Unsubscribe listening streams for no memory leak when user signs out
-      unsubscribe && unsubscribe();
-  }
+    if (user) {
+        handleUserSignedIn(user);
+    } else {
+        handleUserSignedOut();
+    }
 });
 
+function handleUserSignedIn(user) {
+    usersRef = collection(db, 'userData');
+
+    // Hide Signed-Out Content
+    divSignedOutUser.hidden = true;
+
+    checkIfAccountSetup(usersRef, user.uid);
+
+    userOwnsSomething(user.uid).then(userOwnsThings => {
+        console.log("User owns things? ", userOwnsThings);
+        if (!userOwnsThings) {
+            showFirstLoginUI();
+        } else {
+            fetchUserData(user);
+            checkIfAdmin(user);
+            showMainUI();
+        }
+    });
+
+    btnMakeAccountDetails.onclick = handleAccountDetailsSubmission;
+}
+
+function checkIfAccountSetup(usersRef, userId) {
+    const userRef = doc(usersRef, userId);
+
+    getDoc(userRef)
+        .then(docSnapshot => {
+            if (!docSnapshot.exists()) {
+                console.log("User has no profile setup, prompting first-time login setup.");
+                showFirstLoginUI();
+            }
+        })
+        .catch(error => console.error("Error checking account setup:", error));
+}
+
+function handleUserSignedOut() {
+    divFirstLoginPrompt.hidden = true;
+    divFirstLoginForm.hidden = true;
+    divFullUser.hidden = true;
+    loggedInNavbar.hidden = true;
+    divSignedOutUser.hidden = false;
+    unsubscribe && unsubscribe();
+}
+
+function showFirstLoginUI() {
+    divFirstLoginPrompt.hidden = false;
+    divFirstLoginForm.hidden = false;
+    divFullUser.hidden = true;
+    loggedInNavbar.hidden = true;
+    updatePointsSection.style.display = 'none';
+}
+
+const fetchUserData = async (user) => {
+    try {
+        const userQuery = query(usersRef, where("uid", "==", user.uid));
+        const querySnapshot = await getDocs(userQuery);
+
+        clearPreviousUserData();
+
+        querySnapshot.forEach(doc => updateUserProfile(doc.data()));
+    } catch (error) {
+        console.error("Error fetching user data:", error);
+    }
+};
+
+
+function clearPreviousUserData() {
+    document.getElementById('photoArea').innerHTML = '';
+    document.getElementById('bhoodPoints').innerHTML = '';
+    document.getElementById('servicePoints').innerHTML = '';
+    document.getElementById('pdPoints').innerHTML = '';
+    document.getElementById('generalPoints').innerHTML = '';
+}
+
+function updateUserProfile(profile) {
+    const {
+        firstname,
+        lastname,
+        gradYear,
+        fratclass,
+        brotherhoodPoints,
+        pdPoints,
+        servicePoints,
+        generalPoints,
+        deiFulfilled,
+        pictureLink
+    } = profile;
+
+    let totalPoints = brotherhoodPoints + servicePoints + pdPoints + generalPoints;
+
+    document.getElementById('photoArea').innerHTML = `<img src='${pictureLink}' alt='Theta Tau Brother Headshot' width='331' height='496'>`;
+    setPointsDisplay('bhoodPoints', brotherhoodPoints);
+    setPointsDisplay('servicePoints', servicePoints);
+    setPointsDisplay('pdPoints', pdPoints);
+    setPointsDisplay('generalPoints', generalPoints);
+    setPointsDisplay('totalPoints', totalPoints);
+    setDEIDisplay('deiPoint', deiFulfilled);
+
+    txtNavbarName.innerHTML = `Welcome, ${firstname} ${lastname}!`;
+    updatePointsChart(brotherhoodPoints, servicePoints, pdPoints, generalPoints);
+}
+
+function setPointsDisplay(elementId, points) {
+    const element = document.getElementById(elementId);
+    element.innerHTML = `${points}`;
+    element.style = pointsColorDeterminer(points);
+}
+
+function setDEIDisplay(elementId, deiFulfilled) {
+    const element = document.getElementById(elementId);
+    element.innerHTML = `${deiFormatter(deiFulfilled)}`;
+    element.style = deiPointColor(deiFulfilled);
+}
+
+async function checkIfAdmin(user) {
+    try {
+        const docSnapshot = await getDoc(configRef);
+
+        if (docSnapshot.exists()) {
+            const admins = docSnapshot.data().admins;
+            if (admins && admins.includes(user.uid)) {
+                updatePointsSection.style.display = 'list-item';
+            }
+        }
+    } catch (error) {
+        console.error("Error getting document:", error);
+    }
+}
+
+function showMainUI() {
+    divFirstLoginPrompt.hidden = true;
+    divFirstLoginForm.hidden = true;
+    divFullUser.hidden = false;
+    loggedInNavbar.hidden = false;
+}
+
+function handleAccountDetailsSubmission() {
+    const formData = {
+        firstname: txtFirstnameEntry.value,
+        lastname: txtLastnameEntry.value,
+        major: txtMajorEntry.value,
+        minor: txtMinorEntry.value,
+        gradYear: txtGradYearEntry.value,
+        fratclass: txtFratClassEntry.value,
+        linkedin: txtLinkedinEntry.value,
+        personalWeb: txtPersonalWebEntry.value,
+        github: txtGitHubEntry.value
+    };
+
+    if (!validateFormFields(formData)) return;
+
+    usersRef.add({
+        uid: auth.currentUser.uid,
+        fratclass: formData.fratclass,
+        brotherhoodPoints: 0,
+        pdPoints: 0,
+        servicePoints: 0,
+        generalPoints: 0,
+        deiFulfilled: "false",
+        firstname: formData.firstname,
+        lastname: formData.lastname,
+        major: formData.major,
+        minor: formData.minor,
+        gradYear: formData.gradYear,
+        pictureLink: 'https://drive.google.com/uc?export=view&id=1AwJ9tWv0SagtDnE8U1NejxV2rpwOE8mD',
+        linkedinLink: formData.linkedin,
+        personalLink: formData.personalWeb,
+        githubLink: formData.github
+    });
+
+    showMainUI();
+    setTimeout(() => location.reload(true), 500);
+}
+
+function validateFormFields(formData) {
+    let isValid = true;
+    const fields = [
+        { element: txtFirstnameEntry, value: formData.firstname, placeholder: "You must input a valid first name!" },
+        { element: txtLastnameEntry, value: formData.lastname, placeholder: "You must input a valid last name!" },
+        { element: txtMajorEntry, value: formData.major, placeholder: "You must input a valid major!" },
+        { element: txtGradYearEntry, value: formData.gradYear, placeholder: "You must input a valid graduation year! (1980-2050)" },
+        { element: txtFratClassEntry, value: formData.fratclass, placeholder: "You must input a valid fraternity class! (Ex: Kappa)" },
+        { element: txtLinkedinEntry, value: formData.linkedin, placeholder: "You must input a valid LinkedIn URL!" },
+        { element: txtPersonalWebEntry, value: formData.personalWeb, placeholder: "You must input a valid personal website URL!" },
+        { element: txtGitHubEntry, value: formData.github, placeholder: "You must input a valid GitHub URL!" }
+    ];
+
+    fields.forEach(({ element, value, placeholder }) => {
+        if (!element.checkValidity()) {
+            element.style = "width:95%; margin: auto; background-color: #FFCCCB;";
+            element.placeholder = placeholder;
+            element.classList.add('placeholderInvalid');
+            element.classList.add('placeholderInvalid::placeholder');
+            element.value = "";
+            isValid = false;
+        }
+    });
+
+    return isValid;
+}
