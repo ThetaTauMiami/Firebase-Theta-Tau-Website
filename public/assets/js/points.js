@@ -1,8 +1,9 @@
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js';
-import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword, connectAuthEmulator } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
-
-// Initalize constants that the JS will use to interact with HTML elements based on user authentication state
-
+import {
+    onAuthStateChanged,
+    signOut
+} from 'https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js';
+import { collection, doc, query, getDocs, where } from 'https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js';
+import { db, auth} from "/config/firebaseConfig.js";
 
 //Logged-In User Sections
 const divFullUser = document.querySelector('#fullUser')
@@ -18,38 +19,21 @@ const btnLoginReturn = document.querySelector('#btnLoginReturn')
 // Points Update Button (ADMINS ONLY)
 const updatePointsSection = document.querySelector('#updatePointsSection')
 
-///////////////// Firebase Initialization ////////////////
-const firebaseApp = initializeApp({
-    apiKey: "AIzaSyCuS3TWRtitOxxjJ3gyb-lxH2kmu2N0Ij8",
-    authDomain: "thetataumiamiuniversity.firebaseapp.com",
-    projectId: "thetataumiamiuniversity",
-    storageBucket: "thetataumiamiuniversity.appspot.com",
-    messagingSenderId: "752928414181",
-    appId: "1:752928414181:web:d70dbd3f4ed11077e7b70c",
-    measurementId: "G-BTNR03FCB4"
-});
 
-//////// Firestore Variables (Database) //////////
-const db = firebase.firestore();
-const configRef = db.collection('config').doc('roles');
+const configRef = doc(collection(db, 'config'), 'roles');
 let usersRef; // Reference to the document or collection we want to access
 let unsubscribe; // Query handler for user information check
 let adminCheck; // Query handler for admin uid check
 
-// Core constant variables used to regulate a user's authenticated 'state'
-const auth = firebase.auth();
-const authentication = getAuth(firebaseApp);
 
 ///////////////////// User Authentication ////////////////////////
 // Monitor user Authentication state, this will change website contents using javascript functions
 const monitorAuthState = async () => {
-    onAuthStateChanged(authentication, user => {
-      if (user) {
-        console.log("Logged In")
+    onAuthStateChanged(auth, user => {
+      if (!user) {
+          window.redirect('/login');
       }
-      else {
-        console.log("Not Logged In")
-      }
+
     })
 }
 
@@ -67,18 +51,17 @@ const logoutExit = () => {
 
 
 ////////////////////// FUNCTIONS ///////////////////////////////////
-// Function to check if a user owns any items in the Cloud Firestore database
-function userOwnsSomething(userId) {
-  return db.collection("userData")
-    .where("uid", "==", userId)
-    .get()
-    .then((querySnapshot) => {
-      return !querySnapshot.empty; // returns true if user owns things, false otherwise
-    })
-    .catch((error) => {
-      return false; // return false if there was an error [nothing owned]
-    });
-}
+// Helper function to check if a user has stored data
+const userOwnsSomething = async (userId) => {
+    try {
+        const userQuery = query(collection(db, "userData"), where("uid", "==", userId));
+        const snapshot = await getDocs(userQuery);
+        return !snapshot.empty;
+    } catch (error) {
+        console.error("Error checking user data:", error);
+        return false;
+    }
+};
 
 // This button will return a user back to the "Login" page and ensure that they are logged out as well
 btnLoginReturn.addEventListener("click", logoutExit);
@@ -100,7 +83,7 @@ auth.onAuthStateChanged(user => {
   if (user) {
       // SIGNED IN
       // Create a reference to the database user collection
-      usersRef = db.collection('userData');
+      usersRef = collection(db, 'userData');
       // Hide Signed-Out Content
       divSignedOutUser.hidden = true;
       // Checks to see if the current user has setup their account (Not first sign-in)
@@ -342,7 +325,7 @@ function updateHTMLAfterClear(docID) {
 window.clearPoints = clearPoints;
 
 function updateUserPoints(userDocument) {
-  const usersRef = db.collection("userData");
+  const usersRef = collection(db, "userData");
   const user_brotherhoodPoints = document.querySelector(`#brotherhoodPoints-${userDocument.uid}`).value;
   const user_servicePoints = document.querySelector(`#servicePoints-${userDocument.uid}`).value;
   const user_pdPoints = document.querySelector(`#pdPoints-${userDocument.uid}`).value;
