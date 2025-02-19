@@ -38,8 +38,8 @@ function loadComponent(id, file) {
 
 // Load components when the DOM is fully ready
 document.addEventListener("DOMContentLoaded", () => {
-    loadComponent("nav-placeholder", "/public/components/navbar.html");
-    loadComponent("footer-placeholder", "/public/components/footer.html");
-    loadComponent("styles-placeholder", "/public/components/styles.html");
-    loadComponent("scripts-placeholder", "/public/components/scripts.html");
+    loadComponent("nav-placeholder", "/components/navbar.html");
+    loadComponent("footer-placeholder", "/components/footer.html");
+    loadComponent("styles-placeholder", "/components/styles.html");
+    loadComponent("scripts-placeholder", "/components/scripts.html");
 });
