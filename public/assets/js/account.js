@@ -225,7 +225,7 @@ function handleUserSignedIn(user) {
     checkIfAccountSetup(usersRef, user.uid);
 
     userOwnsSomething(user.uid).then(userOwnsThings => {
-        console.log("User owns things? ", userOwnsThings);
+        // console.log("User owns things? ", userOwnsThings);
         if (!userOwnsThings) {
             showFirstLoginUI();
         } else {
@@ -244,7 +244,7 @@ function checkIfAccountSetup(usersRef, userId) {
     getDoc(userRef)
         .then(docSnapshot => {
             if (!docSnapshot.exists()) {
-                console.log("User has no profile setup, prompting first-time login setup.");
+                // console.log("User has no profile setup, prompting first-time login setup.");
                 showFirstLoginUI();
             }
         })

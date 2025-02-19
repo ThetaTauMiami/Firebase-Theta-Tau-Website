@@ -23,7 +23,7 @@ const db = getFirestore(firebaseApp);
 // Set authentication persistence to keep users logged in across page reloads
 setPersistence(auth, browserLocalPersistence)
     .then(() => {
-        console.log("Persistence set to browserLocalPersistence");
+        // console.log("Persistence set to browserLocalPersistence");
     })
     .catch((error) => {
         console.error("Error setting persistence:", error);
