@@ -5,16 +5,30 @@ function loadComponent(id, file) {
             return response.text();
         })
         .then(html => {
-            document.getElementById(id).innerHTML = html;
+            const container = document.getElementById(id);
+            container.innerHTML = html;
+
+            // Find and execute scripts inside the loaded component
+            const scripts = container.querySelectorAll("script");
+            scripts.forEach((script) => {
+                const newScript = document.createElement("script");
+                if (script.type) newScript.type = script.type;
+                if (script.src) {
+                    newScript.src = script.src;
+                    newScript.async = true;
+                } else {
+                    newScript.textContent = script.textContent;
+                }
+                document.body.appendChild(newScript);
+            });
         })
         .catch(error => console.error(error));
 }
 
-// Load navbar
+// Load components
 document.addEventListener("DOMContentLoaded", () => {
     loadComponent("nav-placeholder", "/public/components/navbar.html");
     loadComponent("footer-placeholder", "/public/components/footer.html");
     loadComponent("styles-placeholder", "/public/components/styles.html");
     loadComponent("scripts-placeholder", "/public/components/scripts.html");
-
 });

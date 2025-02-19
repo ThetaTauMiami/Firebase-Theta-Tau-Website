@@ -4,6 +4,10 @@
 
     console.log("Auth script loaded");
 
+    if (!auth) {
+        console.error("Firebase auth is not initialized!");
+    }
+
     function applyAuthState() {
         const whenSignedOutNav = document.getElementById("whenSignedOutNav");
         const whenSignedInNav = document.getElementById("whenSignedInNav");
