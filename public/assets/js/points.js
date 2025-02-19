@@ -39,16 +39,6 @@ const monitorAuthState = async () => {
 
 monitorAuthState();
 
-// Log out
-const logout = async () => {
-  await signOut(auth);
-}
-
-const logoutExit = () => {
-  logout(); // Ensure the user is signed out
-  window.location.replace('login.html'); // Send the user back to the Login page
-}
-
 
 ////////////////////// FUNCTIONS ///////////////////////////////////
 // Helper function to check if a user has stored data
