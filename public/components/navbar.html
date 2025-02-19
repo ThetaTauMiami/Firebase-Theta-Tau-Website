@@ -11,17 +11,17 @@
             return;
         }
 
-        console.log("Checking authentication state...");
-
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 console.log(`User is logged in: ${user.uid}`);
                 whenSignedOutNav.style.display = "none";
                 whenSignedInNav.style.display = "block";
+                whenSignedInNav.style.visibility = "visible";  // Ensure it's visible
             } else {
                 console.log("User is not logged in");
-                whenSignedOutNav.style.display = "block";
                 whenSignedInNav.style.display = "none";
+                whenSignedOutNav.style.display = "block";
+                whenSignedOutNav.style.visibility = "visible"; // Ensure it's visible
             }
         });
     }
@@ -56,11 +56,10 @@
                 <li><a href="contact.html">CONTACT</a></li>
 
                 <!-- The login tab (visible when signed out) -->
-                <li id="whenSignedOutNav">
+                <li id="whenSignedOutNav" style="visibility: hidden;">
                     <a href="login.html">LOGIN</a>
                 </li>
-                <!-- The account tab (visible when signed in) -->
-                <li id="whenSignedInNav" style="display: none;">
+                <li id="whenSignedInNav" style="visibility: hidden;">
                     <a href="account.html">ACCOUNT</a>
                 </li>
             </ul>
