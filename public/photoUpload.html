@@ -4,47 +4,13 @@
 <head>
     <title>Theta Tau | Tau Delta Chapter - Miami University</title>
     <meta property="og:site_name" content="Theta Tau | Miami University" />
+    <meta charset="utf-8">;
 
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.16.1/firebase-firestore.js"></script>
-    <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-app.js";
-        // import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.1.0/firebase-analytics.js";
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-        const firebaseConfig = {
-          apiKey: "AIzaSyCuS3TWRtitOxxjJ3gyb-lxH2kmu2N0Ij8",
-          authDomain: "thetataumiamiuniversity.firebaseapp.com",
-          projectId: "thetataumiamiuniversity",
-          storageBucket: "thetataumiamiuniversity.appspot.com",
-          messagingSenderId: "752928414181",
-          appId: "1:752928414181:web:d70dbd3f4ed11077e7b70c",
-          measurementId: "G-BTNR03FCB4"
-        };
-      
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        // This can be uncommented and implemented later if analytics are needed, proper Firebase (Google) SDK integration is needed however
-        // const analytics = getAnalytics(app);
-    </script>
+    <script type='module' src="/config/firebaseConfig.js"></script>
 
-    <!--References the app.js file, uses defer to make sure it loads after the body elements have loaded-->
-    <script type="module" src="photoUpload.js" defer></script>
-
-    <link href="./favicon.ico" rel="shortcut icon" type="image/x-icon">
-    <!--<link href="/favicon.ico" rel="icon" type="image/x-icon">-->
-    <link href="https://fonts.googleapis.com/css?family=Lato:100" 
-          rel="stylesheet" type="text/css">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
-          rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"
-          rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
-    <link href="assets/css/home.css" rel="stylesheet">
-    <link href="assets/css/jquery-ui.min.css" rel="stylesheet">
+    <!-- Imports styles from public/components/styles.html   -->
+    <script type='module' src="assets/js/photoUpload.js"></script>
+    <div id="styles-placeholder"></div>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Chrome, Firefox OS, Opera and Vivaldi -->
@@ -59,187 +25,106 @@
 
 
 <body>
+    <!-- Imports navbar from public/components/navbar.html   -->
+    <div id="nav-placeholder"></div>
 
-  <nav class="navbar navbar-inverse navbar-fixed-top">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <button class="navbar-toggle" data-target="#myNavbar"
-                    data-toggle="collapse" type="button">
-                <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
-            </button> <a class="navbar-brand" href="/"><span id="nav">THETA TAU | <span class="hidden-xs hidden-sm">MIAMI UNIVERSITY</span><span class="hidden-md hidden-lg hidden-xl">ΤΔ</span></span></a>
-            <span class="hidden-xs hidden-sm"><a href="/"><img src="assets/img/login-logo.png" class="navbar-brand"></a></span>
-        </div>
-        <div class="collapse navbar-collapse" id="myNavbar">
-            <ul class="nav navbar-nav navbar-right">
-                <li>
-                    <a href="index.html">HOME</a>
-                </li>
-                <li>
-                    <a href="gallery.html">GALLERY</a>
-                </li>
-                <li>
-                    <a href="events.html">EVENTS</a>
-                </li>
-                <li>
-                    <a href="leadership.html">LEADERSHIP</a>
-                </li>
-                <li>
-                    <a href="recruitment.html">RECRUITMENT</a>
-                </li>
-                <!--
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">MEMBERS
-                        <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/members">ACTIVES</a></li>
-                        <li><a href="/alumni">ALUMNI</a></li>
-                        <li><a href="/resumes">MEMBER RESUMES</a></li>
-                    </ul>
-                </li>
-                -->
-                <li>
-                    <a href="contact.html">CONTACT</a>
-                </li>
-                <!-- The account tab, which shows the user their profile. -->
-                <li>
-                  <a href="account.html" >ACCOUNT</a>
-              </li>
-            </ul>
-        </div>
+    <!-- Header "Photo Upload" ---------------------------------->
+    <div id="headerPhotoUpload" class="jumbotron" style="background-image:url('assets/img/banner.png'); background-position: center;">
+        <h1>Photo Upload</h1>
     </div>
-</nav>
 
-<!-- Header "Photo Upload" ---------------------------------->
-<div id="headerPhotoUpload" class="jumbotron" style="background-image:url('assets/img/banner.png'); background-position: center;">
-    <h1>Photo Upload</h1>
-</div>
+    <div class="container" id="borderBar">
 
-<div class="container" id="borderBar">
+    <br/>
+    <br/>
 
-<br/>
-<br/>
+    <!-- Added upper ---------------------------------->
 
-<!-- Added upper ---------------------------------->
-
-<div class="container">
-  <div class="row" style="text-align: center">
-    <!-- Removed facebook and Twitter as they are no longer used for now -->
-    <!--<a href="https://www.facebook.com/ThetaTauMU/" target="_blank"><i id="social" class="fa fa-facebook-official fa-5x" aria-hidden="true">&nbsp;&nbsp; </i></a>-->
-    <!--<a href="https://twitter.com/thetataumu?lang=en" target="_blank"><i id="social" class="fa fa-twitter fa-5x" aria-hidden="true">&nbsp;&nbsp;</i></a>-->
-    <!-- <a href="https://www.instagram.com/thetatau_miamiu/?hl=en" target="_blank"><i id="social" class="fa fa-instagram fa-5x" aria-hidden="true">&nbsp;&nbsp;</i></a>
-    <a href="http://www.linkedin.com/groups/8471878" target="_blank"><i id="social" class="fa fa-linkedin fa-5x" aria-hidden="true"></i></a> -->
-    <!-- <img id="profile-img" class="profile-img-card center-block img-responsive" src="assets/img/login-logo.png" style="height: 214px; width: 125px;" /> -->
-    <h3><u>Upload Instructions</u></h3>
-    <p>(<b>*NOTE:</b> All images uploaded are displayed with dimensions of 331x496 pixels, or a multiple of this.)</p>
-    <div style="text-align: left; margin-left: 25%; margin-right: 25%;">
-      <ol type="1" style="font-size: 16px;">
-        <li>Navigate to the Theta Tau Miami shared Google Drive</li>
-        <li>Follow the folder path of <b>Pictures</b> > <b>Website</b> > <b>Headshots</b></li>
-        <li>Upload your professional headshot to the Google Drive folder, preferrably cropped to dimensions of 331x496 pixels</li>
-        <li>Double-click on your uploaded photo, click on the three dots in the top-right corner, and select <b>"Share"</b></li>
-        <li>Look at the bottom of the Share menu and change the <b>General Access</b> section to <b>"Anyone with the link"</b> with <b>"Viewer"</b> privilages</li>
-        <li>After selecting the correct options, copy the link and paste it into the submission box down below</li>
-      </ol>
-      <!-- <p>Step 1: Navigate to the Theta Tau Miami shared Google Drive</p>
-      <p>Step 2: Follow the folder path of <b>Pictures</b> > <b>Website</b> > <b>Headshots</b></p>
-      <p>Step 3: Upload your professional headshot to the Google Drive folder, preferrably cropped to dimensions of 331x496 pixels</p>
-      <p>Step 4: Double-click on your uploaded photo, click on the three dots in the top-right corner, and select <b>"Share"</b></p>
-      <p>Step 5: Look at the bottom of the Share menu and change the <b>General Access</b> section to <b>"Anyone with the link"</b> with <b>"Viewer"</b> privilages</p>
-      <p>Step 6: After selecting the correct options, copy the link and paste it into the submission box down below</p> -->
-    </div>
-  </div>
-</div>
-
-<div class="container">
-  <div class="row">
-    <div class="col-md-6 col-md-offset-3">
-
-      <div class="well well-sm" style="margin-top: 30px">
-
-        <form class="form-horizontal" action="">
-          <fieldset>
-
-            <legend>Upload Your Photo</legend>
-
-            <!-- Photo URL input-->
-            <div class="form-group">
-              <label class="col-md-3 control-label" for="profilePhoto">Photo URL:</label>
-              <div class="col-md-9">
-                <input id="txtPhotoURL" name="profilePhoto" type="url" placeholder="Enter your full shared photo URL" class="form-control" value="" style="width:95%; margin: auto;">
-              </div>
-            </div>
-
-            <!-- Submit Button -->
-            <div class="form-group">
-              <div class="col-md-12 text-right">
-                <button id="btnSubmitPhoto" type="button" class="btn btn-warning btn-lg">Submit Photo</button>
-              </div>
-              <div class="col-md-12 text-left" id="divPhotoSubmitError">
-                <div id="lblLoginErrorMessage"></div>
-              </div>
-            </div>
-          </fieldset>
-        </form>
-      </div>
-      <div class="col-md-12 text-center">
-        <p id="successMessage" style="color:#005b14; font-size: 18px;  text-align: center;" hidden><b>Your photo was successfully submitted!</b></p>
-        <p id="failureMessage" style="color:#5B0000; font-size: 18px;  text-align: center;" hidden><b>Invalid URL has been entered, try again.</b></p>
-      </div>
-      <div class="col-md-12 text-left">
-        <a href="account.html" style="color:#5B0000; font-size: 18px;  text-align: left;">← Back to your account</a>
+    <div class="container">
+      <div class="row" style="text-align: center">
+        <!-- Removed facebook and Twitter as they are no longer used for now -->
+        <!--<a href="https://www.facebook.com/ThetaTauMU/" target="_blank"><i id="social" class="fa fa-facebook-official fa-5x" aria-hidden="true">&nbsp;&nbsp; </i></a>-->
+        <!--<a href="https://twitter.com/thetataumu?lang=en" target="_blank"><i id="social" class="fa fa-twitter fa-5x" aria-hidden="true">&nbsp;&nbsp;</i></a>-->
+        <!-- <a href="https://www.instagram.com/thetatau_miamiu/?hl=en" target="_blank"><i id="social" class="fa fa-instagram fa-5x" aria-hidden="true">&nbsp;&nbsp;</i></a>
+        <a href="http://www.linkedin.com/groups/8471878" target="_blank"><i id="social" class="fa fa-linkedin fa-5x" aria-hidden="true"></i></a> -->
+        <!-- <img id="profile-img" class="profile-img-card center-block img-responsive" src="assets/img/login-logo.png" style="height: 214px; width: 125px;" /> -->
+        <h3><u>Upload Instructions</u></h3>
+        <p>(<b>*NOTE:</b> All images uploaded are displayed with dimensions of 331x496 pixels, or a multiple of this.)</p>
+        <div style="text-align: left; margin-left: 25%; margin-right: 25%;">
+          <ol type="1" style="font-size: 16px;">
+            <li>Navigate to the Theta Tau Miami shared Google Drive</li>
+            <li>Follow the folder path of <b>Pictures</b> > <b>Website</b> > <b>Headshots</b></li>
+            <li>Upload your professional headshot to the Google Drive folder, preferrably cropped to dimensions of 331x496 pixels</li>
+            <li>Double-click on your uploaded photo, click on the three dots in the top-right corner, and select <b>"Share"</b></li>
+            <li>Look at the bottom of the Share menu and change the <b>General Access</b> section to <b>"Anyone with the link"</b> with <b>"Viewer"</b> privilages</li>
+            <li>After selecting the correct options, copy the link and paste it into the submission box down below</li>
+          </ol>
+          <!-- <p>Step 1: Navigate to the Theta Tau Miami shared Google Drive</p>
+          <p>Step 2: Follow the folder path of <b>Pictures</b> > <b>Website</b> > <b>Headshots</b></p>
+          <p>Step 3: Upload your professional headshot to the Google Drive folder, preferrably cropped to dimensions of 331x496 pixels</p>
+          <p>Step 4: Double-click on your uploaded photo, click on the three dots in the top-right corner, and select <b>"Share"</b></p>
+          <p>Step 5: Look at the bottom of the Share menu and change the <b>General Access</b> section to <b>"Anyone with the link"</b> with <b>"Viewer"</b> privilages</p>
+          <p>Step 6: After selecting the correct options, copy the link and paste it into the submission box down below</p> -->
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- Added footer ------------------------------------------>
-<br/>
-<hr>
-<br/>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-md-offset-3">
 
-</div>
+          <div class="well well-sm" style="margin-top: 30px">
 
-<nav class="navbar" class="footer">
-    <div class="row">
-        <div class="col-lg-12 text-center">
-            <h1 class="social-h1">
-                <!-- Removed facebook and Twitter as they are no longer used for now -->
-                <a href="https://www.instagram.com/thetatau_miamiu" target="_blank"><i class="fa fa-instagram"></i></a> 
-                <!--<a href="https://www.facebook.com/ThetaTauMU/?fref=ts" target="_blank"><i class="fa fa-facebook"></i></a>--> 
-                <!--<a href="https://twitter.com/thetataumu" target= "_blank"><i class="fa fa-twitter"></i></a>-->
-                <a href="https://www.linkedin.com/groups/8471878/" target="_blank"><i class="fa fa-linkedin"></i></a> 
-                <a href="https://github.com/ThetaTauMiami/" target="_blank"><i class="fa fa-github"></i></a>
-            </h1>
+            <form class="form-horizontal" action="">
+              <fieldset>
+
+                <legend>Upload Your Photo</legend>
+
+                <!-- Photo URL input-->
+                <div class="form-group">
+                  <label class="col-md-3 control-label" for="profilePhoto">Photo URL:</label>
+                  <div class="col-md-9">
+                    <input id="txtPhotoURL" name="profilePhoto" type="url" placeholder="Enter your full shared photo URL" class="form-control" value="" style="width:95%; margin: auto;">
+                  </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="form-group">
+                  <div class="col-md-12 text-right">
+                    <button id="btnSubmitPhoto" type="button" class="btn btn-warning btn-lg">Submit Photo</button>
+                  </div>
+                  <div class="col-md-12 text-left" id="divPhotoSubmitError">
+                    <div id="lblLoginErrorMessage"></div>
+                  </div>
+                </div>
+              </fieldset>
+            </form>
+          </div>
+          <div class="col-md-12 text-center">
+            <p id="successMessage" style="color:#005b14; font-size: 18px;  text-align: center;" hidden><b>Your photo was successfully submitted!</b></p>
+            <p id="failureMessage" style="color:#5B0000; font-size: 18px;  text-align: center;" hidden><b>Invalid URL has been entered, try again.</b></p>
+          </div>
+          <div class="col-md-12 text-left">
+            <a href="account.html" style="color:#5B0000; font-size: 18px;  text-align: left;">← Back to your account</a>
+          </div>
         </div>
-        <div class="col-lg-12 text-center">
-            <p class="footer-links">
-              <a href="/">Home</a> · 
-              <a href="gallery.html">Gallery</a> · 
-              <a href="events.html">Events</a> · 
-              <a href="leadership.html">Leadership</a> · 
-              <a href="recruitment.html">Recruitment</a> · 
-              <!--<a href="members">Members</a> · 
-              <a href="alumni">Alumni</a> · -->
-              <a href="contact.html">Contact Us</a>  · 
-              <a href="login.html" id="footerLogin"hidden>Login</a>
-              <a href="account.html" id="footerAccount">Account</a>
-            </p>
-            <p class="footer-links">Theta Tau | Tau Delta Chapter of Miami University | 2023</p>
-        </div>
+      </div>
     </div>
-</nav>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <!-- Added footer ------------------------------------------>
+    <br/>
+    <hr>
+    <br/>
 
-<!-- Bootbox dependencies -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/js/bootstrap.min.js"></script>
+    </div>
 
-<script src="assets/js/jquery-ui.min.js"></script>
+    <!-- Imports footer from public/components/footer.html   -->
+    <div id='footer-placeholder'></div>
 
 
-<!-- This script always goes last, contains custom scripts -->
-<script src="assets/js/site.js"></script>
+    <!-- Imports scripts from public/components/scripts.html   -->
+    <div id="scripts-placeholder"></div>
+    <script src="assets/js/loadComponents.js"></script>
 
 </body>
 
