@@ -28,15 +28,8 @@
     <!-- Imports navbar from public/components/navbar.html   -->
     <div id="nav-placeholder"></div>
 
-    <!-- This is displayed when the user is not logged in yet ---------------------------------->
-    <div id="headerLogin" class="jumbotron" style="background-image:url('assets/img/miami/banner.png'); background-position: center;">
-        <h1>Login</h1>
-    </div>
-
-    <!-- This is displayed only when the user is logged in ---------------------------------->
-    <div id="headerAccount" class="jumbotron" style="background-image:url('assets/img/miami/banner.png'); background-position: center;" hidden="true">
-      <h1>Account</h1>
-    </div>
+    <!--Custom tag from public/components/jumbotron.js-->
+    <custom-jumbotron title="Login" height="150px"></custom-jumbotron>
 
 
     <div class="container" id="borderBar">
