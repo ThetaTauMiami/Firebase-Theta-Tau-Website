@@ -17,6 +17,7 @@
     <!-- iOS Safari -->
     <meta name="apple-mobile-web-app-status-bar-style" content="#5B0000">
 
+
 </head>
 
 
@@ -24,11 +25,10 @@
 <body>
 
     <div id="nav-placeholder"></div>
-  
-    <div class="jumbotron" style="background-image:url('assets/img/banner.png'); background-position: center;">
-        <h1>Contact Us</h1>
-    </div>
 
+    <custom-jumbotron
+            title="Contact Us">
+    </custom-jumbotron>
 
     <div class="container" id="borderBar">
 
@@ -62,7 +62,13 @@
 
                 <legend>Email Us</legend>
                 <!-- Name input-->
-                <img id="profile-img" class="profile-img-card center-block img-responsive" src="assets/img/login-logo.png" style="height: 214px; width: 125px;" />
+                <img id="profile-img"
+                     class="profile-img-card center-block img-responsive"
+                     src="assets/img/theta-tau/login-logo.png"
+                     style="height: 214px;
+                     width: 125px;"
+                     loading="lazy"
+                />
 
 
                 <div class="form-group">
