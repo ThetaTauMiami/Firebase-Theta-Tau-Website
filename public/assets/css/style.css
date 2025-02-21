@@ -62,19 +62,6 @@ body, html{
     font-weight: 700;
 }
 
-.jumbotron {
-    text-align: center;
-    color: #FFFFFF;
-    font-family: "DejaVu Sans Light";
-    margin-bottom: 0;
-    background-size: cover;
-    border-radius: 0px !important; 
-}
-
-.jumbotron > h1 {
-    text-shadow: 1px 1px 10px black;
-}
-
 #homeHeading {
     font-family: "DejaVu Sans Light";
 }

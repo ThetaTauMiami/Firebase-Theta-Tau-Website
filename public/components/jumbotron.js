@@ -3,12 +3,14 @@ class CustomJumbotron extends HTMLElement {
         super();
         this.attachShadow({ mode: "open" });
 
-        // Get attributes from the element
+        // Get attributes
         const backgroundImage = this.getAttribute("background") || "assets/img/miami/banner.png";
         const title = this.getAttribute("title") || "Welcome!";
-        const height = this.getAttribute("height") || "300px";
 
-        // Define styles
+        // ✅ Use documentFragment for faster DOM updates
+        const fragment = document.createDocumentFragment();
+
+        // Create styles
         const style = document.createElement("style");
         style.textContent = `
             * {
@@ -18,6 +20,7 @@ class CustomJumbotron extends HTMLElement {
             :host {
                 display: block;
                 width: 100%;
+                will-change: transform, opacity; /* ✅ Reduce redraws */
             }
             body {
                 margin: 0;
@@ -25,7 +28,7 @@ class CustomJumbotron extends HTMLElement {
             }
             .jumbotron {
                 width: 100%;
-                min-height: ${height};  /* Ensures it fills while allowing content expansion */
+                min-height: 300px;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -35,7 +38,10 @@ class CustomJumbotron extends HTMLElement {
                 background-repeat: no-repeat;
                 color: #FFFFFF;
                 font-family: "DejaVu Sans Light", sans-serif;
-                margin: 0; /* Remove unwanted margins */
+                margin: 0;
+                opacity: 0; /* ✅ Start invisible for fade-in */
+                transform: translateY(10px); /* ✅ Start slightly off-screen */
+                transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* ✅ Smooth animations */
             }
             .jumbotron h1 {
                 font-size: 63px;
@@ -43,18 +49,23 @@ class CustomJumbotron extends HTMLElement {
             }
         `;
 
-        // Define HTML structure
+        // Create jumbotron element
         const jumbotron = document.createElement("div");
         jumbotron.classList.add("jumbotron");
-
-        // ✅ Apply background image dynamically (fixes white space issue)
         jumbotron.style.backgroundImage = `url('${backgroundImage}')`;
 
         jumbotron.innerHTML = `<h1>${title}</h1>`;
 
-        // Append elements to shadow root
-        this.shadowRoot.appendChild(style);
-        this.shadowRoot.appendChild(jumbotron);
+        // ✅ Append to fragment (minimizing DOM operations)
+        fragment.appendChild(style);
+        fragment.appendChild(jumbotron);
+        this.shadowRoot.appendChild(fragment);
+
+        // ✅ Use requestAnimationFrame for smoother rendering
+        requestAnimationFrame(() => {
+            jumbotron.style.opacity = "1";
+            jumbotron.style.transform = "translateY(0)";
+        });
     }
 }
 
