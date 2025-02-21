@@ -6,7 +6,7 @@ class CustomJumbotron extends HTMLElement {
         this.attachShadow({ mode: "open" });
 
         // Get attributes from the element
-        const backgroundImage = this.getAttribute("background") || "assets/img/miami/banner.png";
+        const backgroundImage = this.getAttribute("background") || "assets/img/miami/banner.webp";
         const title = this.getAttribute("title") || "Welcome!";
 
         // Define styles
