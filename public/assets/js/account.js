@@ -306,7 +306,7 @@ function updateUserProfile(profile) {
 
     let totalPoints = brotherhoodPoints + servicePoints + pdPoints + generalPoints;
 
-    document.getElementById('photoArea').innerHTML = `<img src='${pictureLink}' alt='Theta Tau Brother Headshot' width='331' height='496'>`;
+    document.getElementById('photoArea').innerHTML = `<img src='${pictureLink}' alt='Theta Tau Brother Headshot' loading="lazy"  width='331' height='496'>`;
     setPointsDisplay('bhoodPoints', brotherhoodPoints);
     setPointsDisplay('servicePoints', servicePoints);
     setPointsDisplay('pdPoints', pdPoints);

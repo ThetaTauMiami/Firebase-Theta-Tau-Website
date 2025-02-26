@@ -103,7 +103,7 @@ const createUserElement = (userData) => {
     const isDeiNotFulfilled = userData.deiFulfilled === "false" ? "selected" : "";
 
     element.innerHTML = `
-        <div class="col-lg-2"><img src="${userData.pictureLink}" style="width:100%" /></div>
+        <div class="col-lg-2"><img src="${userData.pictureLink}"  loading="lazy" style="width:100%" /></div>
         <div class="col-lg-2"><h5>${userData.firstname} ${userData.lastname}</h5></div>
         <div class="col-lg-6">
             ${createPointsInput("Brotherhood", userData.uid, userData.brotherhoodPoints)}
