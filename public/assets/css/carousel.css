@@ -3,7 +3,7 @@
     width: 100%;
     max-width: 800px;
     height: 450px; /* Adjust as needed */
-    background-color: black; /* Black bars */
+    background-color: white; /* Black bars */
     margin: auto;
     overflow: hidden;
 }
@@ -17,6 +17,7 @@
     width: 100%;
     height: 100%;
     object-fit: contain; /* Maintains aspect ratio with black bars */
+    object-position: bottom;
     flex: 0 0 100%;
     background-color: black;
 }
