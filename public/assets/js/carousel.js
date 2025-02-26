@@ -2,12 +2,21 @@ let currentIndex = 0;
 
 function showSlide(index) {
     const carousel = document.querySelector(".carousel");
-    const totalSlides = document.querySelectorAll(".carousel img").length;
+    const slides = document.querySelectorAll(".carousel img");
+    const totalSlides = slides.length;
 
-    if (index >= totalSlides) currentIndex = 0;
-    if (index < 0) currentIndex = totalSlides - 1;
+    if (index >= totalSlides) {
+        currentIndex = 0;
+    } else if (index < 0) {
+        currentIndex = totalSlides - 1;
+    } else {
+        currentIndex = index;
+    }
 
-    carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+    // Ensure only valid slides are displayed
+    if (slides[currentIndex]) {
+        carousel.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
 }
 
 function nextSlide() {
@@ -21,4 +30,4 @@ function prevSlide() {
 }
 
 // Auto slide every 3 seconds
-setInterval(nextSlide, 3000);
+// setInterval(nextSlide, 3000);
