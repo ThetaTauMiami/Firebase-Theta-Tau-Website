@@ -40,3 +40,24 @@ button {
 
 .prev { left: 10px; }
 .next { right: 10px; }
+
+/* RESPONSIVE FIX */
+@media (max-width: 768px) {
+    .carousel-container {
+        width: 300px;
+    }
+    .carousel img {
+        object-fit: contain; /* Prevent extreme cropping */
+        min-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-container {
+        height: 250px;
+    }
+    button {
+        font-size: 18px;
+        padding: 5px;
+    }
+}
