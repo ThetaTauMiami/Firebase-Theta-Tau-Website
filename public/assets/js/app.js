@@ -11,7 +11,6 @@ const lblLoginErrorMessage = document.querySelector('#lblLoginErrorMessage')
 const whenSignedOutNav = document.querySelector('#whenSignedOutNav')
 const whenSignedInNav = document.querySelector('#whenSignedInNav')
 // Header Text
-const headerLogin = document.querySelector('#headerLogin')
 const headerAccount = document.querySelector('#headerAccount')
 // Footer Links
 const footerLogin = document.querySelector('#footerLogin')
@@ -59,8 +58,7 @@ auth.onAuthStateChanged( (user) => {
     if (user) {
         // SIGNED IN
         // Change Header Text
-        headerLogin.hidden = true;
-        headerAccount.hidden = false;
+        // headerAccount.hidden = false;
         // Change Nav Bar Display
         // whenSignedInNav.style = "";
         // whenSignedOutNav.style = "display:none;";
@@ -75,9 +73,6 @@ auth.onAuthStateChanged( (user) => {
     } else {
         // NOT SIGNED IN
         console.log("Not logged in")
-        // Change header to Login page
-        headerLogin.hidden = false;
-        headerAccount.hidden = true;
         // Change Nav Bar to Login
         whenSignedInNav.style = "display:none;";
         whenSignedOutNav.style = "";
