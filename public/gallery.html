@@ -9,6 +9,8 @@
     <!-- Imports styles from public/components/styles.html   -->
     <div id="styles-placeholder"></div>
 
+    <link rel="stylesheet" href="assets/css/carousel.css">
+    <script src="assets/js/carousel.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Chrome, Firefox OS, Opera and Vivaldi -->
     <meta name="theme-color" content="#5B0000">
@@ -37,42 +39,26 @@
     <!-- Added upper ---------------------------------->
 
     <div class="container">
-        <div clas="row">
-            <div class="col-xs-12">
-                <!-- Update album code from any google photos album here (set "Carousel only"):
-                     https://www.publicalbum.org/blog/embedding-google-photos-albums
-                -->
-
-                <script src="https://cdn.jsdelivr.net/npm/publicalbum@latest/embed-ui.min.js" async></script>
-                <div class="pa-carousel-widget" style="width:100%; height:480px; display:none;"
-                data-link="https://photos.app.goo.gl/Wk1SCUoMeHwCWvRy6"
-                data-title="Theta Tau | Tau Delta | Public Photo Album"
-                data-description="7 new items added to shared album">
-                <object data="https://lh3.googleusercontent.com/pw/AP1GczNtZnKiDX4hZyYdA46_XL9YYLRD18Kx70CrfYZPz90d_4_E1KxF7lWn_2mH9G3ZDf1CYjfOaH-bPXN3wfYCJop2qunZEUxE24KpQZv6pFEFsupzdEw=w1920-h1080"></object>
-                <object data="https://lh3.googleusercontent.com/pw/AP1GczPX2IRMfXuv_fB9rKBh9sPi0SZ9VBWvk_IY0ndDkTVm5FbHYFbyJ0HNf_9P-pyKUBzGw-ridB7fvnYebfG0RIRVhRy2xKWPvKUeSonJCqRjkPYgXfQ=w1920-h1080"></object>
-                <object data="https://lh3.googleusercontent.com/pw/AP1GczNMnmO7o63ppbxgqncir1RgJy1PTV3-JZL8MITXBocyiMTHZQhz5Nrc119HUhi79ZYfvyHOpDC6neCo18SGFXsUBhbztJkfOgYHhx13gzPH2bTQvII=w1920-h1080"></object>
-                <object data="https://lh3.googleusercontent.com/pw/AP1GczNPPEM6de97QkA0tgLYyo_O1U-NuD_PtJTQS4IASp4gCE994xYiLYSplt_1U92_y6myaL6nywRA9NtEDIUJJRYK-vds9HohcuUCT2k0gRXBw4sJquk=w1920-h1080"></object>
-                <object data="https://lh3.googleusercontent.com/pw/AP1GczNdArgQgevUZHSa1pRSKVeaqReYqQMuk4nNGkVlznPoAlt0OEbwRhgUfRwCmef6PWk3EItE9Rz_jc75cLCPgNYzR7-C83yhMNBiItANQyhiQx2AYTA=w1920-h1080"></object>
-                <object data="https://lh3.googleusercontent.com/pw/AP1GczOCnSGlIDu8ICpkXPrbyoHCROMrK8t7gQKSkdjNZQa4CL6laHZ5mhSrsYc3_wJsVeJjghKTIqpZlrjldn1guCLugENEb1HdxKcQDxHmH4n7b-xgRqQ=w1920-h1080"></object>
-                <object data="https://lh3.googleusercontent.com/pw/AP1GczPoX2drkKsvxDtIdpf73RS0nn1ga5cpbTgy15QlXaVzklPv94D9QABKy6jyJe5-N0E3WoTuVZVDutNmdC-eZY_1EjPVBQ4cvlMZDwWkicCWWdJPT18=w1920-h1080"></object>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="carousel-container">
+                    <div class="carousel">
+                        <!-- Due to the nature of these pictures being different you MUST individually configure the translateY's-->
+                        <!-- This is not an ideal solution, and is welcome to better ones -->
+                        <img style="transform: translateY(0%)"   src="https://lh3.googleusercontent.com/pw/AP1GczNtZnKiDX4hZyYdA46_XL9YYLRD18Kx70CrfYZPz90d_4_E1KxF7lWn_2mH9G3ZDf1CYjfOaH-bPXN3wfYCJop2qunZEUxE24KpQZv6pFEFsupzdEw=w1920-h1080" alt="Photo 1">
+                        <img style="transform: translateY(-25%)" src="https://lh3.googleusercontent.com/pw/AP1GczPX2IRMfXuv_fB9rKBh9sPi0SZ9VBWvk_IY0ndDkTVm5FbHYFbyJ0HNf_9P-pyKUBzGw-ridB7fvnYebfG0RIRVhRy2xKWPvKUeSonJCqRjkPYgXfQ=w1920-h1080" alt="Photo 2">
+                        <img style="transform: translateY(-10%)" src="https://lh3.googleusercontent.com/pw/AP1GczNMnmO7o63ppbxgqncir1RgJy1PTV3-JZL8MITXBocyiMTHZQhz5Nrc119HUhi79ZYfvyHOpDC6neCo18SGFXsUBhbztJkfOgYHhx13gzPH2bTQvII=w1920-h1080" alt="Photo 3">
+                        <img style="transform: translateY(-10%)" src="https://lh3.googleusercontent.com/pw/AP1GczNPPEM6de97QkA0tgLYyo_O1U-NuD_PtJTQS4IASp4gCE994xYiLYSplt_1U92_y6myaL6nywRA9NtEDIUJJRYK-vds9HohcuUCT2k0gRXBw4sJquk=w1920-h1080" alt="Photo 4">
+                        <img style="transform: translateY(-10%)" src="https://lh3.googleusercontent.com/pw/AP1GczNdArgQgevUZHSa1pRSKVeaqReYqQMuk4nNGkVlznPoAlt0OEbwRhgUfRwCmef6PWk3EItE9Rz_jc75cLCPgNYzR7-C83yhMNBiItANQyhiQx2AYTA=w1920-h1080" alt="Photo 5">
+                        <img style="transform: translateY(-35%)" src="https://lh3.googleusercontent.com/pw/AP1GczOCnSGlIDu8ICpkXPrbyoHCROMrK8t7gQKSkdjNZQa4CL6laHZ5mhSrsYc3_wJsVeJjghKTIqpZlrjldn1guCLugENEb1HdxKcQDxHmH4n7b-xgRqQ=w1920-h1080" alt="Photo 6">
+                        <img style="transform: translateY(-10%)" src="https://lh3.googleusercontent.com/pw/AP1GczPoX2drkKsvxDtIdpf73RS0nn1ga5cpbTgy15QlXaVzklPv94D9QABKy6jyJe5-N0E3WoTuVZVDutNmdC-eZY_1EjPVBQ4cvlMZDwWkicCWWdJPT18=w1920-h1080" alt="Photo 7">
+                    </div>
+                    <button class="prev" onclick="prevSlide()">&#10094;</button>
+                    <button class="next" onclick="nextSlide()">&#10095;</button>
                 </div>
-
-
-
-                <!-- Placeholder:
-                <script src="https://cdn.jsdelivr.net/npm/publicalbum@latest/embed-ui.min.js" async></script>
-                <div class="pa-carousel-widget" style="width:100%; height:480px; display:none;"
-                  data-link="https://photos.app.goo.gl/3q5jwGxdwRxRUb6K7"
-                  data-title="Theta Tau | Miami University | Public Photo Album"
-                  data-description="2 new items added to shared album">
-                  <object data="https://lh3.googleusercontent.com/ncOehZhfIiTM8G-D1EyQBk2vqlAmhMUKnbS1pYqvNwLUhMqsUXygVTs1cL3a3Ojdu34h6oG9UfnqyAv5rkzsgmZnBvb3k_v0kTSWB2hLEjvZ6FgmkKEaKZQjHh-kQDJmrqO8G29wZw=w1920-h1080"></object>
-                  <object data="https://lh3.googleusercontent.com/Nn6FIYQf6TAxqgEBwtMwjmVMcobkzQPvzwqB_geI6bESWImEQRosrWA04xKyOucjvp_ohtIMpWlZmrwyp4M2JeDMpVmIrf1ss1kBLu4sK5AzjaBZOGl_JUf_fK6eHeMjijlB-SSLsg=w1920-h1080"></object>
-                </div>-->
-
-
-
             </div>
         </div>
+
     </div>
 
     <!-- Added footer ------------------------------------------>
@@ -88,6 +74,8 @@
     <!-- Imports scripts from public/components/scripts.html   -->
     <div id="scripts-placeholder"></div>
     <script src="assets/js/loadComponents.js"></script>
+
+
 
 </body>
 
