@@ -54,7 +54,9 @@ class CustomJumbotron extends HTMLElement {
         jumbotron.classList.add("jumbotron");
         jumbotron.style.backgroundImage = `url('${backgroundImage}')`;
 
-        jumbotron.innerHTML = `<h1>${title}</h1>`;
+        const h1 = document.createElement("h1");
+        h1.textContent = title
+        jumbotron.appendChild(h1);
 
         // ✅ Append to fragment (minimizing DOM operations)
         fragment.appendChild(style);
