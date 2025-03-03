@@ -57,7 +57,7 @@ class CustomJumbotron extends HTMLElement {
         const h1 = document.createElement("h1");
         h1.textContent = title
         jumbotron.appendChild(h1);
-        
+
         // ✅ Append to fragment (minimizing DOM operations)
         fragment.appendChild(style);
         fragment.appendChild(jumbotron);
