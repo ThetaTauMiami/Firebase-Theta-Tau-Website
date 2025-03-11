@@ -30,8 +30,6 @@ const txtFratClassEntry = document.querySelector('#txtFratClass')
 const txtLinkedinEntry = document.querySelector('#txtLinkedin')
 const txtPersonalWebEntry = document.querySelector('#txtPersonalWeb')
 const txtGitHubEntry = document.querySelector('#txtGithub')
-// Text Areas
-const txtNavbarName = document.querySelector('#userNameNavbar')
 
 // Get the canvas element
 var ctx = document.getElementById('pointsChart').getContext('2d');
@@ -39,28 +37,15 @@ var ctx = document.getElementById('pointsChart').getContext('2d');
 // Submission Button
 const btnMakeAccountDetails = document.querySelector('#btnMakeAccountDetails')
 
-
 //Logged-In User Sections
 const divFullUser = document.querySelector('#fullUser')
 const loggedInNavbar = document.querySelector('#loggedInNavbar')
-const logoutHeader = document.querySelector('#logoutHeader')
 
 //Logged-Out User Sections
 const divSignedOutUser = document.querySelector('#signedOutUser')
 
 // Return to Login Button
 const btnLoginReturn = document.querySelector('#btnLoginReturn')
-
-// Upload Photo Button
-const btnUploadPhoto = document.querySelector('#btnUploadPhoto')
-
-// Update Profile Button
-const btnUpdateProfile = document.querySelector('#btnUpdateProfile')
-
-// Points Update Button (ADMINS ONLY)
-const updatePointsSection = document.querySelector('#updatePointsSection')
-
-
 
 const configRef = doc(collection(db, 'config'), 'roles');
 let usersRef; // Reference to the document or collection we want to access
@@ -194,20 +179,18 @@ function updatePointsChart(bhoodP, serviceP, professionalDevelopmentP, generalP)
     });
 }
 
+// Add event listener to the logged-in navbar component for logout
+document.addEventListener('DOMContentLoaded', () => {
+    const navbarComponent = document.querySelector('logged-in-navbar');
+    if (navbarComponent) {
+        navbarComponent.addEventListener('logout-requested', logoutExit);
+    }
+});
+
 // This button will return a user back to the "Login" page and ensure that they are logged out as well
 btnLoginReturn.addEventListener("click", logoutExit);
-// Normal Logout Button
-// btnLogout.addEventListener("click", logoutExit);
 
-// Logout header clicked
-logoutHeader.addEventListener("click", logoutExit);
-
-// This button will take the user to the photo upload page
-// btnUploadPhoto.addEventListener("click", goToPhotoUpload);
-
-// This button will take the user to the profile update page
-// btnUpdateProfile.addEventListener("click", goToProfileUpdate);
-
+// Attach authentication state change listener
 auth.onAuthStateChanged(user => {
     if (user) {
         handleUserSignedIn(user);
@@ -265,7 +248,12 @@ function showFirstLoginUI() {
     divFirstLoginForm.hidden = false;
     divFullUser.hidden = true;
     loggedInNavbar.hidden = true;
-    updatePointsSection.style.display = 'none';
+
+    // Use the custom component's method
+    const navbarComponent = document.querySelector('logged-in-navbar');
+    if (navbarComponent) {
+        navbarComponent.showAdminFeatures(false);
+    }
 }
 
 const fetchUserData = async (user) => {
@@ -314,7 +302,12 @@ function updateUserProfile(profile) {
     setPointsDisplay('totalPoints', totalPoints);
     setDEIDisplay('deiPoint', deiFulfilled);
 
-    txtNavbarName.innerHTML = `Welcome, ${firstname} ${lastname}!`;
+    // Update the custom navbar component with the user's name
+    const navbarComponent = document.querySelector('logged-in-navbar');
+    if (navbarComponent) {
+        navbarComponent.setUserName(`Welcome, ${firstname} ${lastname}!`);
+    }
+
     updatePointsChart(brotherhoodPoints, servicePoints, pdPoints, generalPoints);
 }
 
@@ -337,7 +330,11 @@ async function checkIfAdmin(user) {
         if (docSnapshot.exists()) {
             const admins = docSnapshot.data().admins;
             if (admins && admins.includes(user.uid)) {
-                updatePointsSection.style.display = 'list-item';
+                // Update the custom navbar component to show admin features
+                const navbarComponent = document.querySelector('logged-in-navbar');
+                if (navbarComponent) {
+                    navbarComponent.showAdminFeatures(true);
+                }
             }
         }
     } catch (error) {
