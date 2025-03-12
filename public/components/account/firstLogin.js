@@ -4,6 +4,9 @@ class FirstLoginComponent extends HTMLElement {
         super();
         this.attachShadow({ mode: "open" });
 
+        // Debug mode attribute
+        this.debug = this.hasAttribute('debug');
+
         // Create styles
         const style = document.createElement("style");
         style.textContent = `
@@ -15,8 +18,17 @@ class FirstLoginComponent extends HTMLElement {
                 width: 100%;
                 font-family: Arial, sans-serif;
             }
-            .hidden {
+            :host([hidden]) {
                 display: none;
+            }
+            .debug-banner {
+                background-color: #FFA500;
+                color: #000;
+                text-align: center;
+                padding: 5px;
+                font-weight: bold;
+                margin-bottom: 10px;
+                border-radius: 3px;
             }
             .form-group {
                 margin-bottom: 15px;
@@ -94,7 +106,18 @@ class FirstLoginComponent extends HTMLElement {
 
         // Create container for prompt and form
         this.container = document.createElement("div");
-        this.container.innerHTML = `
+
+        // Add debug banner if in debug mode
+        if (this.debug) {
+            const debugBanner = document.createElement("div");
+            debugBanner.className = "debug-banner";
+            debugBanner.textContent = "DEBUG MODE: First Login Form Forcibly Displayed";
+            this.container.appendChild(debugBanner);
+        }
+
+        // Add form content
+        const formContent = document.createElement("div");
+        formContent.innerHTML = `
             <div id="firstLoginPrompt" class="text-center">
                 <h5>Looks like this is your first time logging in, please enter your information below:</h5>
                 <h4>(*NOTE: These choices can be changed later in your account settings)</h4>
@@ -186,21 +209,56 @@ class FirstLoginComponent extends HTMLElement {
             </div>
         `;
 
+        this.container.appendChild(formContent);
+
         // Append to shadow DOM
         this.shadowRoot.appendChild(style);
         this.shadowRoot.appendChild(this.container);
+
+        // Initialize as hidden by default, unless in debug mode
+        if (!this.debug) {
+            this.setAttribute('hidden', '');
+        }
     }
 
     connectedCallback() {
         // Add event listener to submit button
         this.submitButton = this.shadowRoot.getElementById('btnMakeAccountDetails');
-        this.submitButton.addEventListener('click', () => this.handleSubmission());
+        this.submitButton.addEventListener('click', this.handleSubmission.bind(this));
+
+        // Log debug status
+        if (this.debug) {
+            console.log('First Login Component in DEBUG mode. Form will be displayed regardless of user state.');
+        }
     }
 
     disconnectedCallback() {
         // Remove event listeners when component is removed
         if (this.submitButton) {
-            this.submitButton.removeEventListener('click', () => this.handleSubmission());
+            this.submitButton.removeEventListener('click', this.handleSubmission.bind(this));
+        }
+    }
+
+    // Handle when attributes change
+    static get observedAttributes() {
+        return ['debug', 'hidden'];
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        if (name === 'debug') {
+            this.debug = this.hasAttribute('debug');
+            // If debug mode is true, always show the component
+            if (this.debug && this.hasAttribute('hidden')) {
+                this.removeAttribute('hidden');
+
+                // Add debug banner if not already present
+                if (!this.shadowRoot.querySelector('.debug-banner')) {
+                    const debugBanner = document.createElement("div");
+                    debugBanner.className = "debug-banner";
+                    debugBanner.textContent = "DEBUG MODE: First Login Form Forcibly Displayed";
+                    this.shadowRoot.querySelector('div').prepend(debugBanner);
+                }
+            }
         }
     }
 
@@ -272,14 +330,36 @@ class FirstLoginComponent extends HTMLElement {
         this.dispatchEvent(event);
     }
 
-    // Method to show the component
+    // Method to show the component - uses standard HTML attribute
     show() {
-        this.container.classList.remove('hidden');
+        this.removeAttribute('hidden');
     }
 
-    // Method to hide the component
+    // Method to hide the component - uses standard HTML attribute
     hide() {
-        this.container.classList.add('hidden');
+        // Only hide if not in debug mode
+        if (!this.debug) {
+            this.setAttribute('hidden', '');
+        }
+    }
+
+    // Method to enable debug mode
+    enableDebug() {
+        this.setAttribute('debug', '');
+        this.debug = true;
+        this.show();
+    }
+
+    // Method to disable debug mode
+    disableDebug() {
+        this.removeAttribute('debug');
+        this.debug = false;
+
+        // Remove debug banner if it exists
+        const debugBanner = this.shadowRoot.querySelector('.debug-banner');
+        if (debugBanner) {
+            debugBanner.remove();
+        }
     }
 }
 

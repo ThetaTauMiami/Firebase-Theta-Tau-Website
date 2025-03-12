@@ -14,9 +14,6 @@
     <script src="components/account/firstLogin.js" defer></script>
 
     <script type="module" src="assets/js/account.js" defer></script>
-    <script lang="ts">
-      const debugFirstTimeLogon = false;
-    </script>
 
     <!-- Imports styles from public/components/styles.html   -->
     <div id="styles-placeholder"></div>
@@ -44,7 +41,8 @@
 
     <!--These sections are only shown to logged in users on their first time logging in to setup account information-->
     <!--  Comoponent Loaded from public/components/Account/firstLogin.js   -->
-    <first-login-component></first-login-component>
+    <!--  to enable debug mode <first-login-component debug>...</>  -->
+    <first-login-component debug></first-login-component>
 
       <div id="fullUser" hidden>
         <div class="row">
