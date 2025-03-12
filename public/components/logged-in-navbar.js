@@ -17,6 +17,7 @@ class LoggedInNavbar extends HTMLElement {
                 border-radius: 0px !important;
                 background-color: #5B0000;
                 color: white;
+                position: relative;
             }
             
             .container-fluid {
@@ -28,6 +29,7 @@ class LoggedInNavbar extends HTMLElement {
                 align-items: center;
                 justify-content: space-between;
                 width: 100%;
+                flex-wrap: wrap;
             }
             
             .welcome-text {
@@ -35,17 +37,24 @@ class LoggedInNavbar extends HTMLElement {
                 font-size: 28px;
                 margin: 15px 0;
                 text-align: left;
-                flex-grow: 0;
-                min-width: 200px;
+                padding-right: 50px; /* Space for mobile toggle button */
             }
             
             .navbar-toggle {
                 display: none;
-                margin-right: 0;
                 border: 1px solid white;
                 padding: 9px 10px;
                 background-color: transparent;
                 cursor: pointer;
+                position: absolute;
+                top: 15px;
+                right: 15px;
+                z-index: 100;
+                transition: transform 0.3s ease;
+            }
+            
+            .navbar-toggle.active {
+                transform: rotate(90deg);
             }
             
             .icon-bar {
@@ -54,12 +63,25 @@ class LoggedInNavbar extends HTMLElement {
                 height: 2px;
                 background-color: white;
                 margin: 4px 0;
+                transition: transform 0.3s ease-in-out, opacity 0.2s ease;
+            }
+            
+            .navbar-toggle.active .icon-bar:nth-child(1) {
+                transform: translateY(6px) rotate(45deg);
+            }
+            
+            .navbar-toggle.active .icon-bar:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .navbar-toggle.active .icon-bar:nth-child(3) {
+                transform: translateY(-6px) rotate(-45deg);
             }
             
             .nav-links {
-                flex: 1;
                 display: flex;
                 justify-content: flex-end;
+                flex: 1;
             }
             
             .nav {
@@ -93,31 +115,24 @@ class LoggedInNavbar extends HTMLElement {
             }
             
             @media (max-width: 768px) {
-                .navbar-content {
-                    flex-direction: column;
-                    align-items: stretch;
-                }
-                
-                .welcome-text {
-                    text-align: center;
-                    margin: 10px 0;
-                    width: 100%;
-                }
-                
                 .navbar-toggle {
                     display: block;
-                    position: absolute;
-                    top: 10px;
-                    right: 10px;
                 }
                 
                 .nav-links {
-                    display: none;
+                    flex-basis: 100%;
+                    max-height: 0;
+                    overflow: hidden;
                     width: 100%;
+                    opacity: 0;
+                    transform: translateY(-20px);
+                    transition: max-height 0.4s ease-in-out, opacity 0.3s ease, transform 0.3s ease;
                 }
                 
                 .nav-links.active {
-                    display: block;
+                    max-height: 300px; /* Adjust this value based on your menu height */
+                    opacity: 1;
+                    transform: translateY(0);
                 }
                 
                 .navbar-right {
@@ -128,7 +143,21 @@ class LoggedInNavbar extends HTMLElement {
                 .navbar-right li {
                     display: block;
                     border-top: 1px solid rgba(255, 255, 255, 0.1);
+                    opacity: 0;
+                    transform: translateX(-10px);
+                    transition: opacity 0.2s ease, transform 0.2s ease;
                 }
+                
+                .nav-links.active .navbar-right li {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+                
+                /* Stagger the delay for each item */
+                .nav-links.active .navbar-right li:nth-child(1) { transition-delay: 0.05s; }
+                .nav-links.active .navbar-right li:nth-child(2) { transition-delay: 0.1s; }
+                .nav-links.active .navbar-right li:nth-child(3) { transition-delay: 0.15s; }
+                .nav-links.active .navbar-right li:nth-child(4) { transition-delay: 0.2s; }
             }
         `;
 
@@ -139,13 +168,12 @@ class LoggedInNavbar extends HTMLElement {
             <div class="container-fluid">
                 <div class="navbar-content">
                     <h5 id="userNameDisplay" class="welcome-text"></h5>
-                    <button type="button" class="navbar-toggle">
-                        <span class="sr-only">Toggle navigation</span>
+                    <button type="button" class="navbar-toggle" id="navToggle">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <div class="nav-links" id="navbar-collapse">
+                    <div class="nav-links" id="navbarCollapse">
                         <ul class="nav navbar-right">
                             <li id="updatePointsLink" style="display: none;"><a href="points.html">Points Update</a></li>
                             <li><a href="photoUpload.html">Photo Upload</a></li>
@@ -163,22 +191,27 @@ class LoggedInNavbar extends HTMLElement {
     }
 
     connectedCallback() {
-        // Setup toggle functionality
-        const toggleButton = this.shadowRoot.querySelector(".navbar-toggle");
-        const collapse = this.shadowRoot.querySelector(".collapse");
+        // Setup toggle functionality for mobile navigation
+        const toggleButton = this.shadowRoot.querySelector("#navToggle");
+        const navLinks = this.shadowRoot.querySelector("#navbarCollapse");
 
-        toggleButton.addEventListener("click", () => {
-            const navLinks = this.shadowRoot.querySelector(".nav-links");
-            navLinks.classList.toggle("active");
-        });
+        if (toggleButton && navLinks) {
+            toggleButton.addEventListener("click", () => {
+                toggleButton.classList.toggle("active");
+                navLinks.classList.toggle("active");
+                console.log("Toggle clicked, nav links active:", navLinks.classList.contains("active"));
+            });
+        }
 
         // Setup logout functionality
         const logoutLink = this.shadowRoot.querySelector("#logoutLink");
-        logoutLink.addEventListener("click", (e) => {
-            e.preventDefault();
-            // Dispatch a custom event that account.js can listen for
-            this.dispatchEvent(new CustomEvent("logout-requested"));
-        });
+        if (logoutLink) {
+            logoutLink.addEventListener("click", (e) => {
+                e.preventDefault();
+                // Dispatch a custom event that account.js can listen for
+                this.dispatchEvent(new CustomEvent("logout-requested"));
+            });
+        }
 
         // Check if we should show admin features (initially hidden)
         this.showAdminFeatures(false);
