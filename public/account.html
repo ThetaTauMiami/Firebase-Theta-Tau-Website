@@ -30,117 +30,117 @@
 
 
 <body>
-    <!-- Imports navbar from public/components/navbar.html   -->
-    <div id="nav-placeholder"></div>
+<!-- Imports navbar from public/components/navbar.html   -->
+<div id="nav-placeholder"></div>
 
-    <!--Custom tag from public/components/jumbotron.js-->
-    <custom-jumbotron title="Account" height="150px"></custom-jumbotron>
+<!--Custom tag from public/components/jumbotron.js-->
+<custom-jumbotron title="Account" height="150px"></custom-jumbotron>
 
-    <!--  Component found at public/components/logged-in-navbar.js  -->
-    <logged-in-navbar id="loggedInNavbar" hidden></logged-in-navbar>
+<!--  Component found at public/components/logged-in-navbar.js  -->
+<logged-in-navbar id="loggedInNavbar" hidden></logged-in-navbar>
 
-    <!--These sections are only shown to logged in users on their first time logging in to setup account information-->
-    <!--  Comoponent Loaded from public/components/Account/firstLogin.js   -->
-    <!--  to enable debug mode <first-login-component debug>...</>  -->
-    <first-login-component debug></first-login-component>
+<!--These sections are only shown to logged in users on their first time logging in to setup account information-->
+<!--  Comoponent Loaded from public/components/Account/firstLogin.js   -->
+<!--  to enable debug mode <first-login-component debug>...</>  -->
+<first-login-component></first-login-component>
 
-      <div id="fullUser" hidden>
-        <div class="row">
-          <!--This section is shown to users that have logged in before and have successfully entered their information.-->
-          <!--This section should be always shown for authenticated and setup users to access and see their current points and account.-->
-          <div class="col-md-4 center-div-photo" id="photoArea" width="331" height="496">
+<div id="fullUser" hidden>
+    <div class="row">
+        <!--This section is shown to users that have logged in before and have successfully entered their information.-->
+        <!--This section should be always shown for authenticated and setup users to access and see their current points and account.-->
+        <div class="col-md-4 center-div-photo" id="photoArea" width="331" height="496">
             <!--This area is rewritten by JavaScript to display the correct photo to users-->
-          </div>
-          <div class="col-md-8">
+        </div>
+        <div class="col-md-8">
             <div class="row">
-              <div class="row center" >
-                <canvas id="pointsChart" style="width:100%;max-width:600px; padding-left:20px;"></canvas>
-              </div>
+                <div class="row center" >
+                    <canvas id="pointsChart" style="width:100%;max-width:600px; padding-left:20px;"></canvas>
+                </div>
             </div>
             <hr/>
             <div class="row" style="padding-left:20px;">
-              <div class="col-md-6" id="brotherhoodPointsContainer">
-                <h5 class="points-display">Brotherhood Points:</h5>
-              </div>
-              <div class="col-md-6" id="brotherhoodPointsContainer2">
-                <h5 id="bhoodPoints" class="points-display"></h5>
-              </div>
+                <div class="col-md-6" id="brotherhoodPointsContainer">
+                    <h5 class="points-display">Brotherhood Points:</h5>
+                </div>
+                <div class="col-md-6" id="brotherhoodPointsContainer2">
+                    <h5 id="bhoodPoints" class="points-display"></h5>
+                </div>
             </div>
             <div class="row" style="padding-left:20px;">
-              <div class="col-md-6" id="servicePointsContainer">
-                <h5 class="points-display">Service Points:</h5>
-              </div>
-              <div class="col-md-6" id="servicePointsContaine2">
-                <h5 id="servicePoints" class="points-display"></h5>
-              </div>
+                <div class="col-md-6" id="servicePointsContainer">
+                    <h5 class="points-display">Service Points:</h5>
+                </div>
+                <div class="col-md-6" id="servicePointsContaine2">
+                    <h5 id="servicePoints" class="points-display"></h5>
+                </div>
             </div>
             <div class="row" style="padding-left:20px;">
-              <div class="col-md-6" id="pdPointsContainer">
-                <h5 class="points-display">Professional Development Points:</h5>
-              </div>
-              <div class="col-md-6" id="pdPointsContainer2">
-                <h5 id="pdPoints" class="points-display"></h5>
-              </div>
+                <div class="col-md-6" id="pdPointsContainer">
+                    <h5 class="points-display">Professional Development Points:</h5>
+                </div>
+                <div class="col-md-6" id="pdPointsContainer2">
+                    <h5 id="pdPoints" class="points-display"></h5>
+                </div>
             </div>
             <div class="row" style="padding-left:20px;">
-              <div class="col-md-6" id="generalPointsContainer">
-                <h5 class="points-display">General Points:</h5>
-              </div>
-              <div class="col-md-6" id="generalPointsContainer2">
-                <h5 id="generalPoints" class="points-display"></h5>
-              </div>
+                <div class="col-md-6" id="generalPointsContainer">
+                    <h5 class="points-display">General Points:</h5>
+                </div>
+                <div class="col-md-6" id="generalPointsContainer2">
+                    <h5 id="generalPoints" class="points-display"></h5>
+                </div>
             </div>
             <div class="row" style="padding-left:20px;">
-              <div class="col-md-6" id="totalPointsContainer">
-                <h5 class="points-display">Total Points:</h5>
-              </div>
-              <div class="col-md-6" id="totalPointsContainer2">
-                <h5 id="totalPoints" class="points-display"></h5>
-              </div>
+                <div class="col-md-6" id="totalPointsContainer">
+                    <h5 class="points-display">Total Points:</h5>
+                </div>
+                <div class="col-md-6" id="totalPointsContainer2">
+                    <h5 id="totalPoints" class="points-display"></h5>
+                </div>
             </div>
             <div class="row" style="padding-left:20px;">
-              <div class="col-md-6" id="deiPointContainer">
-                <h5 class="points-display">DEI Fulfilled:</h5>
-              </div>
-              <div class="col-md-6" id="deiPointContainer2">
-                <h5 id="deiPoint" class="points-display"></h5>
-              </div>
-              <!-- Google Calendar iFrame -->
-              <div style="padding-top:50px">
-                <iframe src="https://calendar.google.com/calendar/embed?src=thetatau%40miamioh.edu&ctz=America%2FNew_York" style="border:solid 2px #000000" max-width:"800" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
-              </div>
+                <div class="col-md-6" id="deiPointContainer">
+                    <h5 class="points-display">DEI Fulfilled:</h5>
+                </div>
+                <div class="col-md-6" id="deiPointContainer2">
+                    <h5 id="deiPoint" class="points-display"></h5>
+                </div>
+                <!-- Google Calendar iFrame -->
+                <div style="padding-top:50px">
+                    <iframe src="https://calendar.google.com/calendar/embed?src=thetatau%40miamioh.edu&ctz=America%2FNew_York" style="border:solid 2px #000000" max-width:"800" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
-
-      <div class="row" id="signedOutUser" hidden>
-        <!--This section is shown to users that are not logged in, and need to return to the Login page.-->
-        <br>
-        <div class="col-md-12 text-center">
-          <h5>You are not currently signed in, click below to return to the login page:</h5>
-        </div>
-        <br>
-        <div class="col-md-12 text-center">
-          <button id="btnLoginReturn" type="button" class="btn btn-warning btn-lg">Return to Login</button>
-        </div>
-      </div>
-
     </div>
+</div>
 
-    <!-- Added footer ------------------------------------------>
-    <br/>
-    <hr>
-    <br/>
-
+<div class="row" id="signedOutUser" hidden>
+    <!--This section is shown to users that are not logged in, and need to return to the Login page.-->
+    <br>
+    <div class="col-md-12 text-center">
+        <h5>You are not currently signed in, click below to return to the login page:</h5>
     </div>
+    <br>
+    <div class="col-md-12 text-center">
+        <button id="btnLoginReturn" type="button" class="btn btn-warning btn-lg">Return to Login</button>
+    </div>
+</div>
 
-    <!-- Imports footer from public/components/footer.html   -->
-    <div id='footer-placeholder'></div>
+</div>
 
-    <!-- Imports styles from public/components/styles.html   -->
-    <div id="scripts-placeholder"></div>
-    <script src="assets/js/loadComponents.js"></script>
+<!-- Added footer ------------------------------------------>
+<br/>
+<hr>
+<br/>
+
+</div>
+
+<!-- Imports footer from public/components/footer.html   -->
+<div id='footer-placeholder'></div>
+
+<!-- Imports styles from public/components/styles.html   -->
+<div id="scripts-placeholder"></div>
+<script src="assets/js/loadComponents.js"></script>
 
 
 </body>
