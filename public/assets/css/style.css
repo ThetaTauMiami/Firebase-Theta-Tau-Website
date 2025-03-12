@@ -95,6 +95,14 @@ body, html{
     padding: 0px;
 }
 
+.borderBar {
+    border-color: #5B0000;
+    border-width: 10px 0px 0px 0px;
+    border-style: solid; margin: 0;
+    width: 100%;
+    padding: 0px;
+}
+
 #borderBarDark {
     border-color: #222224;
     border-width: 10px 0px 0px 0px;
