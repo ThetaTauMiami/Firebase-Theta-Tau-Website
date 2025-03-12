@@ -20,11 +20,22 @@ import {
 import "../../components/account/firstLogin.js";
 
 // DOM elements
-// First Login Component - Now using the component instead
+// First Login Component reference
 let firstLoginComponent;
 
-// Text Areas
-const txtNavbarName = document.querySelector('#userNameNavbar');
+// Legacy first login form elements (for backward compatibility)
+const divFirstLoginPrompt = document.querySelector('#firstLoginPrompt');
+const divFirstLoginForm = document.querySelector('#firstLoginForm');
+const txtFirstnameEntry = document.querySelector('#txtFirstname');
+const txtLastnameEntry = document.querySelector('#txtLastname');
+const txtMajorEntry = document.querySelector('#txtMajor');
+const txtMinorEntry = document.querySelector('#txtMinor');
+const txtGradYearEntry = document.querySelector('#txtGradYear');
+const txtFratClassEntry = document.querySelector('#txtFratClass');
+const txtLinkedinEntry = document.querySelector('#txtLinkedin');
+const txtPersonalWebEntry = document.querySelector('#txtPersonalWeb');
+const txtGitHubEntry = document.querySelector('#txtGithub');
+const btnMakeAccountDetails = document.querySelector('#btnMakeAccountDetails');
 
 // Get the canvas element
 var ctx = document.getElementById('pointsChart').getContext('2d');
@@ -46,6 +57,7 @@ const updatePointsSection = document.querySelector('#updatePointsSection');
 const configRef = doc(collection(db, 'config'), 'roles');
 let usersRef; // Reference to the document or collection we want to access
 let unsubscribe; // Query handler for user information check
+let adminCheck; // Query handler for admin uid check
 
 // Initialize DOM elements after they're loaded
 document.addEventListener('DOMContentLoaded', () => {
@@ -65,7 +77,32 @@ document.addEventListener('DOMContentLoaded', () => {
     if (logoutHeader) {
         logoutHeader.addEventListener("click", logoutExit);
     }
+
+    // Add event listener to the logged-in navbar component for logout
+    const navbarComponent = document.querySelector('logged-in-navbar');
+    if (navbarComponent) {
+        navbarComponent.addEventListener('logout-requested', logoutExit);
+    }
+
+    // Set up legacy form submission if component is not available
+    if (btnMakeAccountDetails) {
+        btnMakeAccountDetails.addEventListener("click", handleAccountDetailsSubmission);
+    }
 });
+
+// Monitor user Authentication state
+const monitorAuthState = async () => {
+    onAuthStateChanged(auth, user => {
+        if (user) {
+            console.log("Logged In");
+        } else {
+            console.log("Not Logged In");
+            window.redirect("/login");
+        }
+    });
+};
+
+monitorAuthState();
 
 // Function to check if a user owns any items in the Cloud Firestore database
 const userOwnsSomething = async (userId) => {
@@ -94,6 +131,23 @@ function pointsColorDeterminer(numPoints) {
         return "color: #67d962";
     } else {
         // Assuming 5 or more
+        return "color: #08a300";
+    }
+}
+
+function totalPointsColorDeterminer(numPoints) {
+    if (numPoints <= 4) {
+        return "color: #8a0108";
+    } else if (numPoints <= 8) {
+        return "color: #e80602";
+    } else if (numPoints <= 12) {
+        return "color: #f56302";
+    } else if (numPoints <= 16) {
+        return "color: #F8B324";
+    } else if (numPoints < 20) {
+        return "color: #67d962";
+    } else {
+        // Assuming 20 or more
         return "color: #08a300";
     }
 }
@@ -127,7 +181,7 @@ function updatePointsChart(bhoodP, serviceP, professionalDevelopmentP, generalP)
     const barColors = ["red", "green", "blue", "orange", "purple"];
 
     // Create the bar chart
-    new Chart(ctx, {
+    var pointsChart = new Chart(ctx, {
         type: "bar",
         data: {
             labels: xValues,
@@ -145,13 +199,18 @@ function updatePointsChart(bhoodP, serviceP, professionalDevelopmentP, generalP)
     });
 }
 
+// Log out
+const logout = async () => {
+    await signOut(auth);
+};
+
 const logoutExit = () => {
     signOut(auth).then(() => {
         window.location.replace('login.html');
     }).catch((err) => {
         console.error(`Error Logging Out: ${err}`);
     });
-}
+};
 
 // Set up auth state change listener
 auth.onAuthStateChanged(user => {
@@ -189,12 +248,30 @@ async function handleUserSignedIn(user) {
     }
 }
 
+function checkIfAccountSetup(usersRef, userId) {
+    const userRef = doc(usersRef, userId);
+
+    getDoc(userRef)
+        .then(docSnapshot => {
+            if (!docSnapshot.exists()) {
+                // console.log("User has no profile setup, prompting first-time login setup.");
+                showFirstLoginUI();
+            }
+        })
+        .catch(error => console.error("Error checking account setup:", error));
+}
+
 function handleUserSignedOut() {
     console.log("User is signed out");
 
+    // Handle new component
     if (firstLoginComponent) {
         firstLoginComponent.hide();
     }
+
+    // Handle legacy components
+    if (divFirstLoginPrompt) divFirstLoginPrompt.hidden = true;
+    if (divFirstLoginForm) divFirstLoginForm.hidden = true;
 
     if (divFullUser) {
         divFullUser.hidden = true;
@@ -217,8 +294,13 @@ function handleUserSignedOut() {
 function showFirstLoginUI() {
     console.log("Showing first login UI");
 
+    // Use the new component if available
     if (firstLoginComponent) {
         firstLoginComponent.show();
+    } else {
+        // Legacy fallback
+        if (divFirstLoginPrompt) divFirstLoginPrompt.hidden = false;
+        if (divFirstLoginForm) divFirstLoginForm.hidden = false;
     }
 
     if (divFullUser) {
@@ -231,6 +313,12 @@ function showFirstLoginUI() {
 
     if (updatePointsSection) {
         updatePointsSection.style.display = 'none';
+    }
+
+    // Use the custom navbar component's method
+    const navbarComponent = document.querySelector('logged-in-navbar');
+    if (navbarComponent) {
+        navbarComponent.showAdminFeatures(false);
     }
 }
 
@@ -289,6 +377,15 @@ function updateUserProfile(profile) {
     setPointsDisplay('totalPoints', totalPoints);
     setDEIDisplay('deiPoint', deiFulfilled);
 
+    // Update the username in both implementations
+    // Update the custom navbar component with the user's name
+    const navbarComponent = document.querySelector('logged-in-navbar');
+    if (navbarComponent) {
+        navbarComponent.setUserName(`Welcome, ${firstname} ${lastname}!`);
+    }
+
+    // Legacy navbar
+    const txtNavbarName = document.querySelector('#userNameNavbar');
     if (txtNavbarName) {
         txtNavbarName.innerHTML = `Welcome, ${firstname} ${lastname}!`;
     }
@@ -318,8 +415,17 @@ async function checkIfAdmin(user) {
 
         if (docSnapshot.exists()) {
             const admins = docSnapshot.data().admins;
-            if (admins && admins.includes(user.uid) && updatePointsSection) {
-                updatePointsSection.style.display = 'list-item';
+            if (admins && admins.includes(user.uid)) {
+                // Legacy admin flag
+                if (updatePointsSection) {
+                    updatePointsSection.style.display = 'list-item';
+                }
+
+                // Update the custom navbar component to show admin features
+                const navbarComponent = document.querySelector('logged-in-navbar');
+                if (navbarComponent) {
+                    navbarComponent.showAdminFeatures(true);
+                }
             }
         }
     } catch (error) {
@@ -330,9 +436,14 @@ async function checkIfAdmin(user) {
 function showMainUI() {
     console.log("Showing main UI");
 
+    // Hide the new first login component if available
     if (firstLoginComponent) {
         firstLoginComponent.hide();
     }
+
+    // Legacy elements
+    if (divFirstLoginPrompt) divFirstLoginPrompt.hidden = true;
+    if (divFirstLoginForm) divFirstLoginForm.hidden = true;
 
     if (divFullUser) {
         divFullUser.hidden = false;
@@ -343,10 +454,10 @@ function showMainUI() {
     }
 }
 
-// Handle the submission event from the first-login component
+// Handle the submission from the new component
 function handleFirstLoginSubmission(event) {
     const formData = event.detail;
-    console.log("First login form submitted:", formData);
+    console.log("First login form submitted via component:", formData);
 
     if (!auth.currentUser) {
         console.error("No authenticated user found");
@@ -378,4 +489,70 @@ function handleFirstLoginSubmission(event) {
     }).catch(error => {
         console.error("Error adding user data:", error);
     });
+}
+
+// Legacy form submission handler
+function handleAccountDetailsSubmission() {
+    const formData = {
+        firstname: txtFirstnameEntry.value,
+        lastname: txtLastnameEntry.value,
+        major: txtMajorEntry.value,
+        minor: txtMinorEntry.value,
+        gradYear: txtGradYearEntry.value,
+        fratclass: txtFratClassEntry.value,
+        linkedin: txtLinkedinEntry.value,
+        personalWeb: txtPersonalWebEntry.value,
+        github: txtGitHubEntry.value
+    };
+
+    if (!validateFormFields(formData)) return;
+
+    usersRef.add({
+        uid: auth.currentUser.uid,
+        fratclass: formData.fratclass,
+        brotherhoodPoints: 0,
+        pdPoints: 0,
+        servicePoints: 0,
+        generalPoints: 0,
+        deiFulfilled: "false",
+        firstname: formData.firstname,
+        lastname: formData.lastname,
+        major: formData.major,
+        minor: formData.minor,
+        gradYear: formData.gradYear,
+        pictureLink: 'https://drive.google.com/uc?export=view&id=1AwJ9tWv0SagtDnE8U1NejxV2rpwOE8mD',
+        linkedinLink: formData.linkedin,
+        personalLink: formData.personalWeb,
+        githubLink: formData.github
+    });
+
+    showMainUI();
+    setTimeout(() => location.reload(true), 500);
+}
+
+function validateFormFields(formData) {
+    let isValid = true;
+    const fields = [
+        { element: txtFirstnameEntry, value: formData.firstname, placeholder: "You must input a valid first name!" },
+        { element: txtLastnameEntry, value: formData.lastname, placeholder: "You must input a valid last name!" },
+        { element: txtMajorEntry, value: formData.major, placeholder: "You must input a valid major!" },
+        { element: txtGradYearEntry, value: formData.gradYear, placeholder: "You must input a valid graduation year! (1980-2050)" },
+        { element: txtFratClassEntry, value: formData.fratclass, placeholder: "You must input a valid fraternity class! (Ex: Kappa)" },
+        { element: txtLinkedinEntry, value: formData.linkedin, placeholder: "You must input a valid LinkedIn URL!" },
+        { element: txtPersonalWebEntry, value: formData.personalWeb, placeholder: "You must input a valid personal website URL!" },
+        { element: txtGitHubEntry, value: formData.github, placeholder: "You must input a valid GitHub URL!" }
+    ];
+
+    fields.forEach(({ element, value, placeholder }) => {
+        if (!element.checkValidity()) {
+            element.style = "width:95%; margin: auto; background-color: #FFCCCB;";
+            element.placeholder = placeholder;
+            element.classList.add('placeholderInvalid');
+            element.classList.add('placeholderInvalid::placeholder');
+            element.value = "";
+            isValid = false;
+        }
+    });
+
+    return isValid;
 }
