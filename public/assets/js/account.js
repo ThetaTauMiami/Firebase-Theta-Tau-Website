@@ -177,60 +177,182 @@ function updatePointsChart(userData) {
 
     if (!userData) return;
 
+    console.log(userData);
     const {
         brotherhoodPoints = 0,
         pdPoints = 0,
         servicePoints = 0,
-        generalPoints = 0
+        generalPoints = 0,
     } = userData;
 
-    // Update points displays
-    updatePointsDisplay('bhoodPoints', brotherhoodPoints);
-    updatePointsDisplay('servicePoints', servicePoints);
-    updatePointsDisplay('pdPoints', pdPoints);
-    updatePointsDisplay('generalPoints', generalPoints);
-    updatePointsDisplay('totalPoints', brotherhoodPoints + servicePoints + pdPoints + generalPoints);
+    const deiPoints = userData.deiFulfilled === true ? 1 : 0;
 
-    if (userData.deiFulfilled !== undefined) {
-        updateDEIDisplay('deiPoint', userData.deiFulfilled);
+    // Points to Achieve
+    const maxPoints = {
+        brotherhood: 6,
+        pd: 6,
+        service: 6,
+        dei: 1,
+        general: 6
+    };
+
+    // Define the categories with their data
+    const categories = [
+        { name: 'Brotherhood', points: brotherhoodPoints, max: maxPoints.brotherhood, color: '#4285F4' },
+        { name: 'Professional Development', points: pdPoints, max: maxPoints.pd, color: '#EA4335' },
+        { name: 'Service', points: servicePoints, max: maxPoints.service, color: '#FBBC05' },
+        { name: 'DEI', points: deiPoints, max: maxPoints.dei, color: '#34A853' },
+        { name: 'General', points: generalPoints, max: maxPoints.general, color: '#8758FF' }
+    ];
+
+    // Calculate total max points and current total
+    const totalMax = Object.values(maxPoints).reduce((sum, val) => sum + val, 0);
+    const currentTotal = categories.reduce((sum, cat) => sum + Math.min(cat.points, cat.max), 0);
+
+    // Create or update the chart container
+    let chartContainer = $('#points-chart');
+    if (chartContainer.length === 0) {
+        $('body').append('<div id="points-chart" class="points-chart-container"></div>');
+        chartContainer = $('#points-chart');
     }
 
-    // Update chart if canvas exists
-    const ctx = $('#pointsChart');
-    if (ctx.length && typeof Chart !== 'undefined') {
-        // Check if chart instance already exists
-        if (window.pointsChart instanceof Chart) {
-            window.pointsChart.destroy();
+    // Clear existing content
+    chartContainer.empty();
+
+    // Add title and total progress
+    chartContainer.append(`
+        <div class="chart-header">
+            <h3>Progress Tracker: ${currentTotal}/${totalMax} points</h3>
+        </div>
+    `);
+
+    // Create the progress bar container
+    chartContainer.append(`
+        <div class="single-progress-container">
+            <div class="single-progress-bar"></div>
+        </div>
+    `);
+
+    const progressBar = chartContainer.find('.single-progress-bar');
+
+    // Track the total width used so far
+    let currentPosition = 0;
+
+    // Add filled segments for each category, all justified to the left
+    categories.forEach(category => {
+        // Calculate how many points this category contributes to the total
+        const categoryPercentage = (category.max / totalMax) * 100;
+
+        // Calculate how many points are filled in this category
+        const actualPoints = Math.min(category.points, category.max);
+        const pointsPercentage = (actualPoints / totalMax) * 100;
+
+        if (pointsPercentage > 0) {
+            progressBar.append(`
+                <div class="progress-segment" 
+                     style="left: ${currentPosition}%; 
+                            width: ${pointsPercentage}%; 
+                            background-color: ${category.color};">
+                </div>
+            `);
+
+            currentPosition += pointsPercentage;
         }
 
-        // Create new chart
-        window.pointsChart = new Chart(ctx[0].getContext('2d'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Brotherhood', 'Service', 'Professional', 'General'],
-                datasets: [{
-                    data: [brotherhoodPoints, servicePoints, pdPoints, generalPoints],
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.7)',
-                        'rgba(54, 162, 235, 0.7)',
-                        'rgba(255, 206, 86, 0.7)',
-                        'rgba(75, 192, 192, 0.7)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
-            }
-        });
+        // Add segment divider/marker at the end of where this category should be
+        const markerPosition = currentPosition + (categoryPercentage - pointsPercentage);
+        if (markerPosition < 100) {
+            progressBar.append(`
+                <div class="segment-divider" style="left: ${markerPosition}%;"></div>
+            `);
+        }
+    });
+
+    // Add legend below the bar
+    chartContainer.append('<div class="chart-legend"></div>');
+    const legend = chartContainer.find('.chart-legend');
+
+    categories.forEach(category => {
+        legend.append(`
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: ${category.color};"></div>
+                <div class="legend-text">${category.name}: ${category.points}/${category.max}</div>
+            </div>
+        `);
+    });
+
+    // Add CSS if it doesn't exist
+    if ($('#points-chart-styles').length === 0) {
+        $('head').append(`
+            <style id="points-chart-styles">
+                .points-chart-container {
+                    margin: 30px 0;
+                    padding: 20px;
+                    border-radius: 8px;
+                    background-color: #f5f5f5;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                    position: relative;
+                    font-family: Arial, sans-serif;
+                }
+                .chart-header {
+                    margin-bottom: 20px;
+                    text-align: center;
+                }
+                .chart-header h3 {
+                    margin: 0;
+                    font-size: 18px;
+                }
+                .single-progress-container {
+                    height: 30px;
+                    background-color: #e0e0e0;
+                    border-radius: 15px;
+                    overflow: hidden;
+                    margin-bottom: 20px;
+                    position: relative;
+                }
+                .single-progress-bar {
+                    height: 100%;
+                    width: 100%;
+                    position: relative;
+                }
+                .progress-segment {
+                    height: 100%;
+                    position: absolute;
+                    top: 0;
+                }
+                .segment-divider {
+                    position: absolute;
+                    height: 100%;
+                    width: 2px;
+                    background-color: #fff;
+                    top: 0;
+                }
+                .chart-legend {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    gap: 15px;
+                    margin-top: 10px;
+                }
+                .legend-item {
+                    display: flex;
+                    align-items: center;
+                }
+                .legend-color {
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                    margin-right: 5px;
+                }
+                .legend-text {
+                    font-size: 14px;
+                }
+            </style>
+        `);
     }
+
+
+
 }
 
 // Method to update calendar
