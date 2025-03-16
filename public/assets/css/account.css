@@ -35,7 +35,6 @@
     border-radius: 8px;
     padding: 20px;
 }
-
 .calendar {
     grid-area: calendar;
     background-color: #d0d0d0;
@@ -46,22 +45,75 @@
     grid-template-rows: 1fr 1fr;
     gap: 10px;
 }
-
 .calendar-quadrant {
     background-color: rgba(255, 255, 255, 0.3);
     border-radius: 6px;
     padding: 15px;
 }
-
 /* Additional styling for visual demonstration */
 .profile-img {
-    width: 150px;
-    height: 150px;
+    height: 100px;
+    width: 100px;
     border-radius: 50%;
     background-color: #aaa;
     margin-bottom: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.profile-img img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(.4); /* Default scale is 1 (100%) */
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: cover;
 }
 
 h2 {
     margin-top: 0;
+}
+
+/* Container spans */
+.linkedin, .github, .personalSite {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    /* Optional: to display all three spans in a row */
+    float: left;
+}
+
+/* Icon styling */
+.linkedin i, .github i, .personalSite i {
+    margin-right: 10px;
+    font-size: 20px; /* Adjust icon size as needed */
+}
+
+/* Heading styling */
+h3 {
+    margin: 0; /* Remove default margin to align properly */
+    font-size: 16px;
+}
+
+/* Specific brand colors */
+.linkedin i {
+    color: #0077B5;
+}
+
+.github i {
+    color: #333;
+}
+
+.personalSite i {
+    color: #4CAF50;
+}
+
+/* Clear the float if needed */
+.social-links:after {
+    content: "";
+    display: table;
+    clear: both;
 }

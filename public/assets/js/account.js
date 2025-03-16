@@ -120,11 +120,10 @@ function updateProfileUI(userData) {
     } = userData;
 
     // Update profile photo in the profile-img div
-    $('.profile-img').css({
-        'background-image': `url('${pictureLink}')`,
-        'background-size': 'cover',
-        'background-position': 'center'
-    });
+    // If pictureLink exists, update the image source
+    if (pictureLink) {
+        $('.profile-img img').attr('src', pictureLink);
+    }
 
     // Update name
     $('#name').text(`${firstname} ${lastname}`);
@@ -144,17 +143,25 @@ function updateProfileUI(userData) {
 
     // Update LinkedIn
     if (linkedinLink) {
-        $('#linkedin').html(`<a href="${linkedinLink}" target="_blank" rel="noopener noreferrer">LinkedIn</a>`);
+        // Extract the username from LinkedIn URL using regex
+        const linkedinUsername = linkedinLink.match(/linkedin\.com\/in\/([^\/\?]+)/i);
+        const displayText = linkedinUsername ? `in/${linkedinUsername[1]}` : linkedinLink;
+    $('#linkedin').html(`<a href="${linkedinLink}" target="_blank" rel="noopener noreferrer">${displayText}</a>`);
     }
 
     // Update GitHub
     if (githubLink) {
-        $('#github').html(`<a href="${githubLink}" target="_blank" rel="noopener noreferrer">GitHub</a>`);
+        // Extract the username from GitHub URL using regex
+        const githubUsername = githubLink.match(/github\.com\/([^\/\?]+)/i);
+        const displayText = githubUsername ? `github.com/${githubUsername[1]}` : githubLink;
+        $('#github').html(`<a href="${githubLink}" target="_blank" rel="noopener noreferrer">${displayText}</a>`);
     }
 
     // Update personal site
     if (personalLink) {
-        $('#personalSite').html(`<a href="${personalLink}" target="_blank" rel="noopener noreferrer">Personal Website</a>`);
+        // For personal site, just remove http(s):// and trailing slash
+        const displayText = personalLink.replace(/^https?:\/\//i, '').replace(/\/$/,'');
+        $('#personalSite').html(`<a href="${personalLink}" target="_blank" rel="noopener noreferrer">${displayText}</a>`);
     }
 
     // Update username in navbar
