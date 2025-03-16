@@ -162,7 +162,7 @@ async function updateUserPoints(userDocument) {
         const docRef = querySnapshot.docs[0].ref; // Get the first matching document reference
 
         // Use it for all point fields
-        const user_pdPoints = getSafeNumber(`#pdPoints-${userDocument.uid}`);
+        const user_pdPoints = getSafeNumber(`#professionaldevelopmentPoints-${userDocument.uid}`);
         const user_brotherhoodPoints = getSafeNumber(`#brotherhoodPoints-${userDocument.uid}`);
         const user_servicePoints = getSafeNumber(`#servicePoints-${userDocument.uid}`);
         const user_generalPoints = getSafeNumber(`#generalPoints-${userDocument.uid}`);
