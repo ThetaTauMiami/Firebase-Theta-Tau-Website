@@ -4,11 +4,12 @@
     grid-template-rows: 1fr 2fr;
     grid-template-areas:
                 "profile points"
-                "profile calendar";
+                "profile calendar"
+                "bugRequest bugRequest";
     gap: 20px;
     height: 100vh;
     max-height: 800px;
-    margin-top: 10px;
+    padding: 10px;
 }
 
 .profile {
@@ -24,6 +25,12 @@
 
 .points {
     grid-area: points;
+    background-color: #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+}
+.bugRequest {
+    grid-area: bugRequest;
     background-color: #e0e0e0;
     border-radius: 8px;
     padding: 20px;

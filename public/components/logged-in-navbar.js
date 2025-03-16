@@ -1,3 +1,21 @@
+import {
+    onAuthStateChanged,
+    signOut
+} from 'https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js';
+import {
+    collection,
+    doc,
+    query,
+    where,
+    getDocs,
+    getDoc,
+    addDoc
+} from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
+import {
+    auth,
+    db
+} from "/config/firebaseConfig.js";
+
 // Custom component for logged-in navigation bar in account pages
 class LoggedInNavbar extends HTMLElement {
     constructor() {
@@ -121,7 +139,7 @@ class LoggedInNavbar extends HTMLElement {
                 
                 .nav-links {
                     flex-basis: 100%;
-                    max-height: 0;
+                    max-height: 50px;
                     overflow: hidden;
                     width: 100%;
                     opacity: 0;
@@ -131,6 +149,7 @@ class LoggedInNavbar extends HTMLElement {
                 
                 .nav-links.active {
                     max-height: 300px; /* Adjust this value based on your menu height */
+                    
                     opacity: 1;
                     transform: translateY(0);
                 }
@@ -167,7 +186,7 @@ class LoggedInNavbar extends HTMLElement {
         navbar.innerHTML = `
             <div class="container-fluid">
                 <div class="navbar-content">
-                    <h5 id="userNameDisplay" class="welcome-text"></h5>
+                    <h5 id="userNameDisplay" class="welcome-text">Welcome!</h5>
                     <button type="button" class="navbar-toggle" id="navToggle">
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
@@ -188,8 +207,21 @@ class LoggedInNavbar extends HTMLElement {
         // Append elements to shadow DOM
         this.shadowRoot.appendChild(style);
         this.shadowRoot.appendChild(navbar);
+
+        // Store user data as a property of the component
+        this.userData = null;
     }
 
+    // Method to handle logout
+    logoutExit() {
+        signOut(auth).then(() => {
+            window.location.replace('login.html');
+        }).catch((err) => {
+            console.error(`Error Logging Out: ${err}`);
+        });
+    }
+
+    // Setup auth state change listener and other functionality
     connectedCallback() {
         // Setup toggle functionality for mobile navigation
         const toggleButton = this.shadowRoot.querySelector("#navToggle");
@@ -208,16 +240,80 @@ class LoggedInNavbar extends HTMLElement {
         if (logoutLink) {
             logoutLink.addEventListener("click", (e) => {
                 e.preventDefault();
-                // Dispatch a custom event that account.js can listen for
-                this.dispatchEvent(new CustomEvent("logout-requested"));
+                this.logoutExit();
             });
         }
 
-        // Check if we should show admin features (initially hidden)
-        this.showAdminFeatures(false);
+        // Set up authentication state change listener
+        this.setupAuthListener();
     }
 
-    // Method to be called from outside to update username
+    // Setup the Firebase auth state listener
+    setupAuthListener() {
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                try {
+                    // Query Firestore for user data
+                    const userQuery = query(
+                        collection(db, "userData"),
+                        where("uid", "==", user.uid)
+                    );
+                    const snapshot = await getDocs(userQuery);
+
+                    if (!snapshot.empty) {
+                        // Get the user data from the first document
+                        const userData = snapshot.docs[0].data();
+                        const userDocId = snapshot.docs[0].id;
+
+                        // Store the user data and document ID
+                        this.userData = userData;
+                        this.userDocId = userDocId;
+
+                        // Update the welcome message with the user's name
+                        if (userData.firstname) {
+                            this.setUserName(`Welcome, ${userData.firstname}!`);
+                        } else {
+                            this.setUserName(`Welcome!`);
+                        }
+
+                        // Admin check is already done above, no need to check again
+
+                        // Dispatch an event to notify other components that user data is loaded
+                        this.dispatchEvent(new CustomEvent('user-data-loaded', {
+                            detail: {
+                                userData: userData,
+                                userDocId: userDocId
+                            },
+                            bubbles: true,
+                            composed: true
+                        }));
+                    } else {
+                        console.error("No user data found in Firestore");
+                        this.setUserName("Welcome!");
+                    }
+
+                    const configRef = doc(db, "config", "roles");
+                    const docSnapshot = await getDoc(configRef);
+                    docSnapshot.data()
+                    if (docSnapshot.exists()) {
+                        const admins = docSnapshot.data().admins;
+                        const isAdmin = admins.includes(user.uid);
+                        if (isAdmin) {
+                            this.showAdminFeatures(true);
+                        }
+                    }
+                } catch (error) {
+                    console.error("Error fetching user data:", error);
+                    this.setUserName("Welcome!");
+                }
+            } else {
+                // User is not logged in, redirect to login page
+                window.location.replace('login.html');
+            }
+        });
+    }
+
+    // Method to update username display
     setUserName(name) {
         const userNameDisplay = this.shadowRoot.querySelector("#userNameDisplay");
         if (userNameDisplay) {
@@ -231,6 +327,16 @@ class LoggedInNavbar extends HTMLElement {
         if (updatePointsLink) {
             updatePointsLink.style.display = show ? "list-item" : "none";
         }
+    }
+
+    // Method to get user data (can be used by external scripts)
+    getUserData() {
+        return this.userData;
+    }
+
+    // Method to get user document ID (can be used by external scripts)
+    getUserDocId() {
+        return this.userDocId;
     }
 }
 

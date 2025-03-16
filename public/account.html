@@ -10,11 +10,11 @@
 
 
 
-    <script src="components/logged-in-navbar.js" defer></script>
+    <script type='module' src="components/logged-in-navbar.js" defer></script>
     <script src="components/account/firstLogin.js" defer></script>
     <link rel="stylesheet" href="assets/css/account.css">
 
-    <script type="module" src="assets/js/account.js" defer></script>
+<!--    <script type="module" src="assets/js/account.js" defer></script>-->
 
     <!-- Imports styles from public/components/styles.html   -->
     <div id="styles-placeholder"></div>
@@ -38,7 +38,7 @@
     <custom-jumbotron title="Account" height="150px"></custom-jumbotron>
 
     <!--  Component found at public/components/logged-in-navbar.js  -->
-    <logged-in-navbar id="loggedInNavbar" hidden></logged-in-navbar>
+    <logged-in-navbar id="loggedInNavbar" ></logged-in-navbar>
 
     <!--These sections are only shown to logged in users on their first time logging in to setup account information-->
     <!--  Comoponent Loaded from public/components/Account/firstLogin.js   -->
@@ -114,13 +114,27 @@
 <!--            </div>-->
 <!--        </div>-->
 <!--    </div>-->
-    <div class="borderBar"></div>
+<!--    <div class="borderBar"></div>-->
     <div id="fullUser" class="gridContainer">
         <div class="profile">
             <div class="profile-img"></div>
-
             <h2>Profile</h2>
-            <p>User profile information goes here</p>
+            <h3 id="name"></h3>
+            <h3 id="collegeYear"></h3>
+            <h3 id="fraternityClass"></h3>
+            <h3 id="major"></h3>
+            <span class="linkedin">
+                <!-- Linkedin Logo               -->
+                <h3 id="linkedin"></h3>
+            </span>
+            <span class="github">
+                <!-- Github Logo               -->
+                <h3 id="github"></h3>
+            </span>
+            <span class="personalSite">
+                <!-- Personal Site Logo               -->
+                <h3 id="personalSite"></h3>
+            </span>
         </div>
         <div class="points">
             <h2>Points Section</h2>
@@ -143,6 +157,10 @@
                 <h3>Q4</h3>
                 <p>Calendar quadrant 4</p>
             </div>
+        </div>
+        <div class="bugRequest">
+            <h2>Bug Report</h2>
+            <p>Find a bug, go here to report it to our tech staff!</p>
         </div>
 
     </div>

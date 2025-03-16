@@ -37,6 +37,8 @@ const txtPersonalWebEntry = document.querySelector('#txtPersonalWeb');
 const txtGitHubEntry = document.querySelector('#txtGithub');
 const btnMakeAccountDetails = document.querySelector('#btnMakeAccountDetails');
 
+let currentPageUser = null;
+
 // Get the canvas element
 var ctx = document.getElementById('pointsChart').getContext('2d');
 
@@ -63,7 +65,7 @@ let adminCheck; // Query handler for admin uid check
 document.addEventListener('DOMContentLoaded', () => {
     // Get component after DOM is loaded
     firstLoginComponent = document.querySelector('first-login-component');
-
+    console.log("Hello");
     // Listen for the custom event from the first-login component
     if (firstLoginComponent) {
         firstLoginComponent.addEventListener('firstLoginSubmit', handleFirstLoginSubmission);
@@ -118,99 +120,6 @@ const userOwnsSomething = async (userId) => {
     }
 };
 
-function pointsColorDeterminer(numPoints) {
-    if (numPoints <= 0) {
-        return "color: #8a0108";
-    } else if (numPoints === 1) {
-        return "color: #e80602";
-    } else if (numPoints === 2) {
-        return "color: #f56302";
-    } else if (numPoints === 3) {
-        return "color: #F8B324";
-    } else if (numPoints === 4) {
-        return "color: #67d962";
-    } else {
-        // Assuming 5 or more
-        return "color: #08a300";
-    }
-}
-
-function totalPointsColorDeterminer(numPoints) {
-    if (numPoints <= 4) {
-        return "color: #8a0108";
-    } else if (numPoints <= 8) {
-        return "color: #e80602";
-    } else if (numPoints <= 12) {
-        return "color: #f56302";
-    } else if (numPoints <= 16) {
-        return "color: #F8B324";
-    } else if (numPoints < 20) {
-        return "color: #67d962";
-    } else {
-        // Assuming 20 or more
-        return "color: #08a300";
-    }
-}
-
-function deiFormatter(deiFulfillment) {
-    if (deiFulfillment == 'true') {
-        return "Yes";
-    } else if (deiFulfillment == 'false') {
-        return "No";
-    } else {
-        return "Invalid DEI point format";
-    }
-}
-
-function deiPointColor(deiFulfillment) {
-    if (deiFulfillment == 'true') {
-        return "color: #08a300";
-    } else if (deiFulfillment == 'false') {
-        return "color: #e80602";
-    } else {
-        return "Black";
-    }
-}
-
-function updatePointsChart(bhoodP, serviceP, professionalDevelopmentP, generalP) {
-    if (!ctx) return; // Safety check
-
-    let totalP = bhoodP + serviceP + professionalDevelopmentP + generalP;
-    const xValues = ["Brotherhood", "Service", "Professional Development", "General", "Total"];
-    const yValues = [bhoodP, serviceP, professionalDevelopmentP, generalP, totalP];
-    const barColors = ["red", "green", "blue", "orange", "purple"];
-
-    // Create the bar chart
-    var pointsChart = new Chart(ctx, {
-        type: "bar",
-        data: {
-            labels: xValues,
-            datasets: [{
-                backgroundColor: barColors,
-                data: yValues,
-                label: 'Semester Points'
-            }]
-        },
-        options: {
-            legend: {
-                display: false
-            }
-        }
-    });
-}
-
-// Log out
-const logout = async () => {
-    await signOut(auth);
-};
-
-const logoutExit = () => {
-    signOut(auth).then(() => {
-        window.location.replace('login.html');
-    }).catch((err) => {
-        console.error(`Error Logging Out: ${err}`);
-    });
-};
 
 // Set up auth state change listener
 auth.onAuthStateChanged(user => {
@@ -352,6 +261,8 @@ function clearPreviousUserData() {
 function updateUserProfile(profile) {
     if (!profile) return;
 
+    currentPageUser = profile
+    console.log(...currentPageUser)
     const {
         firstname,
         lastname,
@@ -362,6 +273,7 @@ function updateUserProfile(profile) {
         deiFulfilled = 'false',
         pictureLink = 'https://drive.google.com/uc?export=view&id=1AwJ9tWv0SagtDnE8U1NejxV2rpwOE8mD'
     } = profile;
+
 
     let totalPoints = brotherhoodPoints + servicePoints + pdPoints + generalPoints;
 
