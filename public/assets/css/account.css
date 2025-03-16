@@ -117,3 +117,30 @@ h3 {
     display: table;
     clear: both;
 }
+
+.bugRequest {
+    background-color: #f8f9fa;
+    border-left: 4px solid #dc3545;
+    border-radius: 4px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-family: 'Arial', sans-serif;
+}
+.bugRequest h2 {
+    color: #dc3545;
+    margin-top: 0;
+    font-size: 1.5rem;
+}
+.bugRequest p {
+    color: #495057;
+    margin-bottom: 0;
+}
+.bugRequest a {
+    color: #0366d6;
+    text-decoration: none;
+    font-weight: bold;
+}
+.bugRequest a:hover {
+    text-decoration: underline;
+}
