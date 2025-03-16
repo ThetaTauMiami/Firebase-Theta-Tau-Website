@@ -1,6 +1,5 @@
 import {
-    onAuthStateChanged,
-    signOut
+    onAuthStateChanged
 } from 'https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js';
 import {
     collection,
@@ -8,463 +7,260 @@ import {
     query,
     where,
     getDocs,
-    getDoc,
-    addDoc
+    getDoc
 } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
 import {
     auth,
     db
 } from "/config/firebaseConfig.js";
 
-// Import the first login component
-import "../../components/account/firstLogin.js";
+// Store current user data
+let currentUser = null;
+let userData = null;
+let userDocId = null;
+let isAdmin = false;
 
-// DOM elements
-// First Login Component reference
-let firstLoginComponent;
-
-// Legacy first login form elements (for backward compatibility)
-const divFirstLoginPrompt = document.querySelector('#firstLoginPrompt');
-const divFirstLoginForm = document.querySelector('#firstLoginForm');
-const txtFirstnameEntry = document.querySelector('#txtFirstname');
-const txtLastnameEntry = document.querySelector('#txtLastname');
-const txtMajorEntry = document.querySelector('#txtMajor');
-const txtMinorEntry = document.querySelector('#txtMinor');
-const txtGradYearEntry = document.querySelector('#txtGradYear');
-const txtFratClassEntry = document.querySelector('#txtFratClass');
-const txtLinkedinEntry = document.querySelector('#txtLinkedin');
-const txtPersonalWebEntry = document.querySelector('#txtPersonalWeb');
-const txtGitHubEntry = document.querySelector('#txtGithub');
-const btnMakeAccountDetails = document.querySelector('#btnMakeAccountDetails');
-
-let currentPageUser = null;
-
-// Get the canvas element
-var ctx = document.getElementById('pointsChart').getContext('2d');
-
-// Logged-In User Sections
-const divFullUser = document.querySelector('#fullUser');
-const loggedInNavbar = document.querySelector('#loggedInNavbar');
-const logoutHeader = document.querySelector('#logoutHeader');
-
-// Logged-Out User Sections
-const divSignedOutUser = document.querySelector('#signedOutUser');
-
-// Return to Login Button
-const btnLoginReturn = document.querySelector('#btnLoginReturn');
-
-// Points Update Button (ADMINS ONLY)
-const updatePointsSection = document.querySelector('#updatePointsSection');
-
-const configRef = doc(collection(db, 'config'), 'roles');
-let usersRef; // Reference to the document or collection we want to access
-let unsubscribe; // Query handler for user information check
-let adminCheck; // Query handler for admin uid check
-
-// Initialize DOM elements after they're loaded
+// Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
-    // Get component after DOM is loaded
-    firstLoginComponent = document.querySelector('first-login-component');
-    console.log("Hello");
-    // Listen for the custom event from the first-login component
-    if (firstLoginComponent) {
-        firstLoginComponent.addEventListener('firstLoginSubmit', handleFirstLoginSubmission);
-    }
+    console.log("Account page initializing...");
 
-    // Add event listener to logout buttons
-    if (btnLoginReturn) {
-        btnLoginReturn.addEventListener("click", logoutExit);
-    }
-
-    if (logoutHeader) {
-        logoutHeader.addEventListener("click", logoutExit);
-    }
-
-    // Add event listener to the logged-in navbar component for logout
-    const navbarComponent = document.querySelector('logged-in-navbar');
-    if (navbarComponent) {
-        navbarComponent.addEventListener('logout-requested', logoutExit);
-    }
-
-    // Set up legacy form submission if component is not available
-    if (btnMakeAccountDetails) {
-        btnMakeAccountDetails.addEventListener("click", handleAccountDetailsSubmission);
-    }
+    // Setup auth state listener
+    setupAuthStateListener();
 });
 
-// Monitor user Authentication state
-const monitorAuthState = async () => {
+// Setup auth state change listener
+function setupAuthStateListener() {
     onAuthStateChanged(auth, user => {
         if (user) {
-            console.log("Logged In");
+            currentUser = user;
+            fetchUserData(user).then(() => {
+                // Once data is fetched, update all UI components
+                updateProfileUI(userData);
+                updatePointsChart(userData);
+                updateCalendarUI(userData);
+            });
         } else {
-            console.log("Not Logged In");
-            window.redirect("/login");
+            // Redirect to login page if not authenticated
+            window.location.replace('login.html');
         }
     });
-};
+}
 
-monitorAuthState();
-
-// Function to check if a user owns any items in the Cloud Firestore database
-const userOwnsSomething = async (userId) => {
+// Fetch user data from Firestore
+async function fetchUserData(user) {
     try {
+        // Query user data
         const userRef = collection(db, "userData");
-        const userQuery = query(userRef, where("uid", "==", userId));
+        const userQuery = query(userRef, where("uid", "==", user.uid));
         const querySnapshot = await getDocs(userQuery);
 
-        return !querySnapshot.empty; // Returns true if the user owns data, false otherwise
-    } catch (error) {
-        console.error("Error checking user ownership:", error);
-        return false; // Return false if there's an error
-    }
-};
+        if (!querySnapshot.empty) {
+            const docSnapshot = querySnapshot.docs[0];
+            userData = docSnapshot.data();
+            userDocId = docSnapshot.id;
 
-
-// Set up auth state change listener
-auth.onAuthStateChanged(user => {
-    if (user) {
-        handleUserSignedIn(user);
-    } else {
-        handleUserSignedOut();
-    }
-});
-
-async function handleUserSignedIn(user) {
-    console.log("User is signed in:", user.uid);
-    usersRef = collection(db, 'userData');
-
-    // Hide Signed-Out Content
-    if (divSignedOutUser) {
-        divSignedOutUser.hidden = true;
-    }
-
-    try {
-        // Check if user has account data
-        const hasData = await userOwnsSomething(user.uid);
-
-        if (!hasData) {
-            console.log("First-time user detected, showing setup form");
-            showFirstLoginUI();
-        } else {
-            console.log("Returning user detected, showing main UI");
-            await fetchUserData(user);
+            // Check if user is admin
             await checkIfAdmin(user);
-            showMainUI();
+
+            return userData;
+        } else {
+            console.error("No user data found");
+            return null;
         }
     } catch (error) {
-        console.error("Error in user initialization:", error);
-    }
-}
-
-function checkIfAccountSetup(usersRef, userId) {
-    const userRef = doc(usersRef, userId);
-
-    getDoc(userRef)
-        .then(docSnapshot => {
-            if (!docSnapshot.exists()) {
-                // console.log("User has no profile setup, prompting first-time login setup.");
-                showFirstLoginUI();
-            }
-        })
-        .catch(error => console.error("Error checking account setup:", error));
-}
-
-function handleUserSignedOut() {
-    console.log("User is signed out");
-
-    // Handle new component
-    if (firstLoginComponent) {
-        firstLoginComponent.hide();
-    }
-
-    // Handle legacy components
-    if (divFirstLoginPrompt) divFirstLoginPrompt.hidden = true;
-    if (divFirstLoginForm) divFirstLoginForm.hidden = true;
-
-    if (divFullUser) {
-        divFullUser.hidden = true;
-    }
-
-    if (loggedInNavbar) {
-        loggedInNavbar.hidden = true;
-    }
-
-    if (divSignedOutUser) {
-        divSignedOutUser.hidden = false;
-    }
-
-    // Clear any subscriptions
-    if (unsubscribe) {
-        unsubscribe();
-    }
-}
-
-function showFirstLoginUI() {
-    console.log("Showing first login UI");
-
-    // Use the new component if available
-    if (firstLoginComponent) {
-        firstLoginComponent.show();
-    } else {
-        // Legacy fallback
-        if (divFirstLoginPrompt) divFirstLoginPrompt.hidden = false;
-        if (divFirstLoginForm) divFirstLoginForm.hidden = false;
-    }
-
-    if (divFullUser) {
-        divFullUser.hidden = true;
-    }
-
-    if (loggedInNavbar) {
-        loggedInNavbar.hidden = true;
-    }
-
-    if (updatePointsSection) {
-        updatePointsSection.style.display = 'none';
-    }
-
-    // Use the custom navbar component's method
-    const navbarComponent = document.querySelector('logged-in-navbar');
-    if (navbarComponent) {
-        navbarComponent.showAdminFeatures(false);
-    }
-}
-
-const fetchUserData = async (user) => {
-    try {
-        const userQuery = query(usersRef, where("uid", "==", user.uid));
-        const querySnapshot = await getDocs(userQuery);
-
-        clearPreviousUserData();
-
-        querySnapshot.forEach(doc => updateUserProfile(doc.data()));
-    } catch (error) {
         console.error("Error fetching user data:", error);
-    }
-};
-
-function clearPreviousUserData() {
-    const photoArea = document.getElementById('photoArea');
-    const bhoodPoints = document.getElementById('bhoodPoints');
-    const servicePoints = document.getElementById('servicePoints');
-    const pdPoints = document.getElementById('pdPoints');
-    const generalPoints = document.getElementById('generalPoints');
-
-    if (photoArea) photoArea.innerHTML = '';
-    if (bhoodPoints) bhoodPoints.innerHTML = '';
-    if (servicePoints) servicePoints.innerHTML = '';
-    if (pdPoints) pdPoints.innerHTML = '';
-    if (generalPoints) generalPoints.innerHTML = '';
-}
-
-function updateUserProfile(profile) {
-    if (!profile) return;
-
-    currentPageUser = profile
-    console.log(...currentPageUser)
-    const {
-        firstname,
-        lastname,
-        brotherhoodPoints = 0,
-        pdPoints = 0,
-        servicePoints = 0,
-        generalPoints = 0,
-        deiFulfilled = 'false',
-        pictureLink = 'https://drive.google.com/uc?export=view&id=1AwJ9tWv0SagtDnE8U1NejxV2rpwOE8mD'
-    } = profile;
-
-
-    let totalPoints = brotherhoodPoints + servicePoints + pdPoints + generalPoints;
-
-    const photoArea = document.getElementById('photoArea');
-    if (photoArea) {
-        photoArea.innerHTML = `<img src='${pictureLink}' alt='Theta Tau Brother Headshot' loading="lazy" width='331' height='496'>`;
-    }
-
-    setPointsDisplay('bhoodPoints', brotherhoodPoints);
-    setPointsDisplay('servicePoints', servicePoints);
-    setPointsDisplay('pdPoints', pdPoints);
-    setPointsDisplay('generalPoints', generalPoints);
-    setPointsDisplay('totalPoints', totalPoints);
-    setDEIDisplay('deiPoint', deiFulfilled);
-
-    // Update the username in both implementations
-    // Update the custom navbar component with the user's name
-    const navbarComponent = document.querySelector('logged-in-navbar');
-    if (navbarComponent) {
-        navbarComponent.setUserName(`Welcome, ${firstname} ${lastname}!`);
-    }
-
-    // Legacy navbar
-    const txtNavbarName = document.querySelector('#userNameNavbar');
-    if (txtNavbarName) {
-        txtNavbarName.innerHTML = `Welcome, ${firstname} ${lastname}!`;
-    }
-
-    updatePointsChart(brotherhoodPoints, servicePoints, pdPoints, generalPoints);
-}
-
-function setPointsDisplay(elementId, points) {
-    const element = document.getElementById(elementId);
-    if (element) {
-        element.innerHTML = `${points}`;
-        element.style = pointsColorDeterminer(points);
+        return null;
     }
 }
 
-function setDEIDisplay(elementId, deiFulfilled) {
-    const element = document.getElementById(elementId);
-    if (element) {
-        element.innerHTML = `${deiFormatter(deiFulfilled)}`;
-        element.style = deiPointColor(deiFulfilled);
-    }
-}
-
+// Check if user is admin
 async function checkIfAdmin(user) {
     try {
+        const configRef = doc(db, "config", "roles");
         const docSnapshot = await getDoc(configRef);
 
         if (docSnapshot.exists()) {
             const admins = docSnapshot.data().admins;
-            if (admins && admins.includes(user.uid)) {
-                // Legacy admin flag
-                if (updatePointsSection) {
-                    updatePointsSection.style.display = 'list-item';
-                }
+            isAdmin = admins && admins.includes(user.uid);
 
-                // Update the custom navbar component to show admin features
-                const navbarComponent = document.querySelector('logged-in-navbar');
-                if (navbarComponent) {
-                    navbarComponent.showAdminFeatures(true);
-                }
+            // Update navbar with admin status
+            const navbarComponent = $('logged-in-navbar')[0];
+            if (navbarComponent) {
+                navbarComponent.showAdminFeatures(isAdmin);
             }
+
+            return isAdmin;
         }
+
+        return false;
     } catch (error) {
-        console.error("Error getting document:", error);
+        console.error("Error checking admin status:", error);
+        return false;
     }
 }
 
-function showMainUI() {
-    console.log("Showing main UI");
+// Method to update profile information on the page
+function updateProfileUI(userData) {
+    console.log("Updating profile UI");
 
-    // Hide the new first login component if available
-    if (firstLoginComponent) {
-        firstLoginComponent.hide();
-    }
+    if (!userData) return;
 
-    // Legacy elements
-    if (divFirstLoginPrompt) divFirstLoginPrompt.hidden = true;
-    if (divFirstLoginForm) divFirstLoginForm.hidden = true;
+    // Extract user data with defaults for missing fields
+    const {
+        firstname = "",
+        lastname = "",
+        major = "",
+        minor = "",
+        gradYear = "",
+        fratclass = "",
+        linkedinLink = "",
+        personalLink = "",
+        githubLink = "",
+        pictureLink = 'https://drive.google.com/uc?export=view&id=1AwJ9tWv0SagtDnE8U1NejxV2rpwOE8mD'
+    } = userData;
 
-    if (divFullUser) {
-        divFullUser.hidden = false;
-    }
-
-    if (loggedInNavbar) {
-        loggedInNavbar.hidden = false;
-    }
-}
-
-// Handle the submission from the new component
-function handleFirstLoginSubmission(event) {
-    const formData = event.detail;
-    console.log("First login form submitted via component:", formData);
-
-    if (!auth.currentUser) {
-        console.error("No authenticated user found");
-        return;
-    }
-
-    addDoc(usersRef, {
-        uid: auth.currentUser.uid,
-        fratclass: formData.fratclass,
-        brotherhoodPoints: 0,
-        pdPoints: 0,
-        servicePoints: 0,
-        generalPoints: 0,
-        deiFulfilled: "false",
-        firstname: formData.firstname,
-        lastname: formData.lastname,
-        major: formData.major,
-        minor: formData.minor,
-        gradYear: formData.gradYear,
-        pictureLink: 'https://drive.google.com/uc?export=view&id=1AwJ9tWv0SagtDnE8U1NejxV2rpwOE8mD',
-        linkedinLink: formData.linkedin,
-        personalLink: formData.personalWeb,
-        githubLink: formData.github
-    }).then(() => {
-        console.log("User data added successfully");
-        showMainUI();
-        // Use a short timeout to allow database operations to complete
-        setTimeout(() => location.reload(true), 500);
-    }).catch(error => {
-        console.error("Error adding user data:", error);
-    });
-}
-
-// Legacy form submission handler
-function handleAccountDetailsSubmission() {
-    const formData = {
-        firstname: txtFirstnameEntry.value,
-        lastname: txtLastnameEntry.value,
-        major: txtMajorEntry.value,
-        minor: txtMinorEntry.value,
-        gradYear: txtGradYearEntry.value,
-        fratclass: txtFratClassEntry.value,
-        linkedin: txtLinkedinEntry.value,
-        personalWeb: txtPersonalWebEntry.value,
-        github: txtGitHubEntry.value
-    };
-
-    if (!validateFormFields(formData)) return;
-
-    usersRef.add({
-        uid: auth.currentUser.uid,
-        fratclass: formData.fratclass,
-        brotherhoodPoints: 0,
-        pdPoints: 0,
-        servicePoints: 0,
-        generalPoints: 0,
-        deiFulfilled: "false",
-        firstname: formData.firstname,
-        lastname: formData.lastname,
-        major: formData.major,
-        minor: formData.minor,
-        gradYear: formData.gradYear,
-        pictureLink: 'https://drive.google.com/uc?export=view&id=1AwJ9tWv0SagtDnE8U1NejxV2rpwOE8mD',
-        linkedinLink: formData.linkedin,
-        personalLink: formData.personalWeb,
-        githubLink: formData.github
+    // Update profile photo in the profile-img div
+    $('.profile-img').css({
+        'background-image': `url('${pictureLink}')`,
+        'background-size': 'cover',
+        'background-position': 'center'
     });
 
-    showMainUI();
-    setTimeout(() => location.reload(true), 500);
+    // Update name
+    $('#name').text(`${firstname} ${lastname}`);
+
+    // Update college year (graduation year)
+    $('#collegeYear').text(`Class of ${gradYear}`);
+
+    // Update fraternity class
+    $('#fraternityClass').text(`${fratclass} Class`);
+
+    // Update major/minor
+    let majorMinorText = major;
+    if (minor && minor.trim() !== "") {
+        majorMinorText += ` with a minor in ${minor}`;
+    }
+    $('#major').text(majorMinorText);
+
+    // Update LinkedIn
+    if (linkedinLink) {
+        $('#linkedin').html(`<a href="${linkedinLink}" target="_blank" rel="noopener noreferrer">LinkedIn</a>`);
+    }
+
+    // Update GitHub
+    if (githubLink) {
+        $('#github').html(`<a href="${githubLink}" target="_blank" rel="noopener noreferrer">GitHub</a>`);
+    }
+
+    // Update personal site
+    if (personalLink) {
+        $('#personalSite').html(`<a href="${personalLink}" target="_blank" rel="noopener noreferrer">Personal Website</a>`);
+    }
+
+    // Update username in navbar
+    const navbarComponent = $('logged-in-navbar')[0];
+    if (navbarComponent) {
+        navbarComponent.setUserName(`Welcome, ${firstname} ${lastname}!`);
+    }
 }
 
-function validateFormFields(formData) {
-    let isValid = true;
-    const fields = [
-        { element: txtFirstnameEntry, value: formData.firstname, placeholder: "You must input a valid first name!" },
-        { element: txtLastnameEntry, value: formData.lastname, placeholder: "You must input a valid last name!" },
-        { element: txtMajorEntry, value: formData.major, placeholder: "You must input a valid major!" },
-        { element: txtGradYearEntry, value: formData.gradYear, placeholder: "You must input a valid graduation year! (1980-2050)" },
-        { element: txtFratClassEntry, value: formData.fratclass, placeholder: "You must input a valid fraternity class! (Ex: Kappa)" },
-        { element: txtLinkedinEntry, value: formData.linkedin, placeholder: "You must input a valid LinkedIn URL!" },
-        { element: txtPersonalWebEntry, value: formData.personalWeb, placeholder: "You must input a valid personal website URL!" },
-        { element: txtGitHubEntry, value: formData.github, placeholder: "You must input a valid GitHub URL!" }
-    ];
+// Method to update points chart
+function updatePointsChart(userData) {
+    console.log("Updating points chart");
 
-    fields.forEach(({ element, value, placeholder }) => {
-        if (!element.checkValidity()) {
-            element.style = "width:95%; margin: auto; background-color: #FFCCCB;";
-            element.placeholder = placeholder;
-            element.classList.add('placeholderInvalid');
-            element.classList.add('placeholderInvalid::placeholder');
-            element.value = "";
-            isValid = false;
+    if (!userData) return;
+
+    const {
+        brotherhoodPoints = 0,
+        pdPoints = 0,
+        servicePoints = 0,
+        generalPoints = 0
+    } = userData;
+
+    // Update points displays
+    updatePointsDisplay('bhoodPoints', brotherhoodPoints);
+    updatePointsDisplay('servicePoints', servicePoints);
+    updatePointsDisplay('pdPoints', pdPoints);
+    updatePointsDisplay('generalPoints', generalPoints);
+    updatePointsDisplay('totalPoints', brotherhoodPoints + servicePoints + pdPoints + generalPoints);
+
+    if (userData.deiFulfilled !== undefined) {
+        updateDEIDisplay('deiPoint', userData.deiFulfilled);
+    }
+
+    // Update chart if canvas exists
+    const ctx = $('#pointsChart');
+    if (ctx.length && typeof Chart !== 'undefined') {
+        // Check if chart instance already exists
+        if (window.pointsChart instanceof Chart) {
+            window.pointsChart.destroy();
         }
-    });
 
-    return isValid;
+        // Create new chart
+        window.pointsChart = new Chart(ctx[0].getContext('2d'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Brotherhood', 'Service', 'Professional', 'General'],
+                datasets: [{
+                    data: [brotherhoodPoints, servicePoints, pdPoints, generalPoints],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            }
+        });
+    }
 }
+
+// Method to update calendar
+function updateCalendarUI(userData) {
+    console.log("Updating calendar UI");
+
+    // Calendar implementation would go here
+    // This would render upcoming events or activities
+}
+
+// Helper function to update points display
+function updatePointsDisplay(elementId, points) {
+    $(`#${elementId}`).text(points);
+
+    // Add color styling based on point value
+    if (typeof pointsColorDeterminer === 'function') {
+        $(`#${elementId}`).attr('style', pointsColorDeterminer(points));
+    }
+}
+
+// Helper function to update DEI status display
+function updateDEIDisplay(elementId, status) {
+    const element = $(`#${elementId}`);
+
+    // Format the status text
+    element.text(status === "true" ? "Complete" : "Incomplete");
+
+    // Add color styling
+    element.attr('style', status === "true" ?
+        "color: green; font-weight: bold;" :
+        "color: red; font-weight: bold;"
+    );
+}
+
+// Expose methods
+window.accountPage = {
+    updateProfileUI,
+    updatePointsChart,
+    updateCalendarUI
+};
