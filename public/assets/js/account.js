@@ -1,6 +1,5 @@
 import {
-    onAuthStateChanged,
-    signOut
+    onAuthStateChanged
 } from 'https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js';
 import {
     collection,
@@ -15,404 +14,390 @@ import {
     db
 } from "/config/firebaseConfig.js";
 
+// Store current user data
+let currentUser = null;
+let userData = null;
+let userDocId = null;
+let isAdmin = false;
 
-//First Login Sections
-const divFirstLoginPrompt = document.querySelector('#firstLoginPrompt')
-const divFirstLoginForm = document.querySelector('#firstLoginForm')
-// First Time Sign-In Form Selections
-// Input Areas
-const txtFirstnameEntry = document.querySelector('#txtFirstname')
-const txtLastnameEntry = document.querySelector('#txtLastname')
-const txtMajorEntry = document.querySelector('#txtMajor')
-const txtMinorEntry = document.querySelector('#txtMinor')
-const txtGradYearEntry = document.querySelector('#txtGradYear')
-const txtFratClassEntry = document.querySelector('#txtFratClass')
-const txtLinkedinEntry = document.querySelector('#txtLinkedin')
-const txtPersonalWebEntry = document.querySelector('#txtPersonalWeb')
-const txtGitHubEntry = document.querySelector('#txtGithub')
-// Text Areas
-const txtNavbarName = document.querySelector('#userNameNavbar')
+// Initialize the page
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("Account page initializing...");
 
-// Get the canvas element
-var ctx = document.getElementById('pointsChart').getContext('2d');
-
-// Submission Button
-const btnMakeAccountDetails = document.querySelector('#btnMakeAccountDetails')
-
-
-//Logged-In User Sections
-const divFullUser = document.querySelector('#fullUser')
-const loggedInNavbar = document.querySelector('#loggedInNavbar')
-const logoutHeader = document.querySelector('#logoutHeader')
-
-//Logged-Out User Sections
-const divSignedOutUser = document.querySelector('#signedOutUser')
-
-// Return to Login Button
-const btnLoginReturn = document.querySelector('#btnLoginReturn')
-
-// Upload Photo Button
-const btnUploadPhoto = document.querySelector('#btnUploadPhoto')
-
-// Update Profile Button
-const btnUpdateProfile = document.querySelector('#btnUpdateProfile')
-
-// Points Update Button (ADMINS ONLY)
-const updatePointsSection = document.querySelector('#updatePointsSection')
-
-
-
-const configRef = doc(collection(db, 'config'), 'roles');
-let usersRef; // Reference to the document or collection we want to access
-let unsubscribe; // Query handler for user information check
-let adminCheck; // Query handler for admin uid check
-
-// Track user's state of loaded ownership
-var ownershipLoaded = false;
-
-///////////////////// User Authentication ////////////////////////
-// Monitor user Authentication state, this will change website contents using javascript functions
-const monitorAuthState = async () => {
-    onAuthStateChanged(auth, user => {
-        if (user) {
-            console.log("Logged In")
-        } else {
-            console.log("Not Logged In")
-            window.redirect("/login")
-        }
-    })
-}
-
-monitorAuthState();
-
-// Log out
-const logout = async () => {
-    await signOut(auth);
-}
-
-const logoutExit = () => {
-    signOut(auth).then(() => {
-        window.location.replace('login.html');
-    }).catch((err) => {
-        console.error(`Error Logging Out: ${err}`);
-    });
-}
-
-
-////////////////////// FUNCTIONS ///////////////////////////////////
-// Function to check if a user owns any items in the Cloud Firestore database
-const userOwnsSomething = async (userId) => {
-    try {
-        const userRef = collection(db, "userData");
-        const userQuery = query(userRef, where("uid", "==", userId));
-        const querySnapshot = await getDocs(userQuery);
-
-        return !querySnapshot.empty; // Returns true if the user owns data, false otherwise
-    } catch (error) {
-        console.error("Error checking user ownership:", error);
-        return false; // Return false if there's an error
-    }
-};
-
-function pointsColorDeterminer(numPoints) {
-    if (numPoints <= 0) {
-        return "color: #8a0108";
-    } else if (numPoints === 1) {
-        return "color: #e80602";
-    } else if (numPoints === 2) {
-        return "color: #f56302";
-    } else if (numPoints === 3) {
-        return "color: #F8B324";
-    } else if (numPoints === 4) {
-        return "color: #67d962";
-    } else {
-        // Assuming 5 or more
-        return "color: #08a300";
-    }
-}
-
-function totalPointsColorDeterminer(numPoints) {
-    if (numPoints <= 4) {
-        return "color: #8a0108";
-    } else if (numPoints <= 8) {
-        return "color: #e80602";
-    } else if (numPoints <= 12) {
-        return "color: #f56302";
-    } else if (numPoints <= 16) {
-        return "color: #F8B324";
-    } else if (numPoints < 20) {
-        return "color: #67d962";
-    } else {
-        // Assuming 20 or more
-        return "color: #08a300";
-    }
-}
-
-function deiFormatter(deiFulfillment) {
-    if (deiFulfillment == 'true') {
-        return "Yes";
-    } else if (deiFulfillment == 'false') {
-        return "No";
-    } else {
-        return "Invalid DEI point format";
-    }
-}
-
-function deiPointColor(deiFulfillment) {
-    if (deiFulfillment == 'true') {
-        return "color: #08a300";
-    } else if (deiFulfillment == 'false') {
-        return "color: #e80602";
-    } else {
-        return "Black";
-    }
-}
-
-
-function updatePointsChart(bhoodP, serviceP, professionalDevelopmentP, generalP) {
-    let totalP = bhoodP + serviceP + professionalDevelopmentP + generalP;
-    const xValues = ["Brotherhood", "Service", "Professional Development", "General", "Total"];
-    const yValues = [bhoodP, serviceP, professionalDevelopmentP, generalP, totalP];
-    const barColors = ["red", "green", "blue", "orange", "purple"];
-
-    // Create the bar chart
-    var pointsChart = new Chart(ctx, {
-        type: "bar",
-        data: {
-            labels: xValues,
-            datasets: [{
-                backgroundColor: barColors,
-                data: yValues,
-                label: 'Semester Points'
-            }]
-        },
-        options: {
-            legend: {
-                display: false
-            }
-        }
-    });
-}
-
-// This button will return a user back to the "Login" page and ensure that they are logged out as well
-btnLoginReturn.addEventListener("click", logoutExit);
-// Normal Logout Button
-// btnLogout.addEventListener("click", logoutExit);
-
-// Logout header clicked
-logoutHeader.addEventListener("click", logoutExit);
-
-// This button will take the user to the photo upload page
-// btnUploadPhoto.addEventListener("click", goToPhotoUpload);
-
-// This button will take the user to the profile update page
-// btnUpdateProfile.addEventListener("click", goToProfileUpdate);
-
-auth.onAuthStateChanged(user => {
-    if (user) {
-        handleUserSignedIn(user);
-    } else {
-        handleUserSignedOut();
-    }
+    // Setup auth state listener
+    setupAuthStateListener();
 });
 
-function handleUserSignedIn(user) {
-    usersRef = collection(db, 'userData');
-
-    // Hide Signed-Out Content
-    divSignedOutUser.hidden = true;
-
-    checkIfAccountSetup(usersRef, user.uid);
-
-    userOwnsSomething(user.uid).then(userOwnsThings => {
-        // console.log("User owns things? ", userOwnsThings);
-        if (!userOwnsThings) {
-            showFirstLoginUI();
+// Setup auth state change listener
+function setupAuthStateListener() {
+    onAuthStateChanged(auth, user => {
+        if (user) {
+            currentUser = user;
+            fetchUserData(user).then(() => {
+                // Once data is fetched, update all UI components
+                updateProfileUI(userData);
+                updatePointsChart(userData);
+                updateCalendarUI(userData);
+            });
         } else {
-            fetchUserData(user);
-            checkIfAdmin(user);
-            showMainUI();
+            // Redirect to login page if not authenticated
+            window.location.replace('login.html');
         }
     });
-
-    btnMakeAccountDetails.onclick = handleAccountDetailsSubmission;
 }
 
-function checkIfAccountSetup(usersRef, userId) {
-    const userRef = doc(usersRef, userId);
-
-    getDoc(userRef)
-        .then(docSnapshot => {
-            if (!docSnapshot.exists()) {
-                // console.log("User has no profile setup, prompting first-time login setup.");
-                showFirstLoginUI();
-            }
-        })
-        .catch(error => console.error("Error checking account setup:", error));
-}
-
-function handleUserSignedOut() {
-    divFirstLoginPrompt.hidden = true;
-    divFirstLoginForm.hidden = true;
-    divFullUser.hidden = true;
-    loggedInNavbar.hidden = true;
-    divSignedOutUser.hidden = false;
-    unsubscribe && unsubscribe();
-}
-
-function showFirstLoginUI() {
-    divFirstLoginPrompt.hidden = false;
-    divFirstLoginForm.hidden = false;
-    divFullUser.hidden = true;
-    loggedInNavbar.hidden = true;
-    updatePointsSection.style.display = 'none';
-}
-
-const fetchUserData = async (user) => {
+// Fetch user data from Firestore
+async function fetchUserData(user) {
     try {
-        const userQuery = query(usersRef, where("uid", "==", user.uid));
+        // Query user data
+        const userRef = collection(db, "userData");
+        const userQuery = query(userRef, where("uid", "==", user.uid));
         const querySnapshot = await getDocs(userQuery);
 
-        clearPreviousUserData();
+        if (!querySnapshot.empty) {
+            const docSnapshot = querySnapshot.docs[0];
+            userData = docSnapshot.data();
+            userDocId = docSnapshot.id;
 
-        querySnapshot.forEach(doc => updateUserProfile(doc.data()));
+            // Check if user is admin
+            await checkIfAdmin(user);
+
+            return userData;
+        } else {
+            console.error("No user data found");
+            return null;
+        }
     } catch (error) {
         console.error("Error fetching user data:", error);
+        return null;
     }
-};
-
-
-function clearPreviousUserData() {
-    document.getElementById('photoArea').innerHTML = '';
-    document.getElementById('bhoodPoints').innerHTML = '';
-    document.getElementById('servicePoints').innerHTML = '';
-    document.getElementById('pdPoints').innerHTML = '';
-    document.getElementById('generalPoints').innerHTML = '';
 }
 
-function updateUserProfile(profile) {
-    const {
-        firstname,
-        lastname,
-        gradYear,
-        fratclass,
-        brotherhoodPoints,
-        pdPoints,
-        servicePoints,
-        generalPoints,
-        deiFulfilled,
-        pictureLink
-    } = profile;
-
-    let totalPoints = brotherhoodPoints + servicePoints + pdPoints + generalPoints;
-
-    document.getElementById('photoArea').innerHTML = `<img src='${pictureLink}' alt='Theta Tau Brother Headshot' loading="lazy"  width='331' height='496'>`;
-    setPointsDisplay('bhoodPoints', brotherhoodPoints);
-    setPointsDisplay('servicePoints', servicePoints);
-    setPointsDisplay('pdPoints', pdPoints);
-    setPointsDisplay('generalPoints', generalPoints);
-    setPointsDisplay('totalPoints', totalPoints);
-    setDEIDisplay('deiPoint', deiFulfilled);
-
-    txtNavbarName.innerHTML = `Welcome, ${firstname} ${lastname}!`;
-    updatePointsChart(brotherhoodPoints, servicePoints, pdPoints, generalPoints);
-}
-
-function setPointsDisplay(elementId, points) {
-    const element = document.getElementById(elementId);
-    element.innerHTML = `${points}`;
-    element.style = pointsColorDeterminer(points);
-}
-
-function setDEIDisplay(elementId, deiFulfilled) {
-    const element = document.getElementById(elementId);
-    element.innerHTML = `${deiFormatter(deiFulfilled)}`;
-    element.style = deiPointColor(deiFulfilled);
-}
-
+// Check if user is admin
 async function checkIfAdmin(user) {
     try {
+        const configRef = doc(db, "config", "roles");
         const docSnapshot = await getDoc(configRef);
 
         if (docSnapshot.exists()) {
             const admins = docSnapshot.data().admins;
-            if (admins && admins.includes(user.uid)) {
-                updatePointsSection.style.display = 'list-item';
+            isAdmin = admins && admins.includes(user.uid);
+
+            // Update navbar with admin status
+            const navbarComponent = $('logged-in-navbar')[0];
+            if (navbarComponent) {
+                navbarComponent.showAdminFeatures(isAdmin);
             }
+
+            return isAdmin;
         }
+
+        return false;
     } catch (error) {
-        console.error("Error getting document:", error);
+        console.error("Error checking admin status:", error);
+        return false;
     }
 }
 
-function showMainUI() {
-    divFirstLoginPrompt.hidden = true;
-    divFirstLoginForm.hidden = true;
-    divFullUser.hidden = false;
-    loggedInNavbar.hidden = false;
+// Method to update profile information on the page
+function updateProfileUI(userData) {
+    console.log("Updating profile UI");
+
+    if (!userData) return;
+
+    // Extract user data with defaults for missing fields
+    const {
+        firstname = "",
+        lastname = "",
+        major = "",
+        minor = "",
+        gradYear = "",
+        fratclass = "",
+        linkedinLink = "",
+        personalLink = "",
+        githubLink = "",
+        pictureLink = 'https://drive.google.com/uc?export=view&id=1AwJ9tWv0SagtDnE8U1NejxV2rpwOE8mD'
+    } = userData;
+
+    // Update profile photo in the profile-img div
+    // If pictureLink exists, update the image source
+    if (pictureLink) {
+        $('.profile-img img').attr('src', pictureLink);
+    }
+
+    // Update name
+    $('#name').text(`${firstname} ${lastname}`);
+
+    // Update college year (graduation year)
+    $('#collegeYear').text(`Class of ${gradYear}`);
+
+    // Update fraternity class
+    $('#fraternityClass').text(`${fratclass} Class`);
+
+    // Update major/minor
+    let majorMinorText = major;
+    if (minor && minor.trim() !== "") {
+        majorMinorText += ` with a minor in ${minor}`;
+    }
+    $('#major').text(majorMinorText);
+
+    // Update LinkedIn
+    if (linkedinLink) {
+        // Extract the username from LinkedIn URL using regex
+        const linkedinUsername = linkedinLink.match(/linkedin\.com\/in\/([^\/\?]+)/i);
+        const displayText = linkedinUsername ? `in/${linkedinUsername[1]}` : linkedinLink;
+    $('#linkedin').html(`<a href="${linkedinLink}" target="_blank" rel="noopener noreferrer">${displayText}</a>`);
+    }
+
+    // Update GitHub
+    if (githubLink) {
+        // Extract the username from GitHub URL using regex
+        const githubUsername = githubLink.match(/github\.com\/([^\/\?]+)/i);
+        const displayText = githubUsername ? `github.com/${githubUsername[1]}` : githubLink;
+        $('#github').html(`<a href="${githubLink}" target="_blank" rel="noopener noreferrer">${displayText}</a>`);
+    }
+
+    // Update personal site
+    if (personalLink) {
+        // For personal site, just remove http(s):// and trailing slash
+        const displayText = personalLink.replace(/^https?:\/\//i, '').replace(/\/$/,'');
+        $('#personalSite').html(`<a href="${personalLink}" target="_blank" rel="noopener noreferrer">${displayText}</a>`);
+    }
+
+    // Update username in navbar
+    const navbarComponent = $('logged-in-navbar')[0];
+    if (navbarComponent) {
+        navbarComponent.setUserName(`Welcome, ${firstname} ${lastname}!`);
+    }
 }
 
-function handleAccountDetailsSubmission() {
-    const formData = {
-        firstname: txtFirstnameEntry.value,
-        lastname: txtLastnameEntry.value,
-        major: txtMajorEntry.value,
-        minor: txtMinorEntry.value,
-        gradYear: txtGradYearEntry.value,
-        fratclass: txtFratClassEntry.value,
-        linkedin: txtLinkedinEntry.value,
-        personalWeb: txtPersonalWebEntry.value,
-        github: txtGitHubEntry.value
+// Method to update points chart
+function updatePointsChart(userData) {
+    console.log("Updating points chart");
+
+    if (!userData) return;
+
+    console.log(userData);
+    const {
+        brotherhoodPoints = 0,
+        pdPoints = 0,
+        servicePoints = 0,
+        generalPoints = 0,
+    } = userData;
+
+    console.log(userData.deiFulfilled);
+    const deiPoints = userData.deiFulfilled === "true" ? 1 : 0;
+    console.log(deiPoints)
+
+    // Points to Achieve
+    const maxPoints = {
+        brotherhood: 6,
+        pd: 6,
+        service: 6,
+        dei: 1,
+        general: 6
     };
 
-    if (!validateFormFields(formData)) return;
-
-    usersRef.add({
-        uid: auth.currentUser.uid,
-        fratclass: formData.fratclass,
-        brotherhoodPoints: 0,
-        pdPoints: 0,
-        servicePoints: 0,
-        generalPoints: 0,
-        deiFulfilled: "false",
-        firstname: formData.firstname,
-        lastname: formData.lastname,
-        major: formData.major,
-        minor: formData.minor,
-        gradYear: formData.gradYear,
-        pictureLink: 'https://drive.google.com/uc?export=view&id=1AwJ9tWv0SagtDnE8U1NejxV2rpwOE8mD',
-        linkedinLink: formData.linkedin,
-        personalLink: formData.personalWeb,
-        githubLink: formData.github
-    });
-
-    showMainUI();
-    setTimeout(() => location.reload(true), 500);
-}
-
-function validateFormFields(formData) {
-    let isValid = true;
-    const fields = [
-        { element: txtFirstnameEntry, value: formData.firstname, placeholder: "You must input a valid first name!" },
-        { element: txtLastnameEntry, value: formData.lastname, placeholder: "You must input a valid last name!" },
-        { element: txtMajorEntry, value: formData.major, placeholder: "You must input a valid major!" },
-        { element: txtGradYearEntry, value: formData.gradYear, placeholder: "You must input a valid graduation year! (1980-2050)" },
-        { element: txtFratClassEntry, value: formData.fratclass, placeholder: "You must input a valid fraternity class! (Ex: Kappa)" },
-        { element: txtLinkedinEntry, value: formData.linkedin, placeholder: "You must input a valid LinkedIn URL!" },
-        { element: txtPersonalWebEntry, value: formData.personalWeb, placeholder: "You must input a valid personal website URL!" },
-        { element: txtGitHubEntry, value: formData.github, placeholder: "You must input a valid GitHub URL!" }
+    // Define the categories with their data
+    const categories = [
+        { name: 'Brotherhood', points: brotherhoodPoints, max: maxPoints.brotherhood, color: '#4285F4' },
+        { name: 'Professional Development', points: pdPoints, max: maxPoints.pd, color: '#EA4335' },
+        { name: 'Service', points: servicePoints, max: maxPoints.service, color: '#FBBC05' },
+        { name: 'DEI', points: deiPoints, max: maxPoints.dei, color: '#34A853' },
+        { name: 'General', points: generalPoints, max: maxPoints.general, color: '#8758FF' }
     ];
 
-    fields.forEach(({ element, value, placeholder }) => {
-        if (!element.checkValidity()) {
-            element.style = "width:95%; margin: auto; background-color: #FFCCCB;";
-            element.placeholder = placeholder;
-            element.classList.add('placeholderInvalid');
-            element.classList.add('placeholderInvalid::placeholder');
-            element.value = "";
-            isValid = false;
+    // Calculate total max points and current total
+    const totalMax = Object.values(maxPoints).reduce((sum, val) => sum + val, 0);
+    const currentTotal = categories.reduce((sum, cat) => sum + Math.min(cat.points, cat.max), 0);
+
+    // Create or update the chart container
+    let chartContainer = $('#points-chart');
+    if (chartContainer.length === 0) {
+        $('body').append('<div id="points-chart" class="points-chart-container"></div>');
+        chartContainer = $('#points-chart');
+    }
+
+    // Clear existing content
+    chartContainer.empty();
+
+    // Add title and total progress
+    chartContainer.append(`
+        <div class="chart-header">
+            <h3>Progress Tracker: ${currentTotal}/${totalMax} points</h3>
+        </div>
+    `);
+
+    // Create the progress bar container
+    chartContainer.append(`
+        <div class="single-progress-container" style="border: 1px solid black;
+                        background: linear-gradient(to right, 
+                            rgba(255, 230, 230, 0.2), /* Very light, dull red */
+                            rgba(255, 255, 230, 0.2), /* Very light, dull yellow */
+                            rgba(230, 255, 230, 0.2)  /* Very light, dull green */
+                        );
+                    ">
+            <div class="single-progress-bar"></div>
+        </div>
+    `);
+
+    const progressBar = chartContainer.find('.single-progress-bar');
+
+    // Track the total width used so far
+    let currentPosition = 0;
+
+    // Add filled segments for each category, all justified to the left
+    categories.forEach(category => {
+        // Calculate how many points this category contributes to the total
+        const categoryPercentage = (category.max / totalMax) * 100;
+
+        // Calculate how many points are filled in this category
+        const actualPoints = Math.min(category.points, category.max);
+        const pointsPercentage = (actualPoints / totalMax) * 100;
+
+        if (pointsPercentage > 0) {
+            progressBar.append(`
+                <div class="progress-segment" 
+                     style="left: ${currentPosition}%; 
+                            width: ${pointsPercentage}%; 
+                            background-color: ${category.color};">
+                </div>
+            `);
+
+            currentPosition += pointsPercentage;
+        }
+
+        // Add segment divider/marker at the end of where this category should be
+        const markerPosition = currentPosition + (categoryPercentage - pointsPercentage);
+        if (markerPosition < 100) {
+            progressBar.append(`
+<!--                <div class="segment-divider" style="left: ${markerPosition}%;"></div>-->
+            `);
         }
     });
 
-    return isValid;
+    // Add legend below the bar
+    chartContainer.append('<div class="chart-legend"></div>');
+    const legend = chartContainer.find('.chart-legend');
+
+    categories.forEach(category => {
+        legend.append(`
+            <div class="legend-item">
+                <div class="legend-color" style="background-color: ${category.color};"></div>
+                <div class="legend-text">${category.name}: ${category.points}/${category.max}</div>
+            </div>
+        `);
+    });
+
+    // Add CSS if it doesn't exist
+    if ($('#points-chart-styles').length === 0) {
+        $('head').append(`
+            <style id="points-chart-styles">
+                .points-chart-container {
+                    margin: 30px 0;
+                    padding: 20px;
+                    border-radius: 8px;
+                    background-color: #f5f5f5;
+                    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+                    position: relative;
+                    font-family: Arial, sans-serif;
+                }
+                .chart-header {
+                    margin-bottom: 20px;
+                    text-align: center;
+                }
+                .chart-header h3 {
+                    margin: 0;
+                    font-size: 18px;
+                }
+                .single-progress-container {
+                    height: 30px;
+                    background-color: #e0e0e0;
+                    border-radius: 15px;
+                    overflow: hidden;
+                    margin-bottom: 20px;
+                    position: relative;
+                }
+                .single-progress-bar {
+                    height: 100%;
+                    width: 100%;
+                    position: relative;
+                }
+                .progress-segment {
+                    height: 100%;
+                    position: absolute;
+                    top: 0;
+                }
+                .segment-divider {
+                    position: absolute;
+                    height: 100%;
+                    width: 2px;
+                    background-color: #fff;
+                    top: 0;
+                }
+                .chart-legend {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    gap: 15px;
+                    margin-top: 10px;
+                }
+                .legend-item {
+                    display: flex;
+                    align-items: center;
+                }
+                .legend-color {
+                    width: 12px;
+                    height: 12px;
+                    border-radius: 50%;
+                    margin-right: 5px;
+                }
+                .legend-text {
+                    font-size: 14px;
+                }
+            </style>
+        `);
+    }
+
+
+
 }
+
+// Method to update calendar
+function updateCalendarUI(userData) {
+    console.log("Updating calendar UI");
+
+    // Calendar implementation would go here
+    // This would render upcoming events or activities
+}
+
+// Helper function to update points display
+function updatePointsDisplay(elementId, points) {
+    $(`#${elementId}`).text(points);
+
+    // Add color styling based on point value
+    if (typeof pointsColorDeterminer === 'function') {
+        $(`#${elementId}`).attr('style', pointsColorDeterminer(points));
+    }
+}
+
+// Helper function to update DEI status display
+function updateDEIDisplay(elementId, status) {
+    const element = $(`#${elementId}`);
+
+    // Format the status text
+    element.text(status === "true" ? "Complete" : "Incomplete");
+
+    // Add color styling
+    element.attr('style', status === "true" ?
+        "color: green; font-weight: bold;" :
+        "color: red; font-weight: bold;"
+    );
+}
+
+// Expose methods
+window.accountPage = {
+    updateProfileUI,
+    updatePointsChart,
+    updateCalendarUI
+};

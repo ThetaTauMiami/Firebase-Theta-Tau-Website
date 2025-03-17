@@ -1,0 +1,259 @@
+.gridContainer {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 1fr 4fr;
+    grid-template-areas:
+                "profile points"
+                "profile calendar"
+                "bugRequest bugRequest";
+    gap: 20px;
+    height: 115vh;
+    max-height: 1400px;
+    padding: 10px;
+}
+
+/* Media query for screens less than 768px wide */
+@media screen and (max-width: 768px) {
+    .gridContainer {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+    }
+
+    /* Reset grid areas when in stacked mode */
+    .profile, .points, .calendar, .bugRequest {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+}
+
+.profile {
+    grid-area: profile;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.points {
+    grid-area: points;
+    background-color: #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.bugRequest {
+    grid-area: bugRequest;
+    background-color: #f8f9fa;
+    border-left: 4px solid #dc3545;
+    border-radius: 4px;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-family: 'Arial', sans-serif;
+}
+
+.calendar {
+    grid-area: calendar;
+    background-color: #d0d0d0;
+    border-radius: 8px;
+    padding: 20px;
+    /* Removed grid properties to make it a single space */
+}
+
+/* Additional styling for visual demonstration */
+.profile-img {
+    height: 100px;
+    width: 100px;
+    border-radius: 50%;
+    background-color: #aaa;
+    margin-bottom: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.profile-img img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(.4); /* Default scale is 1 (100%) */
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: cover;
+}
+
+h2 {
+    margin-top: 0;
+}
+
+/* Container spans */
+.linkedin, .github, .personalSite {
+    display: flex;
+    align-items: center;
+    margin-right: 20px;
+    /* Optional: to display all three spans in a row */
+    float: left;
+}
+
+/* Icon styling */
+.linkedin i, .github i, .personalSite i {
+    margin-right: 10px;
+    font-size: 20px; /* Adjust icon size as needed */
+}
+
+/* Heading styling */
+h3 {
+    margin: 0; /* Remove default margin to align properly */
+    font-size: 16px;
+}
+
+/* Specific brand colors */
+.linkedin i {
+    color: #0077B5;
+}
+
+.github i {
+    color: #333;
+}
+
+.personalSite i {
+    color: #4CAF50;
+}
+
+/* Clear the float if needed */
+.social-links:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.bugRequest h2 {
+    color: #dc3545;
+    margin-top: 0;
+    font-size: 1.5rem;
+}
+
+.bugRequest p {
+    color: #495057;
+    margin-bottom: 0;
+}
+
+.bugRequest a {
+    color: #0366d6;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.bugRequest a:hover {
+    text-decoration: underline;
+}
+
+.calendar-container {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.calendar-week,
+.calendar-agenda,
+.calendar-link {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.calendar-week iframe,
+.calendar-agenda iframe {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    min-height: 300px;
+    display: block;
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Force Google Calendar to expand */
+iframe[src*="calendar.google.com"] {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Default - show week view only */
+.calendar-week {
+    display: block;
+}
+
+.calendar-agenda,
+.calendar-link {
+    display: none;
+}
+
+/* Medium screens - show agenda view */
+@media screen and (max-width: 768px) {
+    .calendar-week {
+        display: none;
+    }
+
+    .calendar-agenda {
+        display: block;
+    }
+
+    .calendar-link {
+        display: none;
+    }
+}
+
+/* Small screens - show link only */
+@media screen and (max-width: 480px) {
+    .calendar-week,
+    .calendar-agenda {
+        display: none;
+    }
+
+    .calendar-link {
+        display: block;
+    }
+}
+
+/* Styling for the calendar link message */
+.calendar-message {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.calendar-message h3 {
+    color: #333;
+    margin-top: 0;
+}
+
+.calendar-button {
+    display: inline-block;
+    background-color: #4285F4;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.calendar-button:hover {
+    background-color: #3367D6;
+}
