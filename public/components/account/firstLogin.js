@@ -328,7 +328,7 @@ class FirstLoginComponent extends HTMLElement {
             composed: true // allows the event to pass through the shadow DOM boundary
         });
         this.dispatchEvent(event);
-        console.log(event)
+        console.log(event);
     }
 
     // Method to show the component - uses standard HTML attribute
@@ -367,4 +367,53 @@ class FirstLoginComponent extends HTMLElement {
 // Only register the component once
 if (!customElements.get('first-login-component')) {
     customElements.define('first-login-component', FirstLoginComponent);
+}
+
+// Handle Account Details Submission
+function handleAccountDetailsSubmission() {
+    const txtFirstnameEntry = document.querySelector('#txtFirstname');
+    const txtLastnameEntry = document.querySelector('#txtLastname');
+    const txtMajorEntry = document.querySelector('#txtMajor');
+    const txtMinorEntry = document.querySelector('#txtMinor');
+    const txtGradYearEntry = document.querySelector('#txtGradYear');
+    const txtFratClassEntry = document.querySelector('#txtFratClass');
+    const txtLinkedinEntry = document.querySelector('#txtLinkedin');
+    const txtPersonalWebEntry = document.querySelector('#txtPersonalWeb');
+    const txtGitHubEntry = document.querySelector('#txtGithub');
+
+    const formData = {
+        firstname: txtFirstnameEntry.value,
+        lastname: txtLastnameEntry.value,
+        major: txtMajorEntry.value,
+        minor: txtMinorEntry.value,
+        gradYear: txtGradYearEntry.value,
+        fratclass: txtFratClassEntry.value,
+        linkedin: txtLinkedinEntry.value,
+        personalWeb: txtPersonalWebEntry.value,
+        github: txtGitHubEntry.value
+    };
+
+    if (!validateFormFields(formData)) return;
+
+    usersRef.add({
+        uid: auth.currentUser.uid,
+        fratclass: formData.fratclass,
+        brotherhoodPoints: 0,
+        pdPoints: 0,
+        servicePoints: 0,
+        generalPoints: 0,
+        deiFulfilled: "false",
+        firstname: formData.firstname,
+        lastname: formData.lastname,
+        major: formData.major,
+        minor: formData.minor,
+        gradYear: formData.gradYear,
+        pictureLink: 'https://drive.google.com/uc?export=view&id=1AwJ9tWv0SagtDnE8U1NejxV2rpwOE8mD',
+        linkedinLink: formData.linkedin,
+        personalLink: formData.personalWeb,
+        githubLink: formData.github
+    });
+
+    showMainUI();
+    setTimeout(() => location.reload(true), 500);
 }
