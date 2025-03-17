@@ -1,14 +1,14 @@
 .gridContainer {
     display: grid;
     grid-template-columns: 1fr 3fr;
-    grid-template-rows: 1fr 2fr;
+    grid-template-rows: 1fr 4fr;
     grid-template-areas:
                 "profile points"
                 "profile calendar"
                 "bugRequest bugRequest";
     gap: 20px;
     height: 100vh;
-    max-height: 800px;
+    max-height: 1000px;
     padding: 10px;
 }
 
@@ -29,27 +29,26 @@
     border-radius: 8px;
     padding: 20px;
 }
+
 .bugRequest {
     grid-area: bugRequest;
-    background-color: #e0e0e0;
-    border-radius: 8px;
+    background-color: #f8f9fa;
+    border-left: 4px solid #dc3545;
+    border-radius: 4px;
     padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    font-family: 'Arial', sans-serif;
 }
+
 .calendar {
     grid-area: calendar;
     background-color: #d0d0d0;
     border-radius: 8px;
     padding: 20px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 10px;
+    /* Removed grid properties to make it a single space */
 }
-.calendar-quadrant {
-    background-color: rgba(255, 255, 255, 0.3);
-    border-radius: 6px;
-    padding: 15px;
-}
+
 /* Additional styling for visual demonstration */
 .profile-img {
     height: 100px;
@@ -118,29 +117,128 @@ h3 {
     clear: both;
 }
 
-.bugRequest {
-    background-color: #f8f9fa;
-    border-left: 4px solid #dc3545;
-    border-radius: 4px;
-    padding: 20px;
-    margin: 20px 0;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    font-family: 'Arial', sans-serif;
-}
 .bugRequest h2 {
     color: #dc3545;
     margin-top: 0;
     font-size: 1.5rem;
 }
+
 .bugRequest p {
     color: #495057;
     margin-bottom: 0;
 }
+
 .bugRequest a {
     color: #0366d6;
     text-decoration: none;
     font-weight: bold;
 }
+
 .bugRequest a:hover {
     text-decoration: underline;
+}
+
+.calendar-container {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.calendar-week,
+.calendar-agenda,
+.calendar-link {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.calendar-week iframe,
+.calendar-agenda iframe {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    min-height: 300px;
+    display: block;
+    border: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Force Google Calendar to expand */
+iframe[src*="calendar.google.com"] {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+/* Default - show week view only */
+.calendar-week {
+    display: block;
+}
+
+.calendar-agenda,
+.calendar-link {
+    display: none;
+}
+
+/* Medium screens - show agenda view */
+@media screen and (max-width: 768px) {
+    .calendar-week {
+        display: none;
+    }
+
+    .calendar-agenda {
+        display: block;
+    }
+
+    .calendar-link {
+        display: none;
+    }
+}
+
+/* Small screens - show link only */
+@media screen and (max-width: 480px) {
+    .calendar-week,
+    .calendar-agenda {
+        display: none;
+    }
+
+    .calendar-link {
+        display: block;
+    }
+}
+
+/* Styling for the calendar link message */
+.calendar-message {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.calendar-message h3 {
+    color: #333;
+    margin-top: 0;
+}
+
+.calendar-button {
+    display: inline-block;
+    background-color: #4285F4;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.calendar-button:hover {
+    background-color: #3367D6;
 }

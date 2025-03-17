@@ -230,7 +230,13 @@ function updatePointsChart(userData) {
 
     // Create the progress bar container
     chartContainer.append(`
-        <div class="single-progress-container">
+        <div class="single-progress-container" style="border: 1px solid black;
+                        background: linear-gradient(to right, 
+                            rgba(255, 230, 230, 0.2), /* Very light, dull red */
+                            rgba(255, 255, 230, 0.2), /* Very light, dull yellow */
+                            rgba(230, 255, 230, 0.2)  /* Very light, dull green */
+                        );
+                    ">
             <div class="single-progress-bar"></div>
         </div>
     `);
@@ -265,7 +271,7 @@ function updatePointsChart(userData) {
         const markerPosition = currentPosition + (categoryPercentage - pointsPercentage);
         if (markerPosition < 100) {
             progressBar.append(`
-                <div class="segment-divider" style="left: ${markerPosition}%;"></div>
+<!--                <div class="segment-divider" style="left: ${markerPosition}%;"></div>-->
             `);
         }
     });

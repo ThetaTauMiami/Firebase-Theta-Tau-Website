@@ -328,6 +328,7 @@ class FirstLoginComponent extends HTMLElement {
             composed: true // allows the event to pass through the shadow DOM boundary
         });
         this.dispatchEvent(event);
+        console.log(event)
     }
 
     // Method to show the component - uses standard HTML attribute

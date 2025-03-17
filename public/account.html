@@ -46,7 +46,7 @@
     <!--These sections are only shown to logged in users on their first time logging in to setup account information-->
     <!--  Comoponent Loaded from public/components/Account/firstLogin.js   -->
     <!--  to enable debug mode <first-login-component debug>...</>  -->
-    <first-login-component></first-login-component>
+    <first-login-component debug></first-login-component>
 
     <div id="fullUser" class="gridContainer">
         <div class="profile">
@@ -81,24 +81,27 @@
 <!--            <p>This is where points information would be displayed (spans 2 columns × 1 row)</p>-->
             <div id="points-chart"></div>
         </div>
-        <div class="calendar">
-            <div class="calendar-quadrant">
-                <h3>Q1</h3>
-                <p>Calendar quadrant 1</p>
-            </div>
-            <div class="calendar-quadrant">
-                <h3>Q2</h3>
-                <p>Calendar quadrant 2</p>
-            </div>
-            <div class="calendar-quadrant">
-                <h3>Q3</h3>
-                <p>Calendar quadrant 3</p>
-            </div>
-            <div class="calendar-quadrant">
-                <h3>Q4</h3>
-                <p>Calendar quadrant 4</p>
-            </div>
-        </div>
+       <div class="calendar calendar-container">
+           <!-- Week view for larger screens -->
+           <div class="calendar-week">
+               <iframe src="https://calendar.google.com/calendar/embed?src=thetatau%40miamioh.edu&ctz=America%2FNew_York&mode=WEEK&hours=0800-2000&showCalendars=0&showTabs=0&showPrint=0" style="border: 0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+           </div>
+
+           <!-- Agenda view for medium screens -->
+           <div class="calendar-agenda">
+               <iframe src="https://calendar.google.com/calendar/embed?src=thetatau%40miamioh.edu&ctz=America%2FNew_York&mode=AGENDA&showCalendars=0&showPrint=0" style="border: 0" width="100%" height="500" frameborder="0" scrolling="no"></iframe>
+           </div>
+
+           <!-- Simple link for smallest screens -->
+           <div class="calendar-link">
+               <div class="calendar-message">
+                   <h3>Theta Tau Calendar</h3>
+                   <p>Your screen size is too small for the embedded calendar.</p>
+                   <a href="https://calendar.google.com/calendar/embed?src=thetatau%40miamioh.edu&ctz=America%2FNew_York" class="calendar-button" target="_blank">Open Full Calendar</a>
+               </div>
+           </div>
+
+       </div>
         <div class="bugRequest">
             <h2>Bug Report</h2>
             <p>Find a bug? <a href="https://github.com/ThetaTauMiami/Firebase-Theta-Tau-Website/discussions/categories/general" target="_blank">Report it to our tech staff!</a></p>
