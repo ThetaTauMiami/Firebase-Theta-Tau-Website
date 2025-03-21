@@ -1,5 +1,5 @@
 import { auth } from "/config/firebaseConfig.js";
-import { onAuthStateChanged, signOut, signInWithEmailAndPassword, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js';
+import { onAuthStateChanged, signOut, signInWithEmailAndPassword, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js';
 
 // Initialize constants that the JS will use to interact with HTML elements based on user authentication state
 const divLoginError = document.querySelector('#divLoginError')
