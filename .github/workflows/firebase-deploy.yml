@@ -1,10 +1,10 @@
-name: Deploy to Firebase Hosting
+name: Firebase Deployment
 
 on:
-  pull_request:  # ✅ Deploys previews on PRs
+  pull_request:  # For preview deployments
   push:
     branches:
-      - main  # ✅ Deploys to live site when `main` branch is updated
+      - main     # For production deployments
 
 jobs:
   deploy:
@@ -17,6 +17,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      # Setup Node.js environment
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # Create environment config
       - name: Create environment config
         run: |
           echo "const ENV = {" > public/config/env-config.js
@@ -30,10 +37,25 @@ jobs:
           echo "};" >> public/config/env-config.js
           echo "export default ENV;" >> public/config/env-config.js
 
-      - name: Deploy to Firebase Hosting
+      # Install dependencies for root project and functions
+      - name: Install Dependencies
+        run: |
+          npm ci
+          cd functions && npm ci
+
+      # For Pull Requests - Only deploy Hosting preview
+      - name: Deploy Hosting Preview (PR only)
+        if: github.event_name == 'pull_request'
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           projectId: thetataumiamiuniversity
-          channelId: ${{ github.ref == 'refs/heads/main' && 'live' || 'preview' }}
+          channelId: preview
+
+      # For main branch - Deploy both Hosting and Functions
+      - name: Deploy Production (main branch only)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          npm install -g firebase-tools
+          firebase deploy --only hosting,functions --token "${{ secrets.FIREBASE_TOKEN }}" --project thetataumiamiuniversity
