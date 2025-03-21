@@ -65,8 +65,17 @@ node_modules/
 # Intellij
 .idea
 
+# Functions
+functions/venv
+functions/__pycache__/
+
+
 # dotenv environment variables file
 .env
+public/config/env-config.js
+theta-tau-miami-a48e8da0b3e8.json
+public/config/thetataumiamiuniversity-firebase-adminsdk-6ipvf-046c184e74.json
+thetataumiamiuniversity-d792532dca8f.json
 
 # Temporary files
 .tempsave

@@ -2,18 +2,19 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
 import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
+import ENV from "./env-config.js";
 
-
-// Firebase Configuration (Replace with your actual Firebase credentials)
+// Firebase Configuration (Replace with your actuacll Firebase credentials)
 const firebaseConfig = {
-    apiKey: "AIzaSyCuS3TWRtitOxxjJ3gyb-lxH2kmu2N0Ij8",
-    authDomain: "thetataumiamiuniversity.firebaseapp.com",
-    projectId: "thetataumiamiuniversity",
-    storageBucket: "thetataumiamiuniversity.appspot.com",
-    messagingSenderId: "752928414181",
-    appId: "1:752928414181:web:d70dbd3f4ed11077e7b70c",
-    measurementId: "G-BTNR03FCB4"
+    apiKey: ENV.FIREBASE_API_KEY,
+    authDomain: ENV.FIREBASE_AUTH_DOMAIN,
+    projectId: ENV.FIREBASE_PROJECT_ID,
+    storageBucket: ENV.FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: ENV.FIREBASE_MESSAGING_SENDER_ID,
+    appId: ENV.FIREBASE_APP_ID,
+    measurementId: ENV.FIREBASE_MEASUREMENT_ID
 };
+
 
 // Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);

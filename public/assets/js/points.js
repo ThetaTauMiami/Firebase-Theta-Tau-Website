@@ -98,10 +98,14 @@ const createUserElement = (userData) => {
     element.classList.add("row", "user-row");
     element.style.padding = "10px";
 
-    const totalPoints = userData.brotherhoodPoints + userData.servicePoints + userData.pdPoints + userData.generalPoints;
-    const isDeiFulfilled = userData.deiFulfilled === "true" ? "selected" : "";
-    const isDeiNotFulfilled = userData.deiFulfilled === "false" ? "selected" : "";
+    const totalPoints = (parseInt(userData.brotherhoodPoints, 10) || 0) +
+        (parseInt(userData.servicePoints, 10) || 0) +
+        (parseInt(userData.pdPoints, 10) || 0) +
+        (parseInt(userData.generalPoints, 10) || 0);
 
+    console.log(userData)
+    const deiFulfilled = userData.deiFulfilled;
+    console.log(`User DEI Fulfilled: ${deiFulfilled}`);
     element.innerHTML = `
         <div class="col-lg-2"><img src="${userData.pictureLink}"  loading="lazy" style="width:100%" /></div>
         <div class="col-lg-2"><h5>${userData.firstname} ${userData.lastname}</h5></div>
@@ -118,8 +122,8 @@ const createUserElement = (userData) => {
                 <div class="col-md-6"><label>DEI Fulfillment:</label></div>
                 <div class="col-md-6">
                     <select id="deiPoint-${userData.uid}">
-                        <option value="true" ${isDeiFulfilled}>Yes</option>
-                        <option value="false" ${isDeiNotFulfilled}>No</option>
+                        <option value="true" ${deiFulfilled ? "selected" : ""}>Yes</option>
+                    <option value="false" ${!deiFulfilled ? "selected" : ""}>No</option>
                     </select>
                 </div>
             </div>
@@ -138,7 +142,7 @@ const createPointsInput = (label, uid, value) => `
     <div class="row points-padding">
         <div class="col-md-6"><label>${label} Points:</label></div>
         <div class="col-md-6">
-            <input type="number" id="${label.toLowerCase().replace(/\s+/g, '')}Points-${uid}" min="0" value="${value ?? 0}">
+            <input type="number" id="${label.toLowerCase().replace(/\s+/g, '')}Points-${uid}" min="0" value="${Number.parseInt(value) ?? 0}">
         </div>
     </div>
 `;
