@@ -64,6 +64,14 @@ jobs:
           echo "};" >> public/config/env-config.js
           echo "export default ENV;" >> public/config/env-config.js
 
+      # Setup Python environment for functions
+      - name: Setup Python venv
+        run: |
+          cd functions
+          python3.12 -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
       # Deploy hosting
       - name: Deploy Hosting
         uses: FirebaseExtended/action-hosting-deploy@v0
