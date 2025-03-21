@@ -23,9 +23,9 @@ try:
         print("Running in Cloud Functions environment")
         try:
             # Try to get credentials from Secret Manager
-            print("Trying secret manager")
+            # print("Trying secret manager")
             client = secretmanager.SecretManagerServiceClient()
-            print("Trying service account")
+            # print("Trying service account")
             name = "projects/752928414181/secrets/service-account-credentials/versions/1"
             response = client.access_secret_version(request={"name": name})
             service_account_json = response.payload.data.decode("UTF-8")
