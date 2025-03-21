@@ -70,6 +70,26 @@ jobs:
           echo "};" >> public/config/env-config.js
           echo "export default ENV;" >> public/config/env-config.js
 
+      # Create service account key file for Python functions
+      - name: Create service account key file
+        run: |
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > functions/service-account.json
+
+      # Modify Python code to initialize Firebase with the service account
+      - name: Update Firebase initialization
+        run: |
+          # Check if the file has import firebase_admin at the top
+          if grep -q "import firebase_admin" functions/main.py; then
+            # Ensure proper initialization with service account
+            if ! grep -q "firebase_admin.initialize_app" functions/main.py; then
+              # Add initialization after imports
+              sed -i '/import firebase_admin/a from firebase_admin import credentials\nfirebase_admin.initialize_app(credentials.Certificate("service-account.json"))' functions/main.py
+            elif ! grep -q "credentials.Certificate" functions/main.py; then
+              # Replace existing initialization
+              sed -i 's/firebase_admin.initialize_app()/firebase_admin.initialize_app(credentials.Certificate("service-account.json"))/g' functions/main.py
+            fi
+          fi
+
       # Setup Python virtual environment
       - name: Setup Python venv and dependencies
         run: |
@@ -78,8 +98,14 @@ jobs:
           source venv/bin/activate
           pip install -r requirements.txt
 
+      # Set up Google Cloud credentials
+      - name: Set up Google Cloud credentials
+        run: |
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > $HOME/gcp-key.json
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcp-key.json" >> $GITHUB_ENV
+
       # Deploy using Firebase CLI
       - name: Deploy to Firebase
         run: |
           npm install -g firebase-tools
-          firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}" --project thetataumiamiuniversity --only hosting,functions
+          firebase deploy --project thetataumiamiuniversity --only hosting,functions
