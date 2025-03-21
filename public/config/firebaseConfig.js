@@ -4,7 +4,7 @@ import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } 
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
 
 
-// Firebase Configuration (Replace with your actual Firebase credentials)
+// Firebase Configuration (Replace with your actuacll Firebase credentials)
 const firebaseConfig = {
     apiKey: "AIzaSyCuS3TWRtitOxxjJ3gyb-lxH2kmu2N0Ij8",
     authDomain: "thetataumiamiuniversity.firebaseapp.com",

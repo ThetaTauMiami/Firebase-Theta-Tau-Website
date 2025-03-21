@@ -1,0 +1,6 @@
+firebase-admin==6.2.0
+firebase-functions==0.4.2
+functions-framework==3.3.0
+google-auth==2.22.0
+gspread==5.10.0
+dotenv==0.9.9
