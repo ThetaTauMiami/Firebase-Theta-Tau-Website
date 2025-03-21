@@ -2,69 +2,133 @@ import os
 import json
 import firebase_admin
 from firebase_admin import credentials, firestore
-import functions_framework
+from firebase_functions import https_fn, scheduler_fn
 import gspread
 from google.oauth2 import service_account
 from dotenv import load_dotenv
-from typing import Dict, Union, Any, Optional
+from typing import Dict, Any, Optional
+from google.cloud import secretmanager
 
-
-# Path to your service account file
+# Path to your service account file for local development
 SERVICE_ACCOUNT_PATH = '/Users/alecbyrd/WebstormProjects/Firebase-Theta-Tau-Website/thetataumiamiuniversity-d792532dca8f.json'
 
-# Load environment variables from .env file
+# Load environment variables from .env file (for local development)
 load_dotenv()
 
-# For cloud deployment, use environment variables or secrets
-service_account_json = os.environ.get('SERVICE_ACCOUNT')
-SERVICE_ACCOUNT_INFO = json.loads(service_account_json)
-cred = credentials.Certificate(SERVICE_ACCOUNT_INFO)
-firebase_admin.initialize_app(cred)
+# Initialize Firebase and get credentials
+try:
+    # First, determine if we're running in Cloud Functions
+    in_cloud = os.environ.get('K_SERVICE') is not None
+    if in_cloud:
+        print("Running in Cloud Functions environment")
+        try:
+            # Try to get credentials from Secret Manager
+            # print("Trying secret manager")
+            client = secretmanager.SecretManagerServiceClient()
+            # print("Trying service account")
+            name = "projects/752928414181/secrets/service-account-credentials/versions/1"
+            response = client.access_secret_version(request={"name": name})
+            service_account_json = response.payload.data.decode("UTF-8")
+            SERVICE_ACCOUNT_INFO = json.loads(service_account_json)
+            cred = credentials.Certificate(SERVICE_ACCOUNT_INFO)
+            print("Using credentials from Secret Manager")
+        except Exception as e:
+            print(f"Could not get credentials from Secret Manager: {e}")
+            # Fall back to default credentials in GCP
+            cred = None
+    else:
+        # Local development - use .env or local file
+        service_account_json = os.environ.get('SERVICE_ACCOUNT')
+        if service_account_json:
+            SERVICE_ACCOUNT_INFO = json.loads(service_account_json)
+            cred = credentials.Certificate(SERVICE_ACCOUNT_INFO)
+            print("Using credentials from environment variable")
+        else:
+            # Try to use the local service account file
+            try:
+                cred = credentials.Certificate(SERVICE_ACCOUNT_PATH)
+                print("Using credentials from local file")
+            except Exception as e:
+                print(f"Could not load credentials from file: {e}")
+                cred = None
 
-# Get Firestore database instance
-db = firestore.client()
+    # Initialize the app with credentials or default
+    if cred:
+        firebase_admin.initialize_app(cred)
+    else:
+        # Use default credentials
+        firebase_admin.initialize_app()
+        print("Using default credentials")
 
-# Configure spreadsheet ID - you should set this in environment variables
-SPREADSHEET_ID = os.environ.get('SPREADSHEET_ID')
+    # Get Firestore database instance
+    db = firestore.client()
+
+    # Get spreadsheet ID - prioritize environment variable, then try loading from config
+    SPREADSHEET_ID = "15B3JMrCT4W5-85NH6kMwjjEIxXyb_sjQ8A11wjBmCIQ"
+
+except Exception as e:
+    print(f"Error during initialization: {e}")
+    raise e
 
 def get_brother_points_from_sheet():
     """Fetch data from Google Sheets using service account authentication"""
-    # Create Google Sheets client with same service account
-    scopes = ['https://www.googleapis.com/auth/spreadsheets']
+    try:
+        # Create Google Sheets client
+        scopes = ['https://www.googleapis.com/auth/spreadsheets']
 
-    # Use the same service account for Google Sheets
-    credentials = service_account.Credentials.from_service_account_info(
-        SERVICE_ACCOUNT_INFO,
-        scopes=scopes
-    )
+        # First check if we have the SERVICE_ACCOUNT_INFO in global scope
+        if 'SERVICE_ACCOUNT_INFO' in globals():
+            # Use the credentials from our saved info
+            credentials = service_account.Credentials.from_service_account_info(
+                SERVICE_ACCOUNT_INFO,
+                scopes=scopes
+            )
+            print("Using service account info from global scope for Sheets")
+        else:
+            # Try to use application default credentials
+            credentials = service_account.Credentials.from_service_account_file(
+                SERVICE_ACCOUNT_PATH,
+                scopes=scopes
+            ) if os.path.exists(SERVICE_ACCOUNT_PATH) else None
 
-    # Connect to Google Sheets
-    gc = gspread.authorize(credentials)
-    print(SPREADSHEET_ID)
-    spreadsheet = gc.open_by_key(SPREADSHEET_ID)
+            if not credentials:
+                print("Using default credentials for Sheets")
+                credentials = service_account.Credentials.from_compute_engine()
 
-    # Get the first worksheet
-    sheet = spreadsheet.get_worksheet(0)
+        # Connect to Google Sheets
+        gc = gspread.authorize(credentials)
 
-    # Get all values including headers
-    all_rows = sheet.get_all_values()
+        if not SPREADSHEET_ID:
+            raise ValueError("SPREADSHEET_ID environment variable is not set")
 
-    # Skip the header row
-    data = []
-    for row in all_rows[1:]:  # Skip header row
-        if not row or len(row) < 6:
-            continue
+        print(f"Using spreadsheet ID: {SPREADSHEET_ID}")
+        spreadsheet = gc.open_by_key(SPREADSHEET_ID)
 
-        data.append({
-            "name": row[0],
-            "brotherhood": row[1],
-            "service": row[2],
-            "pd": row[3],
-            "general": row[4],
-            "dei": row[5]
-        })
+        # Get the first worksheet
+        sheet = spreadsheet.get_worksheet(0)
 
-    return data
+        # Get all values including headers
+        all_rows = sheet.get_all_values()
+
+        # Skip the header row
+        data = []
+        for row in all_rows[1:]:  # Skip header row
+            if not row or len(row) < 6:
+                continue
+
+            data.append({
+                "name": row[0],
+                "brotherhood": row[1],
+                "service": row[2],
+                "pd": row[3],
+                "general": row[4],
+                "dei": row[5]
+            })
+
+        return data
+    except Exception as e:
+        print(f"Error fetching data from sheets: {e}")
+        raise
 
 def update_user_points(user_points: Dict[str, Any]) -> Optional[bool]:
     """
@@ -129,7 +193,27 @@ def update_user_points(user_points: Dict[str, Any]) -> Optional[bool]:
         print(f"Error updating user points: {error}")
         return None
 
-@functions_framework.http
+@scheduler_fn.on_schedule(schedule="every 6 hours")
+def update_points_from_sheet_scheduled(event):
+    """Scheduled Cloud Function to update points from Google Sheets to Firestore every 6 hours"""
+    try:
+        data = get_brother_points_from_sheet()
+        print(f"Successfully processed {len(data)} rows")
+
+        for person in data:
+            try:
+                update_user_points(person)
+            except Exception as err:
+                print(f"Error updating user points: {err}")
+
+        print("Scheduled function completed: Points updated successfully")
+        return None
+    except Exception as err:
+        print(f"Error in scheduled sheet processing: {err}")
+        raise err
+
+# Keeping the HTTP version as a backup/alternative way to trigger the function
+@https_fn.on_request()
 def update_points_from_sheet(request):
     """HTTP Cloud Function to update points from Google Sheets to Firestore"""
     try:
