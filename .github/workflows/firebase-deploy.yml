@@ -50,6 +50,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      # Setup Python 3.12
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
       # Create environment config
       - name: Create environment config
         run: |
@@ -64,27 +70,16 @@ jobs:
           echo "};" >> public/config/env-config.js
           echo "export default ENV;" >> public/config/env-config.js
 
-      # Setup Python environment for functions
-      - name: Setup Python venv
+      # Setup Python virtual environment
+      - name: Setup Python venv and dependencies
         run: |
           cd functions
-          python3.12 -m venv functions/venv
-          source functions/venv/bin/activate
+          python -m venv venv
+          source venv/bin/activate
           pip install -r requirements.txt
 
-      # Deploy hosting
-      - name: Deploy Hosting
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          projectId: thetataumiamiuniversity
-          channelId: live
-
-      # Deploy functions using the dedicated action
-      - name: Deploy Functions
-        uses: jsryudev/deploy-firebase-functions@v20.0.1
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-          FIREBASE_PROJECT: thetataumiamiuniversity
-          FUNCTIONS_DIR: functions
+      # Deploy using Firebase CLI
+      - name: Deploy to Firebase
+        run: |
+          npm install -g firebase-tools
+          firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}" --project thetataumiamiuniversity --only hosting,functions
