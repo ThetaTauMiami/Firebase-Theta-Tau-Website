@@ -6,8 +6,6 @@ import { getFirestore } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-
 
 // Firebase Configuration (Replace with your actuacll Firebase credentials)
 const firebaseConfig = {
-    apiKey: "AIzaSyCuS3TWRtitOxxjJ3gyb-lxH2kmu2N0Ij8",
-    authDomain: "thetataumiamiuniversity.firebaseapp.com",
     projectId: "thetataumiamiuniversity",
     storageBucket: "thetataumiamiuniversity.appspot.com",
     messagingSenderId: "752928414181",
