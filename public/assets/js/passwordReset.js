@@ -17,6 +17,7 @@ const successMessage = document.querySelector('#successMessage')
 const failureMessage = document.querySelector('#failureMessage')
 const resetPassword = document.querySelector('#resetPassword')
 
+// TODO MIGRATE
 const firebaseApp = initializeApp({
     apiKey: "AIzaSyCuS3TWRtitOxxjJ3gyb-lxH2kmu2N0Ij8",
     authDomain: "thetataumiamiuniversity.firebaseapp.com",
