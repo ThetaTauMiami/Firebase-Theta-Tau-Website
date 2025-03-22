@@ -60,8 +60,7 @@ try:
         firebase_admin.initialize_app()
         print("Using default credentials")
 
-    # Get Firestore database instance
-    db = firestore.client()
+
 
     # Get spreadsheet ID - prioritize environment variable, then try loading from config
     SPREADSHEET_ID = "15B3JMrCT4W5-85NH6kMwjjEIxXyb_sjQ8A11wjBmCIQ"
@@ -142,6 +141,8 @@ def update_user_points(user_points: Dict[str, Any]) -> Optional[bool]:
         True if update successful, None if user not found or error occurred
     """
     try:
+        # Get Firestore database instance
+        db = firestore.client()
         user_name: str = str(user_points["name"])
 
         # Convert all point values to integers with fallback to 0
@@ -234,6 +235,8 @@ def update_points_from_sheet(request):
 
 def set_all_users_dei_false():
     """Set all users' DEI points to false"""
+    # Get Firestore database instance
+    db = firestore.client()
     try:
         user_ref = db.collection("userData")
         docs = user_ref.stream()
