@@ -41,6 +41,7 @@ jobs:
           projectId: thetataumiamiuniversity
           channelId: preview
 
+
   deploy_production:
     name: Deploy to Firebase
     if: github.ref == 'refs/heads/main'
