@@ -78,14 +78,8 @@ jobs:
           source venv/bin/activate
           pip install -r requirements.txt
 
-      # Set up Google Cloud credentials
-      - name: Set up Google Cloud credentials
-        run: |
-          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > $HOME/gcp-key.json
-          echo "GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcp-key.json" >> $GITHUB_ENV
-
       # Deploy using Firebase CLI
       - name: Deploy to Firebase
         run: |
           npm install -g firebase-tools
-          firebase deploy --project thetataumiamiuniversity --only hosting,functions
+          firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}" --project thetataumiamiuniversity --only hosting,functions
