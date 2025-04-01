@@ -186,7 +186,7 @@ function updatePointsChart(userData) {
     } = userData;
 
     console.log(userData.deiFulfilled);
-    const deiPoints = userData.deiFulfilled === "true" ? 1 : 0;
+    const deiPoints = userData.deiFulfilled === true ? 1 : 0;
     console.log(deiPoints)
 
     // Points to Achieve
