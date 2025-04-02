@@ -82,4 +82,4 @@ jobs:
       - name: Deploy to Firebase
         run: |
           npm install -g firebase-tools
-          firebase deploy --token --force "${{ secrets.FIREBASE_TOKEN }}" --project thetataumiamiuniversity --only hosting,functions
+          firebase deploy --token "${{ secrets.FIREBASE_TOKEN }}" --force --project thetataumiamiuniversity --only hosting,functions
