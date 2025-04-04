@@ -48,27 +48,26 @@ function initCarousel() {
     startSlideshow();
     
     function showSlide(index) {
-        // Hide all slides
-        for (let i = 0; i < slides.length; i++) {
-            slides[i].style.display = 'none';
-        }
-        
-        // Show the current slide
-        slides[index].style.display = 'block';
-        
-        // Update current slide index
+        const slides = document.querySelectorAll('.carousel img');
+    
+        slides.forEach((slide, i) => {
+            if (i === index) {
+                slide.classList.add('active'); // Show the current slide
+            } else {
+                slide.classList.remove('active'); // Hide the rest
+            }
+        });
+    
         currentSlide = index;
     }
-    
+
     function startSlideshow() {
-        // Clear any existing interval first
         clearInterval(slideInterval);
-        
-        // Set new interval - changes slide every 5 seconds
-        slideInterval = setInterval(function() {
+        slideInterval = setInterval(() => {
             window.nextSlide();
-        }, 5000);
+        }, 5000); // Change slide every 5 seconds
     }
+    
     
     function resetTimer() {
         clearInterval(slideInterval);

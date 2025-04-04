@@ -16,9 +16,17 @@
 .carousel img {
     width: 100%;
     height: 100%;
-    object-fit: contain; /* Prevents excessive cropping */
+    object-fit: contain;
     object-position: center;
-    display: none; /* Hide all images by default */
+    opacity: 0;
+    position: absolute;
+    transition: opacity 0.8s ease-in-out;
+}
+
+/* Ensure only the active image is visible */
+.carousel img.active {
+    opacity: 1;
+    position: relative;
 }
 
 /* First image is visible by default */
