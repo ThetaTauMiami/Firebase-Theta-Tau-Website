@@ -9,56 +9,37 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function initCarousel() {
-    // Get DOM elements
-    const carousel = document.querySelector('.carousel');
     const slides = document.querySelectorAll('.carousel img');
     const totalSlides = slides.length;
-    
-    // If carousel elements don't exist, exit function
-    if (!carousel || slides.length === 0) {
+
+    if (!slides.length) {
         console.error('Carousel elements not found');
         return;
     }
-    
+
     console.log(`Found carousel with ${totalSlides} slides`);
     
-    // Make first slide visible
-    showSlide(0);
-    
-    // Set up button click handlers - keep the inline onclick attributes
-    window.prevSlide = function() {
-        currentSlide--;
-        if (currentSlide < 0) {
-            currentSlide = totalSlides - 1;
-        }
-        showSlide(currentSlide);
-        resetTimer();
-    };
-    
-    window.nextSlide = function() {
-        currentSlide++;
-        if (currentSlide >= totalSlides) {
-            currentSlide = 0;
-        }
-        showSlide(currentSlide);
-        resetTimer();
-    };
-    
+    // Apply the first slide as active
+    slides[currentSlide].classList.add('active');
+
     // Start the automatic slideshow
     startSlideshow();
-    
-    function showSlide(index) {
-        const slides = document.querySelectorAll('.carousel img');
-    
-        slides.forEach((slide, i) => {
-            if (i === index) {
-                slide.classList.add('active'); // Show the current slide
-            } else {
-                slide.classList.remove('active'); // Hide the rest
-            }
-        });
-    
-        currentSlide = index;
+
+    // Set up button click handlers
+    window.prevSlide = function() {
+        changeSlide(currentSlide - 1);
+        resetTimer();
+    };
+
+    window.nextSlide = function() {
+        changeSlide(currentSlide + 1);
+        resetTimer();
+    };
+
+    function changeSlide(index) {
+        slides[currentSlide].classList.remove('active'); // Remove active class
+        currentSlide = (index + totalSlides) % totalSlides; // Ensure circular looping
+        slides[currentSlide].classList.add('active'); // Add active class
     }
 
     function startSlideshow() {
@@ -67,8 +48,7 @@ function initCarousel() {
             window.nextSlide();
         }, 5000); // Change slide every 5 seconds
     }
-    
-    
+
     function resetTimer() {
         clearInterval(slideInterval);
         startSlideshow();
