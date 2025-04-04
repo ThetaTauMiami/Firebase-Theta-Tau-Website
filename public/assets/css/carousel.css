@@ -1,17 +1,13 @@
 .carousel-container {
     position: relative;
-    width: calc(100% *7);
+    width: 100%;
     max-width: 800px;
-    height: 450px; /* Adjust as needed */
-    background-color: white; /* Black bars */
+    height: 450px;
     margin: auto;
     overflow: hidden;
 }
 
 .carousel {
-    display: flex;
-    flex-direction: row; /* Ensures all images align in a row */
-    transition: transform 0.5s ease-in-out;
     width: 100%;
     height: 100%;
     background-color: black;
@@ -19,23 +15,28 @@
 
 .carousel img {
     width: 100%;
-    height: auto;
+    height: 100%;
     object-fit: contain; /* Prevents excessive cropping */
     object-position: center;
-    flex: 0 0 100%;
-    background-color: black;
+    display: none; /* Hide all images by default */
+}
+
+/* First image is visible by default */
+.carousel img:first-child {
+    display: block;
 }
 
 button {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.01);
+    background-color: rgba(0, 0, 0, 0.5);
     color: white;
     border: none;
     padding: 10px;
     cursor: pointer;
     font-size: 24px;
+    z-index: 10;
 }
 
 .prev { left: 10px; }
@@ -44,11 +45,8 @@ button {
 /* RESPONSIVE FIX */
 @media (max-width: 768px) {
     .carousel-container {
-        width: 300px;
-    }
-    .carousel img {
-        object-fit: contain; /* Prevent extreme cropping */
-        min-width: 100%;
+        width: 90%;
+        max-width: 500px;
     }
 }
 
