@@ -37,62 +37,55 @@
 
     <!-- Added upper ---------------------------------->
     <div class="container">
-        <div clas="row">
+        <div class="row">
             <h1 style="color: #5B0000; text-align: center">Upcoming Events</h1>
             <hr>
-            <div class="col-xs-6 col-sm-5 col-sm-offset-1 col-lg-4 col-lg-offset-2">
+            <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-4 col-lg-offset-2 text-center">
+                <!-- Center the image on small devices -->
                 <br>
                 <br>
                 <picture>
-                    <source srcset="assets/img/promotions/TTAU-Regionals-Schedule.webp" type="image/png">
-                    <img src="assets/img/promotions/TTAU-Regionals-Schedule.png"
-                         alt="Theta Tau - Tau Delta Chapter Regionals 2025"
-                         class="img-responsive"
-                         style="border-style: solid;"
+                    <source srcset="assets/img/promotions/fundraiser-03-31-25-rapid-fired.webp" type="image/webp">
+                    <img src="assets/img/promotions/fundraiser-03-31-25-rapid-fired.png"
+                         alt="Rapid Fired Pizza Fundraiser Promotional Flyer"
+                         class="img-responsive center-block"
+                         style="border-style: solid; max-width: 100%;"
                          loading="lazy">
                 </picture>
-                <!-- <h6><b>QR Code not working? Click <a href="https://docs.google.com/forms/d/e/1FAIpQLSfW_mUVV_liPJp3t_FjOprOxPy4wrMJIuBwEHyU6bb_aoQMnQ/viewform" target="_blank">here</a> instead!</b></h6> -->
-                <!--   <h6>**The QR code is down, we're fixing it soon!</h6>   -->
             </div>
 
 
-            <div class="col-xs-12 col-sm-5 text-left">
-                <h2>Theta Tau - Tau Delta Chapter Regionals</h2>
-                <h4>Saturday, March 8th | 8am-8pm <h5>$32 PER PERSON</h5></h4>
-                <a href="https://maps.app.goo.gl/SDkgcKMQzCJomaDZ9"><h4>MIAMI UNIVERSITY - FARMER SCHOOL OF BUSINESS</h4></a>
+            <div class="col-xs-12 col-sm-12 col-md-10 col-md-offset-1 col-lg-5 text-center-xs text-center-sm text-left-md">
+                <!-- Added custom classes for responsive text alignment -->
+                <h2>Rapid Fired Pizza Fundraiser</h2>
+                <h4>Wednesday, April 16th | 11am-9pm</h4>
+                <a href="https://g.co/kgs/VGuW6YY"><h4>7 WEST HIGH STREET</h4></a>
 
                 <p>
-                    The Tau Delta Chapter of Theta Tau is excited to host the 
-                    2025 Regionals at Miami University! 🎉
-
+                    Come raise some dough for Theta Tau at Rapid Fired Pizza! 🍕💵
                 </p>
                 <p>
-                    This event will be a great opportunity to meet brothers from other chapters, 
-                    hear about national and regional updates, and have a great time! 
-                    We will also be hosting breakout sessions and brotherhood activities to help you
-                    get to know your fellow brothers better. 🤝 🎓
+                    Mention Theta Tau at checkout and 20% of your order will go to the chapter! 🔥🎉
                 </p>
                 <p>
-                    For more information, please contact your regent!
+                    You need further convincing? Here's some stats:
+                </p>
+                <p>
+                    An <b>ENTIRE</b> craft pizza costs only <i>$10</i>, which is less than...
+                <ul class="text-left">
+                    <li>🎬 your monthly Netflix subscription</li>
+                    <li>☕ two Starbucks lattes</li>
+                    <li>🍔 a McDonald's Big Mac meal</li>
+                    <li>📚 1/10th of the textbook you haven't opened yet</li>
+                    <li>⛽ three gallons of gas</li>
+                </ul>
+                </p>
+                <p>
+                    ... and so much more!
                 </p>
                 <p>
                     We hope to see you there!
                 </p>
-            </div>
-            <div class="row">
-                <div class="col-xs-12 text-center">
-                    <br>
-                    <hr>
-                    <br>
-                    <picture>
-                        <source srcset="assets/img/promotions/TTAU-Regionals-Closer.webp" type="image/webp">
-                        <img src="assets/img/promotions/TTAU-Regionals-Closer.png"
-                             alt="Theta Tau - Tau Delta Chapter Regionals 2025 - Closer"
-                             class="img-responsive center-block"
-                             style="border: 2px solid black; max-width: 50%; height: auto;"
-                             loading="lazy">
-                    </picture>
-                </div>
             </div>
         </div>
     </div>
@@ -111,5 +104,53 @@
     <div id="scripts-placeholder"></div>
     <script src="assets/js/loadComponents.js"></script>
 </body>
+
+<style>
+    /* Center text on extra small and small devices */
+    @media (max-width: 991px) {
+        .text-center-xs, .text-center-sm {
+            text-align: center !important;
+        }
+
+        /* Make the image larger on small screens */
+        .img-responsive {
+            width: 90%;
+            margin: 0 auto;
+        }
+
+        /* Additional zoom for extra small devices (phones) */
+        @media (max-width: 767px) {
+            .img-responsive {
+                width: 100%;
+                transform: scale(1.1);
+                margin: 15px auto;
+            }
+        }
+
+        /* Even more zoom for very small devices */
+        @media (max-width: 480px) {
+            .img-responsive {
+                width: 100%;
+                transform: scale(1.2);
+                margin: 20px auto;
+                transform-origin: center center;
+            }
+        }
+
+        /* Center the list items on small screens */
+        ul.text-left {
+            display: inline-block;
+            text-align: left;
+            margin: 0 auto;
+        }
+    }
+
+    /* Return to left-aligned text on medium and large devices */
+    @media (min-width: 992px) {
+        .text-left-md {
+            text-align: left !important;
+        }
+    }
+</style>
 
 </html>
