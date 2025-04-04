@@ -8,25 +8,29 @@
 }
 
 .carousel {
+    position: relative; /* Needed for stacking images absolutely */
     width: 100%;
     height: 100%;
     background-color: black;
 }
 
 .carousel img {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: contain;
     object-position: center;
     opacity: 0;
-    position: absolute;
-    transition: opacity 0.8s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
+    pointer-events: none; /* So only active image is interactive */
 }
 
-/* Ensure only the active image is visible */
+/* Show the active image with full opacity and interaction */
 .carousel img.active {
     opacity: 1;
-    position: relative;
+    pointer-events: auto;
 }
 
 /* First image is visible by default */
