@@ -86,9 +86,26 @@ def create_account_function(request: Request) -> Tuple[Union[str, Dict[str, Any]
 
         # Add user data to Firestore
         db: firestore.Client = firestore.client()
-        db.collection('users').document(user_record.uid).set({
+        db.collection('userData').document(user_record.uid).set({
             'email': email_str,
-            'created_at': firestore.SERVER_TIMESTAMP
+            'created_at': firestore.SERVER_TIMESTAMP,
+            'brotherhoodPoints': 0,
+            'deiFulfilled': False,
+            'earlyAlum': False,
+            'firstname': '',
+            'fratclass': '',
+            'generalPoints': 0,
+            'githubLink': '',
+            'gradYear': '',
+            'lastname': '',
+            'linkedinLink': '',
+            'major': '',
+            'minor': '',
+            'pdPoints': 0,
+            'personalLink': '',
+            'pictureLink': '',
+            'servicePoints': 0,
+            'uid': user_record.uid
         })
 
         return jsonify({'success': True, 'uid': user_record.uid}), 200, cors_headers
