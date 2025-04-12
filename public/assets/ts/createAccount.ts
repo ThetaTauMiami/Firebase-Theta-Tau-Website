@@ -150,11 +150,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
         // Normal
-        // let urlRoot = "https://us-central1-thetataumiamiuniversity.cloudfunctions.net/"
+        let url = "https://us-central1-thetataumiamiuniversity.cloudfunctions.net/create_account"
 
         // LOCALHOST CHANGES
-        let urlRoot = "http://localhost:5001";
-        let apiUrl = `${urlRoot}/thetataumiamiuniversity/us-central1/create_account`;
+        // let urlRoot = "http://localhost:5001/thetataumiamiuniversity/us-central1/create_account";
+
+
+        let apiUrl = `${url}`;
 
         $.ajax({
             url: `${apiUrl}`,
