@@ -70,6 +70,9 @@ functions/venv
 functions/__pycache__/
 
 
+# React
+react-src/*
+
 # dotenv environment variables file
 .env
 public/config/env-config.js
