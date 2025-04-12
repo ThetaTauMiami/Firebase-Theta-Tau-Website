@@ -1,0 +1,17 @@
+// tsconfig.json
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "module": "es2015",
+    "lib": ["dom", "es2015"],
+    "outDir": "./public/assets/js",
+    "rootDir": "./public/assets/ts",
+    "strict": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["public/assets/ts/**/*"],
+  "exclude": ["node_modules"]
+}

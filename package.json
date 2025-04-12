@@ -7,7 +7,15 @@
   "dependencies": {
     "dotenv": "latest",
     "firebase": "latest",
-    "google-spreadsheet": "latest",
-    "google-auth-library": "latest"
+    "google-auth-library": "latest",
+    "google-spreadsheet": "latest"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.5.32",
+    "typescript": "^5.8.3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
   }
 }
