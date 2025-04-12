@@ -3,6 +3,8 @@
 
 // This gets built in firebase-deploy.yml for deployment
 // The values are replaced with the actual values from the secrets in github
+// Get values from GitHub secrets
+// to use locally copy this file to env-config.js and fill in the values3
 const ENV = {
     FIREBASE_API_KEY: "YOUR_API_KEY",
     FIREBASE_AUTH_DOMAIN: "YOUR_AUTH_DOMAIN",

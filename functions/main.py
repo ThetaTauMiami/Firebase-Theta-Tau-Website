@@ -18,6 +18,7 @@ from pointsSystem import (
 
 
 # Path to your service account file for local development
+# To get your own service account file, go to Firebase Console > Project Settings > Service accounts > All Service Accounts > go to service account starting with "firebase-adminsdk-6ipvf" > Download JSON, put in root directory.  BE SURE TO ADD TO .gitignore if not automatically
 SERVICE_ACCOUNT_PATH = '/Users/alecbyrd/WebstormProjects/Firebase-Theta-Tau-Website/thetataumiamiuniversity-d792532dca8f.json'
 
 # Load environment variables from .env file (for local development)
