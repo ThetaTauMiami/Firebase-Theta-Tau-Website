@@ -1,57 +1,38 @@
+"use strict";
 // public/ts/createAccount.ts
-
-interface AccountFormData {
-    email: string;
-    password: string;
-    confirmPassword: string;
-    meaningOfHAndT: string;
-}
-
-interface ServerResponse {
-    success: boolean;
-    message?: string;
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    const accountForm = document.getElementById('accountForm') as HTMLFormElement;
-    const emailInput = document.getElementById('txtEmail') as HTMLInputElement;
-    const password = document.getElementById('password') as HTMLInputElement;
-    const confirmPassword = document.getElementById('confirmPassword') as HTMLInputElement;
-    const successMessage = document.getElementById('successMessage') as HTMLElement;
-    const failureMessage = document.getElementById('failureMessage') as HTMLElement;
-
+document.addEventListener('DOMContentLoaded', function () {
+    const accountForm = document.getElementById('accountForm');
+    const emailInput = document.getElementById('txtEmail');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confirmPassword');
+    const successMessage = document.getElementById('successMessage');
+    const failureMessage = document.getElementById('failureMessage');
     if (accountForm) {
-        accountForm.addEventListener('submit', function(event: Event) {
+        accountForm.addEventListener('submit', function (event) {
             event.preventDefault();
-
             successMessage.hidden = true;
             failureMessage.hidden = true;
-
             const email = emailInput.value;
-            const emailRegex: RegExp = /^[^\s@]+@miamioh.edu$/;
+            const emailRegex = /^[^\s@]+@miamioh.edu$/;
             if (!emailRegex.test(email)) {
                 failureMessage.textContent = 'Please enter a valid miami email address.';
                 failureMessage.hidden = false;
                 return;
             }
-
             if (password.value !== confirmPassword.value) {
                 failureMessage.textContent = 'Passwords do not match.';
                 failureMessage.hidden = false;
                 return;
             }
-
             if (password.value.length < 8) {
                 failureMessage.textContent = 'Password must be at least 8 characters long.';
                 failureMessage.hidden = false;
                 return;
             }
-
             showVerificationPopup();
         });
     }
-
-    function showVerificationPopup(): void {
+    function showVerificationPopup() {
         let modal = document.getElementById('verificationModal');
         if (!modal) {
             modal = document.createElement('div');
@@ -74,7 +55,6 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
       `;
             document.body.appendChild(modal);
-
             const style = document.createElement('style');
             style.textContent = `
         .modal {
@@ -110,65 +90,56 @@ document.addEventListener('DOMContentLoaded', function() {
       `;
             document.head.appendChild(style);
         }
-
         modal.style.display = 'block';
-
-        const meaningInput = document.getElementById('meaningOfHAndT') as HTMLInputElement;
-        const meaningError = document.getElementById('meaningError') as HTMLElement;
-        const submitButton = document.getElementById('submitVerification') as HTMLElement;
-        const cancelButton = document.getElementById('cancelVerification') as HTMLElement;
-
-        submitButton.onclick = function() {
+        const meaningInput = document.getElementById('meaningOfHAndT');
+        const meaningError = document.getElementById('meaningError');
+        const submitButton = document.getElementById('submitVerification');
+        const cancelButton = document.getElementById('cancelVerification');
+        submitButton.onclick = function () {
             const answer = meaningInput.value.trim();
             if (!answer) {
                 meaningError.textContent = 'Please provide an answer.';
                 return;
             }
-
             modal.style.display = 'none';
             submitToAPI(answer);
         };
-
-        cancelButton.onclick = function() {
+        cancelButton.onclick = function () {
             modal.style.display = 'none';
         };
-
-        window.onclick = function(event: MouseEvent) {
+        window.onclick = function (event) {
             if (event.target === modal) {
                 modal.style.display = 'none';
             }
         };
     }
-
-    function submitToAPI(verificationAnswer: string): void {
-        const data: AccountFormData = {
+    function submitToAPI(verificationAnswer) {
+        const data = {
             email: emailInput.value,
             password: password.value,
             confirmPassword: confirmPassword.value,
             meaningOfHAndT: verificationAnswer
         };
-
-
         // Normal
         // let urlRoot = "https://us-central1-thetataumiamiuniversity.cloudfunctions.net/"
-
         // LOCALHOST CHANGES
         let urlRoot = "http://localhost:5001";
         let apiUrl = `${urlRoot}/thetataumiamiuniversity/us-central1/create_account`;
-
         $.ajax({
             url: `${apiUrl}`,
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(data),
-            success: function(response) {
+            success: function (response) {
                 successMessage.hidden = false;
                 accountForm.reset();
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
+                var _a;
                 failureMessage.hidden = false;
-                failureMessage.textContent = xhr.responseJSON?.message || 'An error occurred during account creation.';
+                failureMessage.textContent = ((_a = xhr.responseJSON) === null || _a === void 0 ? void 0 : _a.message) || 'An error occurred during account creation.';
             }
         });
     }
 });
+//# sourceMappingURL=createAccount.js.map

@@ -92,7 +92,9 @@ def create_account_function(request: Request) -> Tuple[Union[str, Dict[str, Any]
         })
 
         return jsonify({'success': True, 'uid': user_record.uid}), 200, cors_headers
-
+    except firebase_admin.auth.EmailAlreadyExistsError:
+        # Handle the duplicate email case
+        return jsonify({'success': False, 'message': 'An account with this email already exists'}), 400, cors_headers
     except Exception as e:
         # Handle errors
         error_message: str = str(e)
