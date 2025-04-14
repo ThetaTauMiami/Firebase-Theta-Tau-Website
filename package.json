@@ -1,13 +1,21 @@
 {
   "type": "module",
   "name": "firebase-theta-tau-website",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Your project description",
   "main": "index.js",
   "dependencies": {
     "dotenv": "latest",
     "firebase": "latest",
-    "google-spreadsheet": "latest",
-    "google-auth-library": "latest"
+    "google-auth-library": "latest",
+    "google-spreadsheet": "latest"
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.5.32",
+    "typescript": "^5.8.3"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
   }
 }
