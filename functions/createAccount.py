@@ -7,21 +7,21 @@ from typing import Dict, Any, Tuple, Union, Optional, List, cast
 
 from google.cloud import secretmanager
 
-_h_t_secret = None
+_gc_secret = None
 
-def initialize_h_t_secret():
+def initialize_gc_secret():
     # Try to get credentials from Secret Manager
     client = secretmanager.SecretManagerServiceClient()
-    name = "projects/752928414181/secrets/theta-tau-secret-h-t/versions/1"
+    name = "projects/752928414181/secrets/theta-tau-secret-gc-name/versions/1"
     response = client.access_secret_version(request={"name": name})
     secret = response.payload.data.decode("UTF-8")
     return secret
 
-def get_h_t_secret():
-    global _h_t_secret
-    if _h_t_secret is None:
-        _h_t_secret = initialize_h_t_secret()
-    return _h_t_secret
+def get_gc_secret():
+    global _gc_secret
+    if _gc_secret is None:
+        _gc_secret = initialize_gc_secret()
+    return _gc_secret
 
 
 
@@ -56,22 +56,22 @@ def create_account_function(request: Request) -> Tuple[Union[str, Dict[str, Any]
         # Extract fields
         email: Optional[str] = request_json.get('email')
         password: Optional[str] = request_json.get('password')
-        meaning_of_h_and_t: Optional[str] = request_json.get('meaningOfHAndT')
+        gcName: Optional[str] = request_json.get('gcName')
 
         # Validate required fields
-        required_fields: List[Optional[str]] = [email, password, meaning_of_h_and_t]
+        required_fields: List[Optional[str]] = [email, password, gcName]
         if not all(required_fields):
             return jsonify({'success': False, 'message': 'Missing required fields'}), 400, cors_headers
 
         # Cast to proper types (we've validated they exist)
         email_str: str = cast(str, email)
         password_str: str = cast(str, password)
-        meaning_str: str = cast(str, meaning_of_h_and_t)
+        gc_str: str = cast(str, gcName)
 
 
-        correct_meaning: str = get_h_t_secret()
+        correct_gc_name: str = get_gc_secret()
 
-        if meaning_str.lower().strip() != correct_meaning.lower().strip():
+        if gc_str.lower().strip() != correct_gc_name.lower().strip():
             return jsonify({'success': False, 'message': 'Incorrect verification answer'}), 403, cors_headers
 
         # Initialize Firebase if not already initialized

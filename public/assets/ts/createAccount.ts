@@ -4,7 +4,7 @@ interface AccountFormData {
     email: string;
     password: string;
     confirmPassword: string;
-    meaningOfHAndT: string;
+    gcName: string;
 }
 
 interface ServerResponse {
@@ -63,8 +63,8 @@ document.addEventListener('DOMContentLoaded', function() {
             <h2>Verification Question</h2>
           </div>
           <div class="modal-body">
-            <p>What is the meaning of H and T?</p>
-            <input type="text" id="meaningOfHAndT" class="form-control" placeholder="Enter your answer">
+            <p>What is the name of the non-formal groupchat (without emojis)</p>
+            <input type="text" id="gcName" class="form-control" placeholder="Enter your answer">
             <div id="meaningError" style="color: red; margin-top: 5px;"></div>
           </div>
           <div class="modal-footer">
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         modal.style.display = 'block';
 
-        const meaningInput = document.getElementById('meaningOfHAndT') as HTMLInputElement;
+        const meaningInput = document.getElementById('gcName') as HTMLInputElement;
         const meaningError = document.getElementById('meaningError') as HTMLElement;
         const submitButton = document.getElementById('submitVerification') as HTMLElement;
         const cancelButton = document.getElementById('cancelVerification') as HTMLElement;
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
             email: emailInput.value,
             password: password.value,
             confirmPassword: confirmPassword.value,
-            meaningOfHAndT: verificationAnswer
+            gcName: verificationAnswer
         };
 
 
