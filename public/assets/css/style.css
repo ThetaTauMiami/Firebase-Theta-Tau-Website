@@ -371,3 +371,22 @@ img.grayscale:hover {
 tr:nth-child(even) {
   background-color: #dddddd;
 }
+
+.login-link-button {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: #f8f9fa;
+  border: 2px solid #5B0000;
+  border-radius: 6px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #5B0000;
+  transition: background-color 0.3s, color 0.3s;
+  margin: 5px;
+}
+
+.login-link-button:hover {
+  background-color: #5B0000;
+  color: white;
+  text-decoration: none;
+}

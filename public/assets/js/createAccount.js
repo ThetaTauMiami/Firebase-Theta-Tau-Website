@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const email = emailInput.value;
             const emailRegex = /^[^\s@]+@miamioh.edu$/;
             if (!emailRegex.test(email)) {
-                failureMessage.textContent = 'Please enter a valid miami email address.';
+                failureMessage.textContent = 'Please enter a valid Miami (miamioh.edu) email address.';
                 failureMessage.hidden = false;
                 return;
             }
