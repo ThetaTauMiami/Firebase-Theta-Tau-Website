@@ -12,7 +12,7 @@ _gc_secret = None
 def initialize_gc_secret():
     # Try to get credentials from Secret Manager
     client = secretmanager.SecretManagerServiceClient()
-    name = "projects/752928414181/secrets/theta-tau-secret-gc-name/versions/1"
+    name = "projects/752928414181/secrets/gc-name-secret/versions/1"
     response = client.access_secret_version(request={"name": name})
     secret = response.payload.data.decode("UTF-8")
     return secret
