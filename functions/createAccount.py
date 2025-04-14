@@ -115,6 +115,8 @@ def create_account_function(request: Request) -> Tuple[Union[str, Dict[str, Any]
     except Exception as e:
         # Handle errors
         error_message: str = str(e)
-        return jsonify({'success': False, 'message': error_message}), 500, cors_headers
+        # Log the detailed error message
+        print(f"Error: {error_message}")
+        return jsonify({'success': False, 'message': 'An internal error has occurred'}), 500, cors_headers
 
 
