@@ -20,9 +20,6 @@ class CustomJumbotron extends HTMLElement {
             :host {
                 display: block;
                 width: 100%;
-                padding: 0;
-                margin: 0;
-                overflow-x: hidden;
                 will-change: transform, opacity; 
             }
             body {
