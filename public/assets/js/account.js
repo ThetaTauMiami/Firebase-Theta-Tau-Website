@@ -185,9 +185,9 @@ function updatePointsChart(userData) {
         generalPoints = 0,
     } = userData;
 
-    console.log(userData.deiFulfilled);
+    // console.log(userData.deiFulfilled);
     const deiPoints = userData.deiFulfilled === true ? 1 : 0;
-    console.log(deiPoints)
+    // console.log(deiPoints)
 
     // Points to Achieve
     const maxPoints = {

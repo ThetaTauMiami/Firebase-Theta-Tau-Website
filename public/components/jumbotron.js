@@ -7,7 +7,7 @@ class CustomJumbotron extends HTMLElement {
         const backgroundImage = this.getAttribute("background") || "assets/img/miami/banner.png";
         const title = this.getAttribute("title") || "Welcome!";
 
-        // ✅ Use documentFragment for faster DOM updates
+        // Use documentFragment for faster DOM updates
         const fragment = document.createDocumentFragment();
 
         // Create styles
@@ -20,7 +20,10 @@ class CustomJumbotron extends HTMLElement {
             :host {
                 display: block;
                 width: 100%;
-                will-change: transform, opacity; /* ✅ Reduce redraws */
+                padding: 0;
+                margin: 0;
+                overflow-x: hidden;
+                will-change: transform, opacity; 
             }
             body {
                 margin: 0;
@@ -39,9 +42,9 @@ class CustomJumbotron extends HTMLElement {
                 color: #FFFFFF;
                 font-family: "DejaVu Sans Light", sans-serif;
                 margin: 0;
-                opacity: 0; /* ✅ Start invisible for fade-in */
-                transform: translateY(10px); /* ✅ Start slightly off-screen */
-                transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* ✅ Smooth animations */
+                opacity: 0; /* Start invisible for fade-in */
+                transform: translateY(10px); /* Start slightly off-screen */
+                transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Smooth animations */
             }
             .jumbotron h1 {
                 font-size: 63px;
@@ -58,12 +61,12 @@ class CustomJumbotron extends HTMLElement {
         h1.textContent = title
         jumbotron.appendChild(h1);
 
-        // ✅ Append to fragment (minimizing DOM operations)
+        // Append to fragment (minimizing DOM operations)
         fragment.appendChild(style);
         fragment.appendChild(jumbotron);
         this.shadowRoot.appendChild(fragment);
 
-        // ✅ Use requestAnimationFrame for smoother rendering
+        // Use requestAnimationFrame for smoother rendering
         requestAnimationFrame(() => {
             jumbotron.style.opacity = "1";
             jumbotron.style.transform = "translateY(0)";
@@ -71,5 +74,5 @@ class CustomJumbotron extends HTMLElement {
     }
 }
 
-// ✅ Register custom element
+// Register custom element
 customElements.define("custom-jumbotron", CustomJumbotron);
