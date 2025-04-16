@@ -191,11 +191,11 @@ function updatePointsChart(userData) {
 
     // Points to Achieve
     const maxPoints = {
-        brotherhood: 6,
-        pd: 6,
-        service: 6,
+        brotherhood: 5,
+        pd: 5,
+        service: 5,
         dei: 1,
-        general: 6
+        general: 5
     };
 
     // Define the categories with their data
