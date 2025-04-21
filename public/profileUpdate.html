@@ -128,10 +128,20 @@
               </fieldset>
             </form>
         </div>
-        <div class="col-md-12 text-center">
+        
+<!-- Profile Photo Upload (Handled by Python Cloud Function) -->
+<div class="form-group" style="margin-top: 30px;">
+  <label class="control-label">Upload Profile Photo (JPG/PNG, max 2MB, cropped to 331x496)</label>
+  <input type="file" name="photo" id="photoInput" accept="image/jpeg,image/png" class="form-control" required />
+  <input type="hidden" name="uid" id="uidField" />
+  <button id="uploadPhotoBtn" type="submit" class="btn btn-primary" style="margin-top: 10px;">Upload Photo</button>
+  <p id="uploadStatus" hidden style="margin-top: 10px;"></p>
+</div>
+
+<div class="col-md-12 text-center">
           <p id="successMessage" style="color:#005b14; font-size: 18px;  text-align: center;" hidden><b>Your profile was successfully updated!</b></p>
           <p id="failureMessage" style="color:#5B0000; font-size: 18px;  text-align: center;" hidden><b>Invalid profile information, please try again.</b></p>
-          <p id="notInitMessage" style="color:#5B0000; font-size: 18px;  text-align: center;" hidden><b>You have not intialized your profile yet, return to your account page.</b></p>
+          <p id="notInitMessage" style="color:#5B0000; font-size: 18px;  text-align: center;" hidden><b>You have not initialized your profile yet, return to your account page.</b></p>
         </div>
         <div class="col-md-12 text-center">
           <a href="account.html" style="color:#5B0000; font-size: 18px;  text-align: left;">← Back to your account</a>
@@ -153,6 +163,7 @@
     <div id="scripts-placeholder"></div>
     <script src="assets/js/loadComponents.js"></script>
 
+    <script type="module" src="assets/js/firebasePhotoUpload.js"></script>
 </body>
 
 </html>
