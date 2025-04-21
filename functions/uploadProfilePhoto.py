@@ -73,5 +73,6 @@ def upload_profile_photo(request: Request):
         return jsonify({'success': True, 'url': blob.public_url}), 200, cors_headers
 
     except Exception as e:
-        print("Upload error:", e)
-        return jsonify({'success': False, 'message': str(e)}), 500, cors_headers
+        import traceback
+        print("Upload error:", traceback.format_exc())  # Log the full stack trace on the server
+        return jsonify({'success': False, 'message': 'An internal error occurred.'}), 500, cors_headers
