@@ -117,7 +117,7 @@ def update_points_from_sheet(request):
         print(f"Error in sheet processing: {err}")
         return (f"Error: {str(err)}", 500)
 
-# @https_fn.on_request() disabled only for local use
+# @https_fn.on_request() # disabled only for local use
 def reset_dei_points(request):
     """HTTP Cloud Function to reset all users' DEI points to false"""
     try:

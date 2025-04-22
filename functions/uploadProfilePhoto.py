@@ -8,8 +8,8 @@ import firebase_admin
 from firebase_admin import credentials, firestore, storage, initialize_app, auth
 
 # Initialize Firebase Admin (if not already initialized)
-if not firebase_admin._apps:
-    initialize_app()
+# if not firebase_admin._apps:
+#     initialize_app()
 
 # Target size
 TARGET_SIZE = (331, 496)
