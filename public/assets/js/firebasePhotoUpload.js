@@ -45,7 +45,7 @@ if (photoInput && uploadBtn && previewImage && uploadStatus && uidField) {
     const file = photoInput.files[0];
     const uid = uidField.value;
     if (!file || !uid) {
-      setStatus("Missing photo or UID", "red");
+      setStatus("Please upload a photo!", "red");
       return;
     }
 
@@ -54,7 +54,7 @@ if (photoInput && uploadBtn && previewImage && uploadStatus && uidField) {
     formData.append("uid", uid);
 
     try {
-      const res = await fetch("https://<YOUR_CLOUD_FUNCTION_URL>", {
+      const res = await fetch("https://us-central1-thetataumiamiuniversity.cloudfunctions.net/upload_profile_photo_function", {
         method: "POST",
         body: formData
       });
