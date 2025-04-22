@@ -1,22 +1,37 @@
-import tempfile
+
 import os
+import tempfile
 from flask import Request, jsonify
-from typing import Dict
 from PIL import Image
-
 import firebase_admin
-from firebase_admin import credentials, firestore, storage, initialize_app, auth
+from firebase_admin import auth, firestore, storage, initialize_app
 
-# Initialize Firebase Admin (if not already initialized)
-# if not firebase_admin._apps:
-#     initialize_app()
+BASE_SIZE = (331, 496)
+BASE_RATIO = BASE_SIZE[0] / BASE_SIZE[1]
 
-# Target size
-TARGET_SIZE = (331, 496)
+def smart_crop(image: Image.Image) -> Image.Image:
+    width, height = image.size
+    current_ratio = width / height
+
+    if current_ratio > BASE_RATIO:
+        new_width = int(height * BASE_RATIO)
+        left = (width - new_width) // 2
+        box = (left, 0, left + new_width, height)
+    else:
+        new_height = int(width / BASE_RATIO)
+        top = (height - new_height) // 2
+        box = (0, top, width, top + new_height)
+
+    return image.crop(box)
+
+def scale_to_multiple(image: Image.Image) -> Image.Image:
+    width, height = image.size
+    multiplier = max(min(width // BASE_SIZE[0], height // BASE_SIZE[1]), 1)
+    target_size = (BASE_SIZE[0] * multiplier, BASE_SIZE[1] * multiplier)
+    return image.resize(target_size, Image.LANCZOS)
 
 def upload_profile_photo(request: Request):
-    # CORS headers
-    cors_headers: Dict[str, str] = {
+    cors_headers = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'POST',
         'Access-Control-Allow-Headers': 'Content-Type',
@@ -27,52 +42,40 @@ def upload_profile_photo(request: Request):
         return ('', 204, cors_headers)
 
     try:
-        # Validate input
-        if not request.files or 'photo' not in request.files:
-            return jsonify({'success': False, 'message': 'Missing photo file'}), 400, cors_headers
+        file = request.files.get('photo')
+        uid = request.form.get('uid')
 
-        file = request.files['photo']
-        uid = request.form.get('uid')  # This should be passed securely from the frontend
+        if not file or not uid:
+            return jsonify({'success': False, 'message': 'Missing photo or UID'}), 400, cors_headers
 
-        if not uid:
-            return jsonify({'success': False, 'message': 'Missing UID'}), 400, cors_headers
-
-        # Validate user
-        auth.get_user(uid)
-
-        # Check file type
         if file.content_type not in ['image/jpeg', 'image/png']:
             return jsonify({'success': False, 'message': 'Invalid file type'}), 400, cors_headers
 
-        # Open, crop, and resize
-        img = Image.open(file.stream)
-        img = img.convert("RGB")
-        img = img.resize(TARGET_SIZE, Image.LANCZOS)
+        auth.get_user(uid)
 
-        # Save to temp
+        # Process image with smart crop then scale
+        img = Image.open(file.stream).convert("RGB")
+        img = smart_crop(img)
+        img = scale_to_multiple(img)
+
         temp = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg")
         img.save(temp.name, format='JPEG')
 
         # Upload to Firebase Storage
-        bucket = storage.bucket()
-        blob = bucket.blob(f"Profile-Photos/{uid}.jpg")
+        blob = storage.bucket().blob(f"Profile-Photos/{uid}.jpg")
         blob.upload_from_filename(temp.name, content_type='image/jpeg')
         blob.make_public()
-
         os.remove(temp.name)
 
-        # Update Firestore userData document
-        db = firestore.client()
-        user_docs = db.collection('userData').where('uid', '==', uid).get()
-        if not user_docs:
-            return jsonify({'success': False, 'message': 'User not found in Firestore'}), 404, cors_headers
+        # Update Firestore
+        user_doc = next(iter(firestore.client().collection('userData').where('uid', '==', uid).get()), None)
+        if not user_doc:
+            return jsonify({'success': False, 'message': 'User not found'}), 404, cors_headers
 
-        user_doc = user_docs[0]
         user_doc.reference.update({'pictureLink': blob.public_url})
-
         return jsonify({'success': True, 'url': blob.public_url}), 200, cors_headers
 
     except Exception as e:
         import traceback
-        print("Upload error:", traceback.format_exc())  # Log the full stack trace on the server
+        print("Upload error:", traceback.format_exc())
         return jsonify({'success': False, 'message': 'An internal error occurred.'}), 500, cors_headers
