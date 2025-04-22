@@ -60,6 +60,7 @@ if (photoInput && uploadBtn && previewImage && uploadStatus && uidField) {
       });
       const data = await res.json();
       setStatus(data.message || (data.success ? "Upload successful!" : "Upload failed."), data.success ? "green" : "red");
+      console.log(data);
     } catch (err) {
       setStatus("An error occurred during upload.", "red");
     }
