@@ -1,74 +1,67 @@
 
-import { auth, db, storage } from "/config/firebaseConfig.js";
-import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-storage.js";
-import { query, collection, where, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
+import { auth } from "/config/firebaseConfig.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
+import Cropper from "https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.esm.js";
+
+let currentUID = null;
+let cropper = null;
 
 const photoInput = document.getElementById("photoInput");
-const previewImage = document.getElementById("previewImage");
-const uploadBtn = document.getElementById("uploadPhotoBtn");
+const cropperImage = document.getElementById("cropperImage");
+const cropperContainer = document.getElementById("cropperContainer");
+const confirmCropBtn = document.getElementById("confirmCropBtn");
 const uploadStatus = document.getElementById("uploadStatus");
-const uidField = document.getElementById("uidField");
 
-if (photoInput && uploadBtn && previewImage && uploadStatus && uidField) {
-  photoInput.addEventListener("change", () => {
-    const file = photoInput.files[0];
-    if (!file) return;
+onAuthStateChanged(auth, (user) => {
+  if (user) currentUID = user.uid;
+});
 
-    if (!["image/jpeg", "image/png"].includes(file.type)) {
-      setStatus("Only JPG and PNG formats are allowed.", "red");
-      photoInput.value = '';
-      return;
-    }
+photoInput.addEventListener("change", function () {
+  const file = this.files[0];
+  if (!file) return;
 
-    if (file.size > 2 * 1024 * 1024) {
-      setStatus("File size exceeds 2MB limit.", "red");
-      photoInput.value = '';
-      return;
-    }
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    cropperImage.src = e.target.result;
+    cropperContainer.style.display = "block";
 
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      previewImage.src = e.target.result;
-      previewImage.hidden = false;
-    };
-    reader.readAsDataURL(file);
-  });
+    if (cropper) cropper.destroy();
+    cropper = new Cropper(cropperImage, {
+      aspectRatio: 1, // force square crop box
+      viewMode: 1,
+      autoCropArea: 1, // use entire image if possible
+    });    
+  };
+  reader.readAsDataURL(file);
+});
 
-  onAuthStateChanged(auth, (user) => {
-    if (!user) return;
-    uidField.value = user.uid;
-  });
+confirmCropBtn.addEventListener("click", async function () {
+  if (!cropper || !currentUID) return;
 
-  uploadBtn.addEventListener("click", async (e) => {
-    e.preventDefault();
-    const file = photoInput.files[0];
-    const uid = uidField.value;
-    if (!file || !uid) {
-      setStatus("Please upload a photo!", "red");
-      return;
-    }
+  const canvas = cropper.getCroppedCanvas(); // no size override
+  console.log("Canvas dimensions:", canvas.width, canvas.height);
 
+
+  canvas.toBlob(async function (blob) {
     const formData = new FormData();
-    formData.append("photo", file);
-    formData.append("uid", uid);
+    formData.append("photo", blob, "cropped.jpg");
+    formData.append("uid", currentUID);
+
+    uploadStatus.textContent = "Uploading...";
+    uploadStatus.style.color = "blue";
+    uploadStatus.hidden = false;
 
     try {
-      const res = await fetch("https://us-central1-thetataumiamiuniversity.cloudfunctions.net/upload_profile_photo_function", {
+      const response = await fetch("https://us-central1-thetataumiamiuniversity.cloudfunctions.net/upload_profile_photo_function", {
         method: "POST",
         body: formData
       });
-      const data = await res.json();
-      setStatus(data.message || (data.success ? "Upload successful!" : "Upload failed."), data.success ? "green" : "red");
-      console.log(data);
-    } catch (err) {
-      setStatus("An error occurred during upload.", "red");
+      const result = await response.json();
+      uploadStatus.textContent = result.success ? "Upload successful!" : result.message;
+      uploadStatus.style.color = result.success ? "green" : "red";
+    } catch (error) {
+      uploadStatus.textContent = "Upload failed.";
+      uploadStatus.style.color = "red";
     }
-  });
-}
-
-function setStatus(msg, color) {
-  uploadStatus.textContent = msg;
-  uploadStatus.style.color = color;
-  uploadStatus.hidden = false;
-}
+  }, "image/jpeg", 0.9);
+});
