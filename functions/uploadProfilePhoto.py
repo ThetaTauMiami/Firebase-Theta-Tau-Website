@@ -6,30 +6,6 @@ from PIL import Image
 import firebase_admin
 from firebase_admin import auth, firestore, storage, initialize_app
 
-BASE_SIZE = (331, 496)
-BASE_RATIO = BASE_SIZE[0] / BASE_SIZE[1]
-
-def smart_crop(image: Image.Image) -> Image.Image:
-    width, height = image.size
-    current_ratio = width / height
-
-    if current_ratio > BASE_RATIO:
-        new_width = int(height * BASE_RATIO)
-        left = (width - new_width) // 2
-        box = (left, 0, left + new_width, height)
-    else:
-        new_height = int(width / BASE_RATIO)
-        top = (height - new_height) // 2
-        box = (0, top, width, top + new_height)
-
-    return image.crop(box)
-
-def scale_to_multiple(image: Image.Image) -> Image.Image:
-    width, height = image.size
-    multiplier = max(min(width // BASE_SIZE[0], height // BASE_SIZE[1]), 1)
-    target_size = (BASE_SIZE[0] * multiplier, BASE_SIZE[1] * multiplier)
-    return image.resize(target_size, Image.LANCZOS)
-
 def upload_profile_photo(request: Request):
     cors_headers = {
         'Access-Control-Allow-Origin': '*',
@@ -52,11 +28,8 @@ def upload_profile_photo(request: Request):
             return jsonify({'success': False, 'message': 'Invalid file type'}), 400, cors_headers
 
         auth.get_user(uid)
-
-        # Process image with smart crop then scale
+        
         img = Image.open(file.stream).convert("RGB")
-        img = smart_crop(img)
-        img = scale_to_multiple(img)
 
         temp = tempfile.NamedTemporaryFile(delete=False, suffix=".jpg")
         img.save(temp.name, format='JPEG')
