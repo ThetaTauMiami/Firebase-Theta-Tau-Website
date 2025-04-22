@@ -55,7 +55,7 @@ def upload_profile_photo(request: Request):
 
         # Upload to Firebase Storage
         bucket = storage.bucket()
-        blob = bucket.blob(f"profilePictures/{uid}.jpg")
+        blob = bucket.blob(f"Profile-Photos/{uid}.jpg")
         blob.upload_from_filename(temp.name, content_type='image/jpeg')
         blob.make_public()
 
