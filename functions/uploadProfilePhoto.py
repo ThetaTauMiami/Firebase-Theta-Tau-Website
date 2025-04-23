@@ -41,7 +41,12 @@ def upload_profile_photo(request: Request):
         os.remove(temp.name)
 
         # Update Firestore
-        user_doc = next(iter(firestore.client().collection('userData').where('uid', '==', uid).get()), None)
+        user_doc = next(iter(firestore.client()
+                            .collection('userData')
+                            .where('uid', '==', uid)
+                            .get()), 
+                            None
+                        )
         if not user_doc:
             return jsonify({'success': False, 'message': 'User not found'}), 404, cors_headers
 
