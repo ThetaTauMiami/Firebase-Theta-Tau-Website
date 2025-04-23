@@ -15,11 +15,11 @@ from pointsSystem import (
     update_user_points,
     set_all_users_dei_false
 )
-
+from uploadProfilePhoto import upload_profile_photo
 
 # Path to your service account file for local development
 # To get your own service account file, go to Firebase Console > Project Settings > Service accounts > All Service Accounts > go to service account starting with "firebase-adminsdk-6ipvf" > Download JSON, put in root directory.  BE SURE TO ADD TO .gitignore if not automatically
-SERVICE_ACCOUNT_PATH = '/Users/alecbyrd/WebstormProjects/Firebase-Theta-Tau-Website/thetataumiamiuniversity-d792532dca8f.json'
+SERVICE_ACCOUNT_PATH = '/Users/capta/VSCode-Local/Firebase-Theta-Tau-Website/thetataumiamiuniversity-firebase-adminsdk-6ipvf-2ed90428c1.json'
 
 # Load environment variables from .env file (for local development)
 load_dotenv()
@@ -117,7 +117,7 @@ def update_points_from_sheet(request):
         print(f"Error in sheet processing: {err}")
         return (f"Error: {str(err)}", 500)
 
-# @https_fn.on_request() disabled only for local use
+# @https_fn.on_request() # disabled only for local use
 def reset_dei_points(request):
     """HTTP Cloud Function to reset all users' DEI points to false"""
     try:
@@ -131,6 +131,10 @@ def reset_dei_points(request):
 def create_account(request):
     """HTTP Cloud Function to create a new user account"""
     return create_account_function(request)
+
+@https_fn.on_request()
+def upload_profile_photo_function(request):
+    return upload_profile_photo(request)
 
 # For local testing (optional)
 if __name__ == "__main__":

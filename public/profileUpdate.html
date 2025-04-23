@@ -128,10 +128,28 @@
               </fieldset>
             </form>
         </div>
-        <div class="col-md-12 text-center">
+        
+
+
+
+<!-- Cropper Upload Section -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cropperjs@1.5.13/dist/cropper.min.css">
+<div class="form-group">
+  <label for="photoInput">Upload Profile Photo</label>
+  <input type="file" id="photoInput" accept="image/jpeg,image/png" class="form-control" />
+</div>
+<div id="cropperContainer" style="display: none; text-align: center;">
+  <img id="cropperImage" style="max-width: 100%;" />
+  <div style="margin-top: 10px;">
+    <button id="confirmCropBtn" class="btn btn-success">Crop & Upload</button>
+  </div>
+</div>
+<p id="uploadStatus" hidden style="margin-top: 10px;"></p>
+
+<div class="col-md-12 text-center">
           <p id="successMessage" style="color:#005b14; font-size: 18px;  text-align: center;" hidden><b>Your profile was successfully updated!</b></p>
           <p id="failureMessage" style="color:#5B0000; font-size: 18px;  text-align: center;" hidden><b>Invalid profile information, please try again.</b></p>
-          <p id="notInitMessage" style="color:#5B0000; font-size: 18px;  text-align: center;" hidden><b>You have not intialized your profile yet, return to your account page.</b></p>
+          <p id="notInitMessage" style="color:#5B0000; font-size: 18px;  text-align: center;" hidden><b>You have not initialized your profile yet, return to your account page.</b></p>
         </div>
         <div class="col-md-12 text-center">
           <a href="account.html" style="color:#5B0000; font-size: 18px;  text-align: left;">← Back to your account</a>
@@ -153,6 +171,8 @@
     <div id="scripts-placeholder"></div>
     <script src="assets/js/loadComponents.js"></script>
 
+    
+<script type="module" src="assets/js/firebasePhotoUpload.js"></script>
 </body>
 
 </html>

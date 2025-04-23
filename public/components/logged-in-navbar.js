@@ -195,7 +195,6 @@ class LoggedInNavbar extends HTMLElement {
                     <div class="nav-links" id="navbarCollapse">
                         <ul class="nav navbar-right">
                             <li id="updatePointsLink" style="display: none;"><a href="points.html">Points Update</a></li>
-                            <li><a href="photoUpload.html">Photo Upload</a></li>
                             <li><a href="profileUpdate.html">Profile Update</a></li>
                             <li><a id="logoutLink" href="#">Logout</a></li>
                         </ul>

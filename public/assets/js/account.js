@@ -122,7 +122,14 @@ function updateProfileUI(userData) {
     // Update profile photo in the profile-img div
     // If pictureLink exists, update the image source
     if (pictureLink) {
-        $('.profile-img img').attr('src', pictureLink);
+        
+        if (pictureLink) {
+            const cacheBustedLink = pictureLink + "?t=" + new Date().getTime();
+            $('.profile-img img').hide().attr('src', cacheBustedLink).fadeIn(300);
+        } else {
+            $('.profile-img img').attr('src', 'images/default-profile.png');
+        }
+        
     }
 
     // Update name

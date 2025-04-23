@@ -2,6 +2,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js";
 import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
 import { getFirestore } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-firestore.js";
+import { getStorage } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-storage.js";
 import ENV from "./env-config.js";
 
 // Firebase Configuration (Replace with your actuacll Firebase credentials)
@@ -20,6 +21,7 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const auth = getAuth(firebaseApp);
 const db = getFirestore(firebaseApp);
+const storage = getStorage(firebaseApp);
 
 // Set authentication persistence to keep users logged in across page reloads
 setPersistence(auth, browserLocalPersistence)
@@ -34,4 +36,4 @@ function giveFirestore() {
     return getFirestore(firebaseApp);
 }
 
-export { firebaseConfig, firebaseApp, auth, db, giveFirestore };
+export { firebaseConfig, firebaseApp, auth, db, storage, giveFirestore };
