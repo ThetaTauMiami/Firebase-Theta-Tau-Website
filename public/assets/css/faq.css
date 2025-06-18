@@ -1,0 +1,74 @@
+/* Adjust the font size in FAQ */
+#faq {
+  font-size: medium;
+  padding-top: 2em;
+  padding-bottom: 2em;
+}
+
+/* Adjust the spacing of the bullet point list in question 2 */
+#faq p, ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+/* Adds a grey border on top of each question */
+details {
+  border-top: 1px solid #ccc;
+  padding-top: 1em;
+  padding-bottom: 1em;
+  margin-left: 1em;
+  margin-right: 1em;
+}
+
+/* Add a bottom border to the last question */
+details:last-of-type {
+  border-bottom: 1px solid #ccc;
+}
+
+/* Styles each question */
+summary {
+  cursor: pointer; /* Adds hand icon over the arrow */
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Moves the arrow to the right of the screen */
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+/* When closed, show the down arrow */
+summary::after {
+  content: '▾';
+  font-size: 1.5em; /* Make the arrow a bit larger than the text */
+  transform: scaleY(1);
+  transition: transform 0.4s ease; /* Animates the arrow inverting */
+}
+
+/* When open, show the up arrow */
+details[open] summary::after {
+  transform: scaleY(-1); /* Flip the arrow upside down */
+}
+
+/* Arrow turns red when you use the mouse to hover over the question */
+summary:hover::after {
+  color: #5B0000;
+}
+
+ /* Open content */
+.faq-content {
+  overflow: hidden; /* Ensures that content isn't shown before the animation */
+  max-height: 0;
+  padding-left: 1em;
+  padding-right: 2em; /* Content doen't go under the arrow */
+  transition: max-height 0.4s ease-out; /* Animation speed */
+}
+
+ /* Close content */
+.faq-content.open {
+  max-height: 300px; /* Size that fits the largest FAQ section */
+  transition: max-height 0.4s ease-in; /* Animation speed */
+}
+
+/* Adds space between question and answer that doesn't break the animation */
+.spacer {
+  height: 0.5em;
+}
