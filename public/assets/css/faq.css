@@ -28,6 +28,7 @@ details:last-of-type {
 /* Styles each question */
 summary {
   cursor: pointer; /* Adds hand icon over the arrow */
+  transition: transform 0.2s ease; /* Animation to increase the font size of the question */
   display: flex;
   align-items: center;
   justify-content: space-between; /* Moves the arrow to the right of the screen */
@@ -50,8 +51,9 @@ details[open] summary::after {
 }
 
 /* Arrow turns red when you use the mouse to hover over the question */
-summary:hover::after {
-  color: #5B0000;
+summary:hover {
+  transform: scale(1.005); /* makes question 0.5% larger */
+  color: #5B0000; /* changes the color of the question from dark grey to red */
 }
 
  /* Open content */
