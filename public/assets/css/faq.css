@@ -45,6 +45,11 @@ summary::after {
   transition: transform 0.4s ease; /* Animates the arrow inverting */
 }
 
+/* Remove default left arrow that sometimes appears on mobile versions */
+summary::-webkit-details-marker {
+  display: none;
+}
+
 /* When open, show the up arrow */
 details[open] summary::after {
   transform: scaleY(-1); /* Flip the arrow upside down */
@@ -56,19 +61,13 @@ summary:hover {
   color: #5B0000; /* Changes the color of the question from dark grey to red */
 }
 
- /* Open content */
+/* Open and close content */
 .faq-content {
   overflow: hidden; /* Ensures that content isn't shown before the animation */
   max-height: 0;
   padding-left: 1em;
   padding-right: 2em; /* Content doen't go under the arrow */
-  transition: max-height 0.4s ease-out; /* Animation speed */
-}
-
- /* Close content */
-.faq-content.open {
-  max-height: 300px; /* Size that fits the largest FAQ section */
-  transition: max-height 0.4s ease-in; /* Animation speed */
+  transition: max-height 0.3s linear; /* Animation speed */
 }
 
 /* Adds space between question and answer that doesn't break the animation */
