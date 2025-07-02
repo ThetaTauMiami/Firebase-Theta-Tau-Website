@@ -28,30 +28,26 @@ function initFAQ() {
 
             const isOpen = detail.hasAttribute('open'); // Check if FAQ box is open or closed
 
-            if (!isOpen) { // Closed -> Open the FAQ box
+            if (!isOpen) { // Open FAQ
 
-                detail.setAttribute('open', ''); // Open the details content
+                detail.setAttribute('open', ''); // Show details
 
-                // requestAnimationFrame ensures that the animation is triggered correctly
-                requestAnimationFrame(function () {
-                    // Start the slide-down animation
-                    content.classList.add('open');
-                });
+                // Slide-down animation (* 1.5 gives extra space for window resizing on the bottom)
+                content.style.maxHeight = (content.scrollHeight * 1.5) + 'px';
 
                 console.log('Opened FAQ item #' + i);
 
-            } else { // Open -> Close the FAQ box
+            } else { // Close FAQ
 
-                // Start the slide-up animation
-                content.classList.remove('open');
+                // Slide-up animation
+                content.style.maxHeight = '0';
 
-                // Wait for the animation to finish, then close
-                content.addEventListener('transitionend', function removeOpenAttribute() {
-                    detail.removeAttribute('open'); // Hide the details content
+                // Remove the open attribute after transition ends
+                content.addEventListener('transitionend', function handler() {
+                    detail.removeAttribute('open'); // Hide details
                     console.log('Closed FAQ item #' + i);
-                    content.removeEventListener('transitionend', removeOpenAttribute);
+                    content.removeEventListener('transitionend', handler);
                 });
-
             }
         });
     }
