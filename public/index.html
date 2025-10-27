@@ -2,137 +2,162 @@
 <html>
 
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Theta Tau | Tau Delta Chapter - Miami University</title>
-    <meta property="og:site_name" content="Theta Tau | Miami University" />
-    <meta charset="utf-8">
+  <title>Theta Tau | Tau Delta Chapter - Miami University</title>
+  <meta property="og:site_name" content="Theta Tau | Miami University" />
 
-    <!-- Imports styles from public/components/placeholder.html   -->
-    <div id="styles-placeholder"></div>
+  <!-- Theme colors for browsers -->
+  <meta name="theme-color" content="#5B0000">
+  <meta name="msapplication-navbutton-color" content="#5B0000">
+  <meta name="apple-mobile-web-app-status-bar-style" content="#5B0000">
 
+  <div id="styles-placeholder"></div>
 
-    <!-- Chrome, Firefox OS, Opera and Vivaldi -->
-    <meta name="theme-color" content="#5B0000">
-    <!-- Windows Phone -->
-    <meta name="msapplication-navbutton-color" content="#5B0000">
-    <!-- iOS Safari -->
-    <meta name="apple-mobile-web-app-status-bar-style" content="#5B0000">
-
+  <!-- Prevent flash of unstyled content -->
+  <style>
+    html, body {
+      background-color: white;
+    }
+    body {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.25s ease;
+    }
+    body.ready {
+      opacity: 1;
+      visibility: visible;
+    }
+  </style>
 </head>
-
-
 
 <body>
 
-    <!-- Imports nav from public/components/navbar.html   -->
-    <div id="nav-placeholder"></div>
+  <!-- Navbar -->
+  <div id="nav-placeholder"></div>
 
+  <header style="border-color: #5B0000; border-width: 0px; border-style: solid; margin: 0; width: 100%; padding: 0px;">
+    <div class="header-content">
+      <div class="header-content-inner">
+        <picture>
+          <source type="image/webp" srcset="assets/img/theta-tau/login-logo.webp">
+          <source type="image/jpeg" srcset="assets/img/theta-tau/login-logo.png">
+          <img src="assets/img/theta-tau/login-logo.png"
+               width="125"
+               height="214"
+               loading="lazy"
+               alt="Theta Tau Rose">
+        </picture>
 
-    <!-- Added upper ---------------------------------->
-
-    <header style="border-color: #5B0000; border-width: 0px; border-style: solid; margin: 0; width: 100%; padding: 0px;">
-        <div class="header-content">
-            <div class="header-content-inner">
-                <picture>
-                    <source type="image/webp" srcset="assets/img/theta-tau/login-logo.webp">
-                    <source type="image/jpeg" srcset="assets/img/theta-tau/login-logo.png">
-                    <img src="assets/img/theta-tau/login-logo.png"
-                         width="125"
-                         height="214"
-                         loading="lazy"
-                         alt="Theta Tau Rose">
-                </picture>
-
-                <h1 id="homeHeading" style="text-shadow: 1px 1px 10px black;">Theta Tau</h1>
-                <hr>
-                <h2 id="homeHeading" style="text-shadow: 1px 1px 10px black;">Tau Delta Chapter of Miami University</h2>
-                <h4 id="homeHeading" style="text-shadow: 1px 1px 10px black;">Professional Engineering Fraternity</h4>
-                <a href="#about" class="btn btn-primary btn-xl page-scroll">Find Out More</a>
-                <a href="recruitment.html" class="btn btn-default btn-xl">How to Join</a>
-            </div>
-        </div>
-    </header>
-
-    <div class="container" style="border-color: #5B0000; border-width: 0px; border-style: solid; margin: 0; width: 100%; padding: 0px;">
-
-        <section class="bg-primary" id="about">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8 col-lg-offset-2 text-center">
-                        <h2 class="section-heading">Welcome!</h2>
-                        <hr class="light">
-                        <p class="text-faded">Theta Tau is the oldest, largest, and foremost Fraternity for Engineers. Since its founding at the University of Minnesota in 1904, over 35,000 have been initiated over the years. With emphasis on quality and a strong fraternal bond, the Fraternity has chapters only at ABET accredited schools and limits the number of student members in any one of its chapters across the nation. </p>
-                        <a href="#pillars" class="page-scroll btn btn-default btn-xl sr-button">ABOUT US</a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="pillars">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12 text-center">
-                        <picture>
-                            <source type="image/webp" srcset="assets/img/theta-tau/rose.webp">
-                            <source type="image/jpeg" srcset="assets/img/theta-tau/rose.png">
-                            <img src="assets/img/theta-tau/rose.png"
-                                 width="166"
-                                 height="182"
-                                 loading="lazy"
-                                 alt="Theta Tau Rose">
-                        </picture>
-                        <h2 class="section-heading">Our Purpose</h2>
-                        <hr class="primary">
-                        <p>The purpose of Theta Tau is to develop and maintain a high standard of professional interest among its members, and to unite them in a strong bond of fraternal fellowship.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-12 text-center">
-                        <br>
-                        <h2 class="section-heading">The Pillars of Theta Tau</h2>
-                        <hr class="primary">
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-4 text-center">
-                        <div class="service-box">
-                            <i class="fa fa-4x fa-sign-language text-primary sr-icons"></i>
-                            <h3>Service</h3>
-                            <p class="text-muted">We are known for our service to our college, university and the larger community. Our service projects create a unifying environment for learning and personal growth for our members.</p>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 text-center">
-                        <div class="service-box">
-                            <i class="fa fa-4x fa-university text-primary sr-icons"></i>
-                            <h3>Professional Development</h3>
-                            <p class="text-muted">We develop and nurture engineers with strong communication, problem-solving, collaboration, and leadership skills that we demonstrate in our profession, our community, and in our lives.</p>
-                        </div>
-                    </div>
-                    <div class="col-sm-4 text-center">
-                        <div class="service-box">
-                            <i class="fa fa-4x fa-users text-primary sr-icons"></i>
-                            <h3>Brotherhood</h3>
-                            <p class="text-muted">We forge lifelong bonds of fraternal friendship, a journey that develops and delivers a network of lasting personal and professional relationships. We foster an inviting, safe, and social environment in which our members become lifelong friends.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Imports footer from public/components/footer.html   -->
-        <div id='footer-placeholder'></div>
+        <h1 id="homeHeading" style="text-shadow: 1px 1px 10px black;">Theta Tau</h1>
+        <hr>
+        <h2 id="homeHeading" style="text-shadow: 1px 1px 10px black;">Tau Delta Chapter of Miami University</h2>
+        <h4 id="homeHeading" style="text-shadow: 1px 1px 10px black;">Professional Engineering Fraternity</h4>
+        <a href="#about" class="btn btn-primary btn-xl page-scroll">Find Out More</a>
+        <a href="recruitment.html" class="btn btn-default btn-xl">How to Join</a>
+      </div>
     </div>
+  </header>
 
+  <div class="container" style="border-color: #5B0000; border-width: 0px; border-style: solid; margin: 0; width: 100%; padding: 0px;">
 
-    <!-- Imports scripts from public/components/scripts.html   -->
-    <div id="scripts-placeholder"></div>
-    <script src="assets/js/loadComponents.js"></script>
+    <section class="bg-primary" id="about">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 col-lg-offset-2 text-center">
+            <h2 class="section-heading">Welcome!</h2>
+            <hr class="light">
+            <p class="text-faded">Theta Tau is the oldest, largest, and foremost Fraternity for Engineers. Since its founding at the University of Minnesota in 1904, over 35,000 have been initiated over the years. With emphasis on quality and a strong fraternal bond, the Fraternity has chapters only at ABET accredited schools and limits the number of student members in any one of its chapters across the nation.</p>
+            <a href="#pillars" class="page-scroll btn btn-default btn-xl sr-button">ABOUT US</a>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <section id="pillars">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 text-center">
+            <picture>
+              <source type="image/webp" srcset="assets/img/theta-tau/rose.webp">
+              <source type="image/jpeg" srcset="assets/img/theta-tau/rose.png">
+              <img src="assets/img/theta-tau/rose.png"
+                   width="166"
+                   height="182"
+                   loading="lazy"
+                   alt="Theta Tau Rose">
+            </picture>
+            <h2 class="section-heading">Our Purpose</h2>
+            <hr class="primary">
+            <p>The purpose of Theta Tau is to develop and maintain a high standard of professional interest among its members, and to unite them in a strong bond of fraternal fellowship.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-12 text-center">
+            <br>
+            <h2 class="section-heading">The Pillars of Theta Tau</h2>
+            <hr class="primary">
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-4 text-center">
+            <div class="service-box">
+              <i class="fa fa-4x fa-sign-language text-primary sr-icons"></i>
+              <h3>Service</h3>
+              <p class="text-muted">We are known for our service to our college, university and the larger community. Our service projects create a unifying environment for learning and personal growth for our members.</p>
+            </div>
+          </div>
+          <div class="col-sm-4 text-center">
+            <div class="service-box">
+              <i class="fa fa-4x fa-university text-primary sr-icons"></i>
+              <h3>Professional Development</h3>
+              <p class="text-muted">We develop and nurture engineers with strong communication, problem-solving, collaboration, and leadership skills that we demonstrate in our profession, our community, and in our lives.</p>
+            </div>
+          </div>
+          <div class="col-sm-4 text-center">
+            <div class="service-box">
+              <i class="fa fa-4x fa-users text-primary sr-icons"></i>
+              <h3>Brotherhood</h3>
+              <p class="text-muted">We forge lifelong bonds of fraternal friendship, a journey that develops and delivers a network of lasting personal and professional relationships. We foster an inviting, safe, and social environment in which our members become lifelong friends.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div id='footer-placeholder'></div>
+  </div>
+
+  <div id="scripts-placeholder"></div>
+
+  <!-- Load components as before -->
+  <script src="assets/js/loadComponents.js"></script>
+
+  <!-- Wait until styles + components are injected before showing -->
+  <script>
+    (function() {
+      // Poll until #styles-placeholder is replaced (CSS injected)
+      function whenReady() {
+        const hasStyle = document.querySelector('#styles-placeholder link, #styles-placeholder style') === null
+          ? !!document.querySelector('head link[rel="stylesheet"], head style')
+          : true;
+        const navReady = document.querySelector('#nav-placeholder').innerHTML.trim().length > 0;
+        const footerReady = document.querySelector('#footer-placeholder').innerHTML.trim().length > 0;
+        if (hasStyle && (navReady || footerReady)) {
+          document.body.classList.add('ready');
+        } else {
+          setTimeout(whenReady, 50);
+        }
+      }
+      window.addEventListener('load', whenReady);
+    })();
+  </script>
 </body>
-
 </html>
