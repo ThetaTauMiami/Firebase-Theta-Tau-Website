@@ -13,18 +13,20 @@
   <meta name="msapplication-navbutton-color" content="#5B0000">
   <meta name="apple-mobile-web-app-status-bar-style" content="#5B0000">
 
-  <div id="styles-placeholder"></div>
+  <link href="./favicon.ico" rel="shortcut icon" type="image/x-icon">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/home.css">
+<link rel="stylesheet" href="assets/css/jquery-ui.min.css">
 
   <!-- Prevent flash of unstyled content -->
   <style>
     html, body {
       background-color: white;
     }
-    body {
-      opacity: 0;
-      visibility: hidden;
-      transition: opacity 0.25s ease;
-    }
+    body { opacity: 1; visibility: visible; }
     body.ready {
       opacity: 1;
       visibility: visible;
@@ -35,7 +37,82 @@
 <body>
 
   <!-- Navbar -->
-  <div id="nav-placeholder"></div>
+  <script type="module">
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js";
+    import { auth } from "/config/firebaseConfig.js";
+
+    function applyAuthState() {
+        const whenSignedOutNav = document.getElementById("whenSignedOutNav");
+        const whenSignedInNav = document.getElementById("whenSignedInNav");
+
+        if (!whenSignedOutNav || !whenSignedInNav) {
+            console.error("Navbar elements not found!");
+            return;
+        }
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log(`User is logged in: ${user.uid}`);
+                whenSignedOutNav.style.display = "none";
+                whenSignedInNav.style.display = "block";
+                whenSignedInNav.style.visibility = "visible";  // Ensure it's visible
+            } else {
+                console.log("User is not logged in");
+                whenSignedInNav.style.display = "none";
+                whenSignedOutNav.style.display = "block";
+                whenSignedOutNav.style.visibility = "visible"; // Ensure it's visible
+            }
+        });
+    }
+    applyAuthState();
+
+</script>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button class="navbar-toggle" data-target="#myNavbar"
+                    data-toggle="collapse" type="button">
+                <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="index.html">
+                <span id="nav">THETA TAU |
+                    <span class="hidden-xs hidden-sm">MIAMI UNIVERSITY</span>
+                    <span class="hidden-md hidden-lg hidden-xl">ΤΔ</span>
+                </span>
+            </a>
+            <span class="hidden-xs hidden-sm">
+                <a href="index.html">
+                    <picture>
+                        <source type="image/webp" srcset="assets/img/theta-tau/login-logo.webp">
+                        <source type="image/jpeg" srcset="assets/img/theta-tau/login-logo.png">
+                        <img src="assets/img/theta-tau/login-logo.png"
+                             class="navbar-brand"
+                             alt="Theta Tau Crest Logo">
+                    </picture>
+                </a>
+            </span>
+        </div>
+        <div class="collapse navbar-collapse" id="myNavbar">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="index.html">HOME</a></li>
+                <li><a href="gallery.html">GALLERY</a></li>
+                <li><a href="events.html">EVENTS</a></li>
+                <li><a href="leadership.html">LEADERSHIP</a></li>
+                <li><a href="recruitment.html">RECRUITMENT</a></li>
+                <li><a href="contact.html">CONTACT</a></li>
+
+                <!-- The login tab (visible when signed out) -->
+                <li id="whenSignedOutNav" style="">
+                    <a href="login.html">LOGIN</a>
+                </li>
+                <li id="whenSignedInNav" style="visibility: hidden;">
+                    <a href="account.html">ACCOUNT</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
   <header style="border-color: #5B0000; border-width: 0px; border-style: solid; margin: 0; width: 100%; padding: 0px;">
     <div class="header-content">
@@ -132,13 +209,41 @@
       </div>
     </section>
 
-    <div id='footer-placeholder'></div>
+    <nav class="navbar" class="footer">
+    <div class="row">
+        <div class="col-lg-12 text-center">
+            <h1 class="social-h1">
+                <!-- Removed facebook and Twitter as they are no longer used for now -->
+                <a href="https://www.instagram.com/thetatau_miamiu" target="_blank"><i class="fa fa-instagram"></i></a>
+                <!--<a href="https://www.facebook.com/ThetaTauMU/?fref=ts" target="_blank"><i class="fa fa-facebook"></i></a>-->
+                <!--<a href="https://twitter.com/thetataumu" target= "_blank"><i class="fa fa-twitter"></i></a>-->
+                <a href="https://www.linkedin.com/groups/8471878/" target="_blank"><i class="fa fa-linkedin"></i></a>
+                <a href="https://github.com/ThetaTauMiami/" target="_blank"><i class="fa fa-github"></i></a>
+            </h1>
+        </div>
+        <div class="col-lg-12 text-center">
+            <p class="footer-links">
+                <a href="/public">Home</a> ·
+                <a href="gallery.html">Gallery</a> ·
+                <a href="events.html">Events</a> ·
+                <a href="leadership.html">Leadership</a> ·
+                <a href="recruitment.html">Recruitment</a> ·
+                <!--<a href="members">Members</a> ·
+                <a href="alumni">Alumni</a> · -->
+                <a href="contact.html">Contact Us</a>  ·
+                <a href="login.html" id="footerLogin">Login</a>
+                <a href="account.html" id="footerAccount" hidden="true">Account</a>
+            </p>
+            <p class="footer-links">Theta Tau | Tau Delta Chapter of Miami University | 2025</p>
+        </div>
+    </div>
+</nav>
   </div>
 
-  <div id="scripts-placeholder"></div>
+  
 
   <!-- Load components as before -->
-  <script src="assets/js/loadComponents.js"></script>
+  <!--                              -->
 
   <!-- Wait until styles + components are injected before showing -->
   <script>
@@ -156,7 +261,7 @@
           setTimeout(whenReady, 50);
         }
       }
-      window.addEventListener('load', whenReady);
+      
     })();
   </script>
 </body>

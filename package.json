@@ -15,7 +15,9 @@
     "typescript": "^5.8.3"
   },
   "scripts": {
-    "build": "tsc",
-    "watch": "tsc --watch"
+    "tsbuild": "tsc",
+    "tswatch": "tsc --watch",
+    "build": "node build.js",
+    "deploy": "npm run build && firebase deploy"
   }
 }
