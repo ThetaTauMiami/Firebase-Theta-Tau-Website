@@ -388,3 +388,13 @@ tr:nth-child(even) {
   color: white;
   text-decoration: none;
 }
+
+.social-h1 a {
+  text-decoration: none !important;
+}
+
+.social-h1 a i {
+  display: inline-block;
+  line-height: 1;
+  vertical-align: middle;
+}
